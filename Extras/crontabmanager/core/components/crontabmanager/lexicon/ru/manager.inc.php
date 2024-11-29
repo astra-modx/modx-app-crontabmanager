@@ -1,4 +1,5 @@
 <?php
+
 include_once 'setting.inc.php';
 
 $_lang['crontabmanager'] = 'CronTabManager';
@@ -30,6 +31,7 @@ $_lang['crontabmanager_task_name'] = 'Наименование';
 $_lang['crontabmanager_task_name_desc'] = 'Короткое наименование';
 $_lang['crontabmanager_task_add_output_email'] = 'Добавить вывод в сообщение на email';
 $_lang['crontabmanager_task_add_output_email_desc'] = 'В сообщение на email добавиться вывод из лог файла';
+$_lang['crontabmanager_task_next_run'] = 'Следующий запуск';
 $_lang['crontabmanager_task_createdon'] = 'Дата создания';
 $_lang['crontabmanager_task_updatedon'] = 'Дата обновления';
 $_lang['crontabmanager_task_date_start'] = 'Дата запуска';
@@ -162,20 +164,14 @@ $_lang['crontabmanager_task_parent'] = 'Категория';
 $_lang['crontabmanager_task_parent_empty'] = 'Выберите категорию';
 $_lang['crontabmanager_task_filter_active'] = 'Активные';
 $_lang['crontabmanager_task_filter_mode_develop'] = 'В разработке';
-
-
 $_lang['crontabmanager_task_log_remove'] = 'Удалить лог';
 $_lang['crontabmanager_task_logs_remove'] = 'Удалить логи';
-
 $_lang['crontabmanager_cron_connector_run_task_windows'] = 'Запустить задание';
 $_lang['crontabmanager_cron_connector_run_task_windows_btn'] = 'Перезапустить';
-
 $_lang['crontabmanager_cron_connector_unlock'] = 'Разблокировать задание';
 $_lang['crontabmanager_cron_connector_unlock_btn'] = 'Разблокировать';
-
 $_lang['crontabmanager_cron_connector_read_log'] = 'Читать лог файл';
 $_lang['crontabmanager_cron_connector_read_log_btn'] = 'Читать лог файл';
-
 $_lang['crontabmanager_cron_connector_args'] = 'Аргументы в виде user=1 resource=2';
 
 
@@ -280,7 +276,7 @@ $_lang['crontabmanager_task_rule_create'] = 'Создать правило';
 $_lang['crontabmanager_task_rule_update'] = 'Обновить правило';
 $_lang['crontabmanager_task_rule_class'] = 'Тип уведомления';
 $_lang['crontabmanager_task_rule_method_http'] = 'Метод отправки данных';
-$_lang['crontabmanager_task_rule_params'] = 'Папаметры в JSON формате';
+$_lang['crontabmanager_task_rule_params'] = 'Параметры в JSON формате';
 $_lang['crontabmanager_task_rule_token'] = 'token - сгенерированный ботом';
 $_lang['crontabmanager_task_rule_chat_id'] = 'Chat id - который выдал бот';
 $_lang['crontabmanager_task_rule_email'] = 'E-mail';
@@ -310,3 +306,8 @@ $_lang['crontabmanager_task_rule_tasks'] = 'Задания';
 
 $_lang['crontabmanager_task_restart_after_failure'] = 'Перезапускать задание после неудачного завершения';
 $_lang['crontabmanager_task_restart_after_failure_desc'] = 'Если установлено, то задание будет перезапущено после неудачного завершения. При этом, если задание не завершается успешно, то оно уведомления не будет отправлено. Только при втором неудачном завершении будет отправлено уведомление.';
+$_lang['crontabmanager_crontab_available'] = 'команда <b>crontab</b> доступна';
+$_lang['crontabmanager_crontab_not_available'] = 'команда <b>crontab</b> недоступна';
+
+$_lang['crontabmanager_next_run_human'] = 'Следующий запуск через: [[+minutes]] минут[[+hours]]';
+$_lang['crontabmanager_next_run_human_hours'] = ' и [[+hours]] часов';

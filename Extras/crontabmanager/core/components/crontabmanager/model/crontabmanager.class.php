@@ -1,6 +1,6 @@
 <?php
 
-//include_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
+include_once dirname(dirname(__FILE__)) . '/vendor/autoload.php';
 
 
 if (!function_exists('CronTabManagerPhpExecutable')) {

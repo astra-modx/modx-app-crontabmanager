@@ -1,10 +1,13 @@
 <?php
 
+require(dirname(__FILE__, 1).'/bootstrap.php');
+
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+
 
 class AppManagerPackage
 {
@@ -34,7 +37,6 @@ class AppManagerPackage
     public function __construct($core_path, array $config = [])
     {
         require($core_path.'model/modx/modx.class.php');
-        require(dirname(__FILE__, 1).'/bootstrap.php');
 
 
         $this->style = new Style(new ArgvInput(), new ConsoleOutput());

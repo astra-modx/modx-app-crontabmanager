@@ -9,7 +9,9 @@ CronTabManager.grid.Tasks = function (config) {
     this.exp = new Ext.grid.RowExpander({
         expandOnDblClick: false,
         tpl: new Ext.Template('<p class="desc">{description} <br>{message}</p>'),
-        renderer: function (v, p, record) {return record.data.description != '' && record.data.description != null ? '<div class="x-grid3-row-expander">&#160;</div>' : '&#160;'}
+        renderer: function (v, p, record) {
+            return record.data.description != '' && record.data.description != null ? '<div class="x-grid3-row-expander">&#160;</div>' : '&#160;'
+        }
     })
 
     Ext.applyIf(config, {
@@ -40,7 +42,7 @@ CronTabManager.grid.Tasks = function (config) {
 Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
 
     getFields: function (config) {
-        return ['id', 'description', 'pid', 'path_task_cli', 'message', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
+        return ['id', 'description', 'pid', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
     },
 
     getColumns: function (config) {
@@ -65,10 +67,20 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             dataIndex: 'time',
             sortable: true,
             width: 70,
+            renderer: function (value, e, row) {
+                return String.format('<span class="crontabmanager_time_cron" title="{0}">{0}</span><span class="crontabmanager_next_run">{1}</span>', value, row.data.next_run_human)
+            }
         }, {
             header: _('crontabmanager_task_createdon'),
             dataIndex: 'createdon',
             sortable: true,
+            width: 70,
+            renderer: CronTabManager.utils.formatDate,
+            hidden: true
+        }, {
+            header: _('crontabmanager_task_next_run'),
+            dataIndex: 'next_run',
+            sortable: false,
             width: 70,
             renderer: CronTabManager.utils.formatDate,
             hidden: true
@@ -98,7 +110,6 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             width: 70,
             //renderer: CronTabManager.utils.renderBoolean,
             renderer: function (value, e, row) {
-                console.log(value)
                 return value
                     ? String.format('<span class="crontabmanager_task_success" title="{0}"></span>', 'Успешно завершено')
                     : String.format('<span class="crontabmanager_task_insuccess" title="{0}"></span>', 'Не завершено')
@@ -207,6 +218,13 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             {
                 xtype: 'label',
                 text: ' ' + _('crontabmanager_time_server') + ': ' + CronTabManager.config.time_server,
+            },
+            {
+                xtype: 'label',
+                html: CronTabManager.config.crontab_is_available === 'yes'
+                    ? String.format('<span class="crontabmanager_crontab available" >{0}</span>', _('crontabmanager_crontab_available'))
+                    : String.format('<span class="crontabmanager_crontab not_available">{0}</span>', _('crontabmanager_crontab_not_available')),
+                //text: ' ' + _('crontabmanager_time_server') + ': ' + CronTabManager.config.crontab_is_available,
             },
             '->', {
                 xtype: 'xcheckbox',
@@ -499,17 +517,17 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
 })
 Ext.reg('crontabmanager-grid-tasks', CronTabManager.grid.Tasks)
 
-function runTaskWindow () {
+function runTaskWindow() {
     var Tasks = Ext.getCmp('crontabmanager-grid-tasks')
     Tasks.runTaskWindow()
 }
 
-function unlockTask () {
+function unlockTask() {
     var Tasks = Ext.getCmp('crontabmanager-grid-tasks')
     Tasks.processors.confirm('unlock', 'task_unlock')
 }
 
-function readLogFileBody () {
+function readLogFileBody() {
     var Tasks = Ext.getCmp('crontabmanager-grid-tasks')
     Tasks.readLogFile()
 }

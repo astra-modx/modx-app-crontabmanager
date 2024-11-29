@@ -3,6 +3,7 @@ x-setting: &default-setting
     - backend
   volumes:
     - "./core/components:/var/www/html/core/components"
+    - "./core/packages:/var/www/html/core/packages"
     - "./core/elements:/var/www/html/core/elements"
     - "./public/assets:/var/www/html/public/assets"
     - "./Extras:/var/www/html/Extras"
@@ -13,6 +14,7 @@ x-setting: &default-setting
     # Package
     - "./Extras/${PACKAGE_NAME}/core/components/${PACKAGE_NAME_LOWER}:/var/www/html/core/components/${PACKAGE_NAME_LOWER}:ro"
     - "./Extras/${PACKAGE_NAME}/assets/components/${PACKAGE_NAME_LOWER}:/var/www/html/public/assets/components/${PACKAGE_NAME_LOWER}:ro"
+    - "./Extras/${PACKAGE_NAME_LOWER}/_build/files/scheduler:/var/www/html/core/scheduler:ro"
 
 services:
   app:

@@ -13,7 +13,8 @@
     ],
     "require": {
         "nesbot/carbon": "^1.0.0",
-        "cheprasov/php-cli-args": "^3.0"
+        "cheprasov/php-cli-args": "^3.0",
+        "dragonmantank/cron-expression": "^3.4"
     },
     "config": {
         "allow-plugins": {

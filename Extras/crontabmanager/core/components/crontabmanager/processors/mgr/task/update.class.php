@@ -18,6 +18,7 @@ class CronTabManagerTaskUpdateProcessor extends modObjectUpdateProcessor
         if (!$this->modx->hasPermission($this->permission)) {
             return $this->modx->lexicon('access_denied');
         }
+
         return parent::initialize();
     }
 
@@ -37,17 +38,19 @@ class CronTabManagerTaskUpdateProcessor extends modObjectUpdateProcessor
         if (!$path_task_your) {
             // Контроллер
             $schedulerPath = $this->modx->getOption('crontabmanager_scheduler_path');
-            $controller = $schedulerPath . '/Controllers/' . $path_task;
+            $controller = $schedulerPath.'/Controllers/'.$path_task;
             if (!file_exists($controller)) {
                 $this->modx->error->addField('path_task', $this->modx->lexicon('crontabmanager_task_err_ae_controller', array('controller' => $controller)));
             }
         } else {
             // Свой файл
             if (!file_exists($path_task)) {
-                $this->modx->error->addField('path_task', $this->modx->lexicon('crontabmanager_task_year_err_ae_controller', array('controller' => $path_task)));
+                $this->modx->error->addField(
+                    'path_task',
+                    $this->modx->lexicon('crontabmanager_task_year_err_ae_controller', array('controller' => $path_task))
+                );
             }
         }
-
 
 
         $send = $this->getProperty('status');
@@ -55,6 +58,7 @@ class CronTabManagerTaskUpdateProcessor extends modObjectUpdateProcessor
             $this->setProperty('approach', 0);
             $this->setProperty('sent', '0000-00-00 00:00:00');
         }
+
         return parent::beforeSet();
     }
 
@@ -71,6 +75,10 @@ class CronTabManagerTaskUpdateProcessor extends modObjectUpdateProcessor
             return $this->modx->lexicon('access_denied');
         }
 
+        if ($this->modx->getOption('crontabmanager_handler_class') === 'CrontabManagerHandlerScheduleWork') {
+            return true;
+        }
+
         $active = $this->setCheckbox('active');
         if ($active) {
             $action = 'add';
@@ -80,8 +88,9 @@ class CronTabManagerTaskUpdateProcessor extends modObjectUpdateProcessor
             $response = $this->object->removeCron();
         }
         if (!$response) {
-            return $this->modx->lexicon('crontabmanager_task_err_' . $action . '_crontab', array('task_path' => $this->object->get('path_task')));
+            return $this->modx->lexicon('crontabmanager_task_err_'.$action.'_crontab', array('task_path' => $this->object->get('path_task')));
         }
+
         return true;
     }
 

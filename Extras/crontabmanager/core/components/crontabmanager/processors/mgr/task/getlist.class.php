@@ -3,6 +3,9 @@
 /**
  * Get a list of Tasks
  */
+
+use Cron\CronExpression;
+
 class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
 {
     /* @var CronTabManager $CronTabManager */
@@ -20,7 +23,8 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         if (!$this->modx->hasPermission($this->permission)) {
             return $this->modx->lexicon('access_denied');
         }
-        $this->CronTabManager = $this->modx->getService('crontabmanager', 'CronTabManager', MODX_CORE_PATH . 'components/crontabmanager/model/');
+        $this->CronTabManager = $this->modx->getService('crontabmanager', 'CronTabManager', MODX_CORE_PATH.'components/crontabmanager/model/');
+
         return parent::initialize();
     }
 
@@ -35,18 +39,18 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         if (!$this->checkPermissions()) {
             return $this->modx->lexicon('access_denied');
         }
+
         return true;
     }
 
 
     /**
-     * @param xPDOQuery $c
+     * @param  xPDOQuery  $c
      *
      * @return xPDOQuery
      */
     public function prepareQueryBeforeCount(xPDOQuery $c)
     {
-
         $orderColumns = $this->modx->getSelectColumns('CronTabManagerTask', 'CronTabManagerTask', '', array(), false);
         $c->select($orderColumns);
 
@@ -57,9 +61,9 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         if ($query = $this->getProperty('query')) {
             $query = trim($query);
             $c->where(array(
-                'message:LIKE' => '%' . $query . '%',
-                'OR:description:LIKE' => '%' . $query . '%',
-                'OR:path_task:LIKE' => '%' . $query . '%'
+                'message:LIKE' => '%'.$query.'%',
+                'OR:description:LIKE' => '%'.$query.'%',
+                'OR:path_task:LIKE' => '%'.$query.'%',
             ));
         }
 
@@ -82,18 +86,22 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         } else {
             $c->where(array('active' => 1));
         }
+
         return $c;
     }
 
 
     /**
-     * @param xPDOObject $object
+     * @param  xPDOObject  $object
      *
      * @return array
      */
     public function eiEmpt($val)
     {
-        if (is_numeric($val)) return $val;
+        if (is_numeric($val)) {
+            return $val;
+        }
+
         return empty($val) ? '*' : $val;
     }
 
@@ -112,6 +120,21 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
             $this->eiEmpt($array['months']),
             $this->eiEmpt($array['weeks']),
         );
+
+        $cron = new CronExpression(implode(' ', $time));
+        $nextRun = $cron->getNextRunDate();
+        $currentDate = new DateTime();
+
+// Вычисляем разницу
+        $interval = $currentDate->diff($nextRun);
+
+        // Формируем человеко-понятный вывод
+        $hours = $interval->h > 0 ? $this->modx->lexicon('crontabmanager_next_run_human_hours', ['hours' => $interval->h]) : '';
+        $array['next_run_human'] = $this->modx->lexicon('crontabmanager_next_run_human', ['minutes' => $interval->i, 'hours' => $hours]);
+
+
+        #$array['next_run'] = $CronExpression->getNextRunDate()->;
+        $array['next_run'] = $nextRun->format('Y-m-d H:i:s');
 
 
         $array['pid'] = $object->pid();
@@ -236,8 +259,6 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
                 'button' => false,
                 'menu' => true,
             );
-
-
         }
 
 

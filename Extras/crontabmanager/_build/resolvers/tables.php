@@ -1,39 +1,40 @@
 <?php
 /** @var xPDOTransport $transport */
+
 /** @var array $options */
 /** @var modX $modx */
 if ($transport->xpdo) {
     $modx =& $transport->xpdo;
 
-
-    function updateClientId($modx)
-    {
-        /* @var modSystemSetting $object */
-        $criteria = [
-            'key' => 'crontabmanager_rest_client_id',
-            'value' => ''
-        ];
-        if ($Setting = $modx->getObject('modSystemSetting', $criteria)) {
-            $User = $modx->user;
-            $value = md5(
-                $User->get('username') .
-                rand(5, 10) .
-                $User->get('createdon') .
-                time() .
-                __CLASS__
-            );
-            $Setting->set('value', $value);
-            $Setting->save();
+    if (!function_exists('updateClientId')) {
+        function updateClientId($modx)
+        {
+            /* @var modSystemSetting $object */
+            $criteria = [
+                'key' => 'crontabmanager_rest_client_id',
+                'value' => '',
+            ];
+            if ($Setting = $modx->getObject('modSystemSetting', $criteria)) {
+                $User = $modx->user;
+                $value = md5(
+                    $User->get('username').
+                    rand(5, 10).
+                    $User->get('createdon').
+                    time().
+                    __CLASS__
+                );
+                $Setting->set('value', $value);
+                $Setting->save();
+            }
         }
     }
-
     switch ($options[xPDOTransport::PACKAGE_ACTION]) {
         case xPDOTransport::ACTION_INSTALL:
         case xPDOTransport::ACTION_UPGRADE:
-            $modx->addPackage('crontabmanager', MODX_CORE_PATH . 'components/crontabmanager/model/');
+            $modx->addPackage('crontabmanager', MODX_CORE_PATH.'components/crontabmanager/model/');
             $manager = $modx->getManager();
             $objects = [];
-            $schemaFile = MODX_CORE_PATH . 'components/crontabmanager/model/schema/crontabmanager.mysql.schema.xml';
+            $schemaFile = MODX_CORE_PATH.'components/crontabmanager/model/schema/crontabmanager.mysql.schema.xml';
             if (is_file($schemaFile)) {
                 $schema = new SimpleXMLElement($schemaFile, 0, true);
                 if (isset($schema->object)) {
@@ -45,7 +46,7 @@ if ($transport->xpdo) {
             }
             foreach ($objects as $class) {
                 $table = $modx->getTableName($class);
-                $sql = "SHOW TABLES LIKE '" . trim($table, '`') . "'";
+                $sql = "SHOW TABLES LIKE '".trim($table, '`')."'";
                 $stmt = $modx->prepare($sql);
                 $newTable = true;
                 if ($stmt->execute() && $stmt->fetchAll()) {
@@ -110,7 +111,8 @@ if ($transport->xpdo) {
                         } else {
                             if ($index != $indexes[$key]) {
                                 if ($manager->removeIndex($class, $key) && $manager->addIndex($class, $key)) {
-                                    $modx->log(modX::LOG_LEVEL_INFO,
+                                    $modx->log(
+                                        modX::LOG_LEVEL_INFO,
                                         "Updated index \"{$key}\" of the table \"{$class}\""
                                     );
                                 }

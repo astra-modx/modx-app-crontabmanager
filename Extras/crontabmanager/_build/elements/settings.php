@@ -28,7 +28,7 @@ return [
 
     'php_command' => [
         'xtype' => 'textfield',
-        'value' => 'php7.0',
+        'value' => '',
         'area' => 'crontabmanager_main',
     ],
 

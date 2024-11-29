@@ -9,7 +9,6 @@
 namespace Webnitros\CronTabManager;
 
 use CronTabManager;
-use CronTabManagerNotification;
 use CronTabManagerTask;
 use modProcessorResponse;
 use modUser;
@@ -355,34 +354,8 @@ class Rest
         $this->success('', ['tasks' => $tasks]);
     }
 
-    protected function _notifications()
-    {
-        $notifications = [];
-        /* @var CronTabManagerNotification $object */
-        $q = $this->CronTabManager->modx->newQuery('CronTabManagerNotification');
-        if ($objectList = $this->modx->getCollection('CronTabManagerNotification', $q)) {
-            foreach ($objectList as $object) {
-                $notifications[] = $object->toArray();
-                #$object->set('read_application',true);
-            }
-        }
-
-        /* @var modProcessorResponse $response */
-        $response = $this->CronTabManager->runProcessor('mgr/notification/getlist');
-        if ($response->isError()) {
-            $this->failure($response->getMessage());
-        } else {
-            $res = $this->modx->fromJSON($response->response);
-            $this->success('', ['notifications' => $res['results']]);
-        }
-    }
 
 
-    protected function _notice()
-    {
-        $count = $this->modx->getCount('CronTabManagerNotification', array('read_application' => 0));
-        $this->success('', ['count' => $count]);
-    }
 
     protected function _check()
     {
