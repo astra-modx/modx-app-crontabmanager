@@ -81,7 +81,7 @@ class CommandCreate extends AbstractCrontabCommand
         }
 
         $output->writeln('Create a controller with the name: '.$controllerName.' [command: php artisan '.$sig.' --d --name=water]');
-        $output->writeln('Path controller: '.$basePath);
+        $output->writeln('Path controller: '.$filePath);
 
         return self::SUCCESS;
     }

@@ -94,15 +94,18 @@ class Builder
                     }
                 }
 
-                $command = $Convert->command($basename);
-                $signature = mb_strtolower($command);
+                $controller = $Convert->command($basename);
+                $signature = mb_strtolower($controller);
                 if ($reflectionClass->hasProperty('signature')) {
                     $property = $reflectionClass->getProperty('signature');
                     $property->setAccessible(true);
                     $signature = $property->getValue(new $class($this->scheduler->modx));
                 }
 
-                $commands[$signature] = $comment;
+                $commands[$signature] = [
+                    'controller' => $controller,
+                    'description' => $comment,
+                ];
             }
         }
 
@@ -137,14 +140,20 @@ class Builder
         return $commands;
     }
 
-    public function addContainer(string $command, string $desc)
+    public function addContainer(string $command, array $row)
     {
+        $desc = $row['description'];
+        $alias = $row['controller'];
         // первое слово перед пробелом
         $args = explode(' ', $command, 2);
         $command = array_shift($args);
 
         $Command = new TaskRun($command);
         $Command->setDescription($desc);
+
+        if ($alias != $command) {
+            $Command->setAliases([$alias]);
+        }
 
         $Command->addArgument('d', InputArgument::OPTIONAL, 'Mode development');
         foreach ($args as $arg) {
@@ -161,8 +170,8 @@ class Builder
     public function run()
     {
         if ($commands = $this->commands()) {
-            foreach ($commands as $key => $desc) {
-                $this->addContainer($key, $desc);
+            foreach ($commands as $key => $row) {
+                $this->addContainer($key, $row);
             }
         }
 
@@ -175,11 +184,11 @@ class Builder
         $application = $this->application();
 
         $name = 'list';
+
         if (!empty($command) && $name != $command && $application->has($command)) {
             $command = $application->get($command);
             $name = $command->getName();
         }
-
 
         if ($name != 'list') {
             $application->setDefaultCommand($name, true);

@@ -27,6 +27,11 @@ class TaskRun extends AbstractCrontabCommand
 
         /* @var string $name */
         $name = $this->getName();
+        if ($aliases = $this->getAliases()) {
+            if (is_array($aliases) && !empty($aliases)) {
+                $name = $aliases[0];
+            }
+        }
 
         $name = str_ireplace(':', '/', $name);
         if ($input->hasArgument('d')) {
@@ -34,7 +39,6 @@ class TaskRun extends AbstractCrontabCommand
                 'develop' => true,
             ]);
         }
-
 
 
         $this->scheduler

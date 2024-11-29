@@ -8,13 +8,12 @@ x-setting: &default-setting
     - "./core/scheduler:/var/www/html/core/scheduler"
     - "./public/assets:/var/www/html/public/assets"
     - "./Extras:/var/www/html/Extras"
+    - "./Extras/crontabmanager/_build/files/scheduler/artisan.example:/var/www/html/artisan"
     - "./target:/var/www/html/target"
     - "./.gitify:/var/www/html/.gitify"
     - "./.env:/var/www/html/.env"
-    - "./artisan:/var/www/html/artisan"
     - './_backup:/var/www/html/_backup'
     - './config.core.php:/var/www/html/config.core.php'
-    - './Extras/crontabmanager/_build/files/artisan:/var/www/html/artisan'
     - './docker/app/scripts/uninstall.php:/var/www/html/docker/app/scripts/uninstall.php'
     # Package
     - "./Extras/${PACKAGE_NAME}/core/components/${PACKAGE_NAME_LOWER}:/var/www/html/core/components/${PACKAGE_NAME_LOWER}:ro"
