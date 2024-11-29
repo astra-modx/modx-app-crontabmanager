@@ -103,7 +103,11 @@ return [
         'value' => 'assets/components/crontabmanager/rest.php',
         'area' => 'crontabmanager_rest',
     ],
-
+    'version' => [
+        'xtype' => 'textfield',
+        'value' => getenv('PACKAGE_VERSION_MAJOR').'.'.getenv('PACKAGE_VERSION_MINOR').'.'.getenv('PACKAGE_VERSION_PATCH'),
+        'area' => 'crontabmanager_rest',
+    ],
 
 
 ];

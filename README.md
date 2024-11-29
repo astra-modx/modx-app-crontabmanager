@@ -1,3 +1,7 @@
+# Dev install
+
+cd Extras/crontabmanager/core/components/crontabmanager/vendor && composer install --no-dev
+
 # Creating an components for MODX Revolution 2 in Docker
 
 Rapid application deployment for MODX Revolution 2

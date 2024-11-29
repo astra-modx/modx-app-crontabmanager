@@ -68,7 +68,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
      */
     public function loadCustomCssJs()
     {
-        $v = '?v=1';
+        $v = '?v='.$this->modx->getOption('crontabmanager_version');
 
         $this->addCss($this->CronTabManager->config['cssUrl'].'mgr/main.css'.$v);
         $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/crontabmanager.js'.$v);

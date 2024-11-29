@@ -1,5 +1,33 @@
 include .env
 
+#######################
+# Extras package
+#######################
+package-build:
+	docker compose exec app bash -c "export PACKAGE_DEPLOY=False && php Extras/${PACKAGE_NAME}/_build/build.php"
+
+package-install:
+	docker compose exec app bash -c "php ./docker/app/scripts/checking-add-ons.php"
+	@make cache-clear
+
+package-build-deploy:
+	docker compose exec app bash -c "export PACKAGE_DEPLOY=True && php Extras/${PACKAGE_NAME}/_build/build.php"
+
+package-target-clear:
+	docker compose exec app bash -c 'rm -rf target/*'
+
+package-deploy:
+	@make package-target-clear
+	@make package-build
+	@make package-build-deploy
+
+
+package-create-new:
+	docker run --rm -ePACKAGE_NAME="${PACKAGE_NAME}" -v ./Extras:/var/www/html/Extras webnitros/modx-app:latest php Extras/myapp/rename_it.php
+
+
+
+
 help:
 	@echo ""
 	@echo "usage: make COMMAND:"
@@ -54,31 +82,6 @@ composer:
 cache-clear:
 	docker compose exec app bash -c 'rm -rf core/cache'
 
-
-#######################
-# Extras package
-#######################
-package-build:
-	docker compose exec app bash -c "export PACKAGE_DEPLOY=False && php Extras/${PACKAGE_NAME}/_build/build.php"
-
-package-install:
-	docker compose exec app bash -c "php ./docker/app/scripts/checking-add-ons.php"
-	@make cache-clear
-
-package-build-deploy:
-	docker compose exec app bash -c "export PACKAGE_DEPLOY=True && php Extras/${PACKAGE_NAME}/_build/build.php"
-
-package-target-clear:
-	docker compose exec app bash -c 'rm -rf target/*'
-
-package-deploy:
-	@make package-target-clear
-	@make package-build
-	@make package-build-deploy
-
-
-package-create-new:
-	docker run --rm -ePACKAGE_NAME="${PACKAGE_NAME}" -v ./Extras:/var/www/html/Extras webnitros/modx-app:latest php Extras/myapp/rename_it.php
 
 
 #######################
