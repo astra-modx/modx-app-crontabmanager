@@ -294,5 +294,11 @@ $_lang['crontabmanager_task_restart_after_failure_desc'] = 'If set, the task wil
 $_lang['crontabmanager_crontab_available'] = 'The <b>crontab</b> command is available';
 $_lang['crontabmanager_crontab_not_available'] = 'The <b>crontab</b> command is not available';
 
-$_lang['crontabmanager_next_run_human'] = 'Next run in: [[+minutes]] minutes[[+hours]]';
+$_lang['crontabmanager_next_run_human'] = 'Next: [[+minutes]] minutes[[+hours]]';
 $_lang['crontabmanager_next_run_human_hours'] = ' and [[+hours]] hours';
+
+
+$_lang['crontabmanager_next_run_human_seconds'] = 'through [[+seconds]] seconds';
+$_lang['crontabmanager_next_run_human_minutes'] = 'through [[+minutes]] minutes';
+$_lang['crontabmanager_next_run_human_hours'] = 'through [[+hours]] hours';
+$_lang['crontabmanager_next_run_human_days'] = 'through [[+days]] days';

@@ -1,14 +1,25 @@
 # Dev install
 
-cd Extras/crontabmanager/core/components/crontabmanager/vendor && composer install --no-dev
+Version components See [.env](.env)
+```shell
+PACKAGE_VERSION_MAJOR=3
+PACKAGE_VERSION_MINOR=6
+PACKAGE_VERSION_PATCH=0
+PACKAGE_RELEASE=beta
+```
 
 
 ```shell
-cp .env.example .env
 # Run Docker and Database Modx
 make remake
 make composer-package
-make package-build-deploy # your zip pack to dist ./target
+make package-build # your zip pack to dist ./target
+make package-install # your zip pack to dist ./target
+```
+
+```shell
+# Run Docker and Database Modx
+make package-deploy
 ```
 
 ### All commands

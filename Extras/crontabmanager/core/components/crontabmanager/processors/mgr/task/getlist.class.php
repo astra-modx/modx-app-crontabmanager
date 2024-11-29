@@ -5,6 +5,7 @@
  */
 
 use Cron\CronExpression;
+use Webnitros\CronTabManager\Crontab;
 
 class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
 {
@@ -123,14 +124,8 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
 
         $cron = new CronExpression(implode(' ', $time));
         $nextRun = $cron->getNextRunDate();
-        $currentDate = new DateTime();
-
-// Вычисляем разницу
-        $interval = $currentDate->diff($nextRun);
-
-        // Формируем человеко-понятный вывод
-        $hours = $interval->h > 0 ? $this->modx->lexicon('crontabmanager_next_run_human_hours', ['hours' => $interval->h]) : '';
-        $array['next_run_human'] = $this->modx->lexicon('crontabmanager_next_run_human', ['minutes' => $interval->i, 'hours' => $hours]);
+        $Crontab = new Crontab();
+        $array['next_run_human'] = $Crontab->diff($this->modx, $cron);
 
 
         #$array['next_run'] = $CronExpression->getNextRunDate()->;

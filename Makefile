@@ -33,10 +33,8 @@ package-deploy:
 	@make package-build
 	@make package-build-deploy
 
-
-package-create-new:
-	docker run --rm -ePACKAGE_NAME="${PACKAGE_NAME}" -v ./Extras:/var/www/html/Extras webnitros/modx-app:latest php Extras/myapp/rename_it.php
-
+composer-package:
+	docker compose exec app bash -c 'cd Extras/${PACKAGE_NAME}/core/components/${PACKAGE_NAME} && composer install --no-dev'
 
 
 #######################
@@ -88,8 +86,6 @@ rollback:
 	docker compose exec app composer rollback
 composer:
 	docker compose exec app composer install
-composer-package:
-	docker compose exec app bash -c 'cd Extras/${PACKAGE_NAME}/core/components/${PACKAGE_NAME} && composer install --no-dev'
 cache-clear:
 	docker compose exec app bash -c 'rm -rf core/cache'
 

@@ -32,6 +32,8 @@
  */
 abstract class modCrontabController
 {
+    use \Webnitros\CronTabManager\Traits\StyleTrait;
+
     /** @var modX $modx The modX instance */
     public $modx;
     /** @var SchedulerService $service The SchedulerService instance */

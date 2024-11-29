@@ -307,7 +307,12 @@ $_lang['crontabmanager_task_rule_tasks'] = 'Задания';
 $_lang['crontabmanager_task_restart_after_failure'] = 'Перезапускать задание после неудачного завершения';
 $_lang['crontabmanager_task_restart_after_failure_desc'] = 'Если установлено, то задание будет перезапущено после неудачного завершения. При этом, если задание не завершается успешно, то оно уведомления не будет отправлено. Только при втором неудачном завершении будет отправлено уведомление.';
 $_lang['crontabmanager_crontab_available'] = 'команда <b>crontab</b> доступна';
-$_lang['crontabmanager_crontab_not_available'] = 'команда <b>crontab</b> недоступна';
+$_lang['crontabmanager_crontab_not_available'] = 'команда <b>crontab</b> недоступна. Используйте php artisan schedule:run';
 
-$_lang['crontabmanager_next_run_human'] = 'Следующий запуск через: [[+minutes]] минут[[+hours]]';
+$_lang['crontabmanager_next_run_human'] = 'Через: [[+minutes]] минут[[+hours]]';
 $_lang['crontabmanager_next_run_human_hours'] = ' и [[+hours]] часов';
+
+$_lang['crontabmanager_next_run_human_seconds'] = 'через [[+seconds]] секунды';
+$_lang['crontabmanager_next_run_human_minutes'] = 'через [[+minutes]] минуты';
+$_lang['crontabmanager_next_run_human_hours'] = 'через [[+hours]] часов';
+$_lang['crontabmanager_next_run_human_days'] = 'через [[+days]] дней';

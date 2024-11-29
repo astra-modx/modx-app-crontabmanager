@@ -46,16 +46,15 @@ class SchedulerService
     public $mode = null;
 
 
-
     /**
-     * @param CronTabManager $CronTabManager
-     * @param array $config
+     * @param  CronTabManager  $CronTabManager
+     * @param  array  $config
      */
     function __construct(CronTabManager &$CronTabManager, array $config = array())
     {
         $this->modx =& $CronTabManager->modx;
         $this->config = array_merge(array(
-            'basePath' => dirname(__FILE__) . '/Controllers/',
+            'basePath' => dirname(__FILE__).'/Controllers/',
             'start_time' => microtime(true),
             'max_exec_time' => @ini_get("max_execution_time") - 5,
             'blocking_time_minutes' => $this->modx->getOption('crontabmanager_blocking_time_minutes', $config, 60),
@@ -80,14 +79,11 @@ class SchedulerService
     /**
      * Process the response and format in the proper response format.
      */
-    public function process($unLock = null)
+    public function process($unLock = null, bool $command = false)
     {
         $this->setMode();
         if ($this->scheduler) {
-
-
             if ($controllerName = $this->getController()) {
-
                 if (null == $controllerName) {
                     throw new Exception('Method not allowed', 405);
                 }
@@ -110,39 +106,39 @@ class SchedulerService
                         $controller = $controller->newInstance($this->modx, $this->config);
                         $controller->service = $this;
 
-                        if ($task = $this->getTask()) {
-
-
-                            // Записываем путь перед стартом
-                            if (is_null($this->manualStopExecutionPath)) {
-                                $this->manualStopExecutionPath = $task->getFileManualStopPath($this->config['basePath']);
-                                if (file_exists($this->manualStopExecutionPath)) {
-                                    unlink($this->manualStopExecutionPath);
+                        if ($command && !$this->modx->getCount('CronTabManagerTask', ['path_task' => $this->scheduler.'.php'])) {
+                            // For command run
+                            $controller->process();
+                        } else {
+                            // Only for task run
+                            if ($task = $this->getTask()) {
+                                // Записываем путь перед стартом
+                                if (is_null($this->manualStopExecutionPath)) {
+                                    $this->manualStopExecutionPath = $task->getFileManualStopPath($this->config['basePath']);
+                                    if (file_exists($this->manualStopExecutionPath)) {
+                                        unlink($this->manualStopExecutionPath);
+                                    }
                                 }
+
+                                $this->defaultModeDevelop = $task->get('mode_develop');
+
+                                // Добавить указатель что запуск в режиме dev
+                                if ($this->getArg('develop')) {
+                                    $task->set('mode_develop', true);
+                                }
+
+                                $this->runProcess($task, $method, $unLock, $controller);
                             }
-
-                            $this->defaultModeDevelop = $task->get('mode_develop');
-
-                            // Добавить указатель что запуск в режиме dev
-                            if ($this->getArg('develop')) {
-                                $task->set('mode_develop', true);
-                            }
-
-                            $this->runProcess($task, $method, $unLock, $controller);
                         }
-
                     } else {
                         throw new Exception('Static methods not supported in Controllers', 500);
                     }
-
                 } catch (ReflectionException $e) {
                     $this->errors = $e->getMessage();
-                    $this->modx->log(modX::LOG_LEVEL_ERROR, '[Crontab] ' . $e->getMessage(), '', __METHOD__, __FILE__, __LINE__);
+                    $this->modx->log(modX::LOG_LEVEL_ERROR, '[Crontab] '.$e->getMessage(), '', __METHOD__, __FILE__, __LINE__);
                 }
-
             }
         }
-
     }
 
 
@@ -153,24 +149,24 @@ class SchedulerService
      */
     public function getTask()
     {
-        $this->task = $this->scheduler . '.php';
+        $this->task = $this->scheduler.'.php';
         $criteria = array(
             'path_task' => $this->task,
         );
 
         /* @var CronTabManagerTask $CronTabManagerTask */
         if (!$this->CronTabManagerTask = $this->modx->getObject('CronTabManagerTask', $criteria)) {
-            $this->response('Error get task: ' . $this->task);
+            $this->response('Error get task: '.$this->task);
         }
 
         // Проверка срока хранения логов, чтобы не забивать логами всю базу автоматически требуется отчищать логи
         $log_storage_time = (int)$this->CronTabManagerTask->get('log_storage_time');
         if ($log_storage_time > 0) {
             $task_id = $this->CronTabManagerTask->get('id');
-            $createdon = strtotime(date('Y-m-d H:i:s', strtotime('-' . $log_storage_time . ' minutes', time())));
+            $createdon = strtotime(date('Y-m-d H:i:s', strtotime('-'.$log_storage_time.' minutes', time())));
             $criteria = array(
                 'task_id' => $this->CronTabManagerTask->get('id'),
-                'createdon:<' => $createdon
+                'createdon:<' => $createdon,
             );
             if ($count = (boolean)$this->modx->getCount('CronTabManagerTaskLog', $criteria)) {
                 $sql = "DELETE FROM {$this->modx->getTableName('CronTabManagerTaskLog')} WHERE task_id = {$task_id} and createdon <= {$createdon}";
@@ -183,24 +179,21 @@ class SchedulerService
 
     /**
      * Исполнение контраллера с фиксацией времени
-     * @param ReflectionMethod $method
-     * @param CronTabManagerTask $task
-     * @param $unLock - Снятие блокировки
-     * @param modCrontabController $controller
+     * @param  ReflectionMethod  $method
+     * @param  CronTabManagerTask  $task
+     * @param $unLock  - Снятие блокировки
+     * @param  modCrontabController  $controller
      */
     public function runProcess(CronTabManagerTask $task, ReflectionMethod $method, $unLock, modCrontabController $controller)
     {
-
         // 1. Проверка блокировок
         if (!$task->isModeDevelop()) {
-
-
             if (!$task->get('active')) {
-                $this->response('job deactivated id:' . $task->get('id'));
+                $this->response('job deactivated id:'.$task->get('id'));
             }
 
             if ($task->isBlockUpTask()) {
-                $this->response('task blocked until: ' . $task->get('blockupdon'));
+                $this->response('task blocked until: '.$task->get('blockupdon'));
             }
 
             // Если установлено снятие блокировки
@@ -218,8 +211,6 @@ class SchedulerService
             if ($task->isLockFile()) {
                 $this->response('Исполнение скрипта не завершено ждите окончания');
             }
-
-
         }
 
         if ($this->isSetCompletionTime) {
@@ -237,7 +228,7 @@ class SchedulerService
             $task->set('mode_develop', $this->defaultModeDevelop);
 
             $exec_time = microtime(true) - $this->getOption('start_time');
-            $memory = round(memory_get_usage(true) / 1024 / 1024, 4) ;
+            $memory = round(memory_get_usage(true) / 1024 / 1024, 4);
             $task->end($exec_time, $memory);
         }
 
@@ -267,7 +258,7 @@ class SchedulerService
     public function generateCronLink()
     {
         if (!class_exists('SheldulerGeneratorLink')) {
-            include_once dirname(__FILE__) . '/sheldulergeneratorlink.class.php';
+            include_once dirname(__FILE__).'/sheldulergeneratorlink.class.php';
         }
         $SheldulerGeneratorLink = new SheldulerGeneratorLink($this->modx);
         $SheldulerGeneratorLink->process($this->getOption('basePath'), $this->getOption('linkPath'));
@@ -285,8 +276,10 @@ class SchedulerService
     {
         $response = array(
             'success' => false
-        , 'message' => $this->modx->lexicon($message, $placeholders)
-        , 'data' => $data
+        ,
+            'message' => $this->modx->lexicon($message, $placeholders)
+        ,
+            'data' => $data,
         );
 
         $this->response($response);
@@ -304,8 +297,10 @@ class SchedulerService
     {
         $response = array(
             'success' => true
-        , 'message' => $this->modx->lexicon($message, $placeholders)
-        , 'data' => $data
+        ,
+            'message' => $this->modx->lexicon($message, $placeholders)
+        ,
+            'data' => $data,
         );
         $this->response($response);
     }
@@ -322,7 +317,7 @@ class SchedulerService
         $request['offset'] = $this->recordsCount;
         $query = http_build_query($request);
 
-        return $this->modx->getOption('site_url') . 'scheduler/' . $this->scheduler . '?' . $query;
+        return $this->modx->getOption('site_url').'scheduler/'.$this->scheduler.'?'.$query;
     }
 
     /**
@@ -337,7 +332,7 @@ class SchedulerService
         $exec_time = microtime(true) - $this->getOption('start_time');
 
         $out = '';
-        $memory = round(memory_get_usage(true) / 1024 / 1024, 4) . ' Mb';
+        $memory = round(memory_get_usage(true) / 1024 / 1024, 4).' Mb';
 
 
         if (isset($_GET['connector_base_path_url'])) {
@@ -348,11 +343,11 @@ class SchedulerService
 
 
         if ($this->ForcedStop) {
-            $out .= "Forced stop, max_exec_time: {$this->getOption('max_exec_time')} s" . $prefix;
+            $out .= "Forced stop, max_exec_time: {$this->getOption('max_exec_time')} s".$prefix;
         }
-        $out .= "Time all: {$exec_time}" . $prefix;
-        $out .= "Records process: {$this->recordsCount}" . $prefix;
-        $out .= "Memory: {$memory}" . $prefix;
+        $out .= "Time all: {$exec_time}".$prefix;
+        $out .= "Records process: {$this->recordsCount}".$prefix;
+        $out .= "Memory: {$memory}".$prefix;
         $totalTime = (microtime(true) - $tstart);
         $totalTime = sprintf("%2.4f s", $totalTime);
         if (!empty($modx)) {
@@ -362,12 +357,12 @@ class SchedulerService
 
             $phpTime = $totalTime - $queryTime;
             $phpTime = sprintf("%2.4f s", $phpTime);
-            $out .= "queries: {$queries}" . $prefix;
-            $out .= "queryTime: {$queryTime}" . $prefix;
-            $out .= "phpTime: {$phpTime}" . $prefix;
+            $out .= "queries: {$queries}".$prefix;
+            $out .= "queryTime: {$queryTime}".$prefix;
+            $out .= "phpTime: {$phpTime}".$prefix;
         }
 
-        $out .= "TotalTime: {$totalTime}" . $prefix;
+        $out .= "TotalTime: {$totalTime}".$prefix;
 
 
         return $out;
@@ -393,8 +388,8 @@ class SchedulerService
     /**
      * Get a configuration option for this service
      *
-     * @param string $key
-     * @param mixed $default
+     * @param  string  $key
+     * @param  mixed  $default
      * @return mixed
      */
     public function getOption($key, $default = null)
@@ -420,9 +415,11 @@ class SchedulerService
         $expectedArray = explode('/', $expectedFile);
 
 
-        if (empty($expectedArray)) $expectedArray = array(rtrim($expectedFile, '/') . '/');
+        if (empty($expectedArray)) {
+            $expectedArray = array(rtrim($expectedFile, '/').'/');
+        }
         $id = array_pop($expectedArray);
-        if (!file_exists($basePath . $expectedFile . $controllerClassFilePostfix) && !empty($id)) {
+        if (!file_exists($basePath.$expectedFile.$controllerClassFilePostfix) && !empty($id)) {
             $expectedFile = implode('/', $expectedArray);
             if (empty($expectedFile)) {
                 $expectedFile = $id;
@@ -431,35 +428,37 @@ class SchedulerService
             $this->requestPrimaryKey = $id;
         }
 
-        foreach ($this->iterateDirectories($basePath . '/*' . $controllerClassFilePostfix, GLOB_NOSORT) as $controller) {
+        foreach ($this->iterateDirectories($basePath.'/*'.$controllerClassFilePostfix, GLOB_NOSORT) as $controller) {
             $controller = $basePath != '/' ? str_replace($basePath, '', $controller) : $controller;
             $controller = trim($controller, '/');
             $controllerFile = str_replace(array($controllerClassFilePostfix), array(''), $controller);
             $controllerClass = str_replace(array('/', $controllerClassFilePostfix), array($controllerClassSeparator, ''), $controller);
             if (strnatcasecmp($expectedFile, $controllerFile) == 0) {
-                require_once $basePath . $controller;
-                return $controllerClassPrefix . $controllerClassSeparator . $controllerClass;
+                require_once $basePath.$controller;
+
+                return $controllerClassPrefix.$controllerClassSeparator.$controllerClass;
             }
         }
-        $this->modx->log(modX::LOG_LEVEL_INFO, 'Could not find expected controller: ' . $expectedFile);
+        $this->modx->log(modX::LOG_LEVEL_INFO, 'Could not find expected controller: '.$expectedFile);
+
         return null;
     }
 
     /**
      * Iterate across directories looking for files based on a pattern
      *
-     * @param string $pattern
-     * @param int $flags
+     * @param  string  $pattern
+     * @param  int  $flags
      * @return array
      */
     public function iterateDirectories($pattern, $flags = 0)
     {
         $files = glob($pattern, $flags);
-        $dirs = glob(dirname($pattern) . '/*', GLOB_ONLYDIR | GLOB_NOSORT);
+        $dirs = glob(dirname($pattern).'/*', GLOB_ONLYDIR | GLOB_NOSORT);
 
         if ($dirs) {
             foreach ($dirs as $dir) {
-                $files = array_merge($files, $this->iterateDirectories($dir . '/' . basename($pattern), $flags));
+                $files = array_merge($files, $this->iterateDirectories($dir.'/'.basename($pattern), $flags));
             }
         }
 
@@ -467,11 +466,14 @@ class SchedulerService
     }
 
     /**
-     * @param $controller путь к контроллеру
+     * @param  string  $controller
+     * @return $this
      */
-    public function php($controller)
+    public function php(string $controller)
     {
         $this->scheduler = $controller;
+
+        return $this;
     }
 
     public function getPath()
@@ -490,7 +492,7 @@ class SchedulerService
         $backtrace = debug_backtrace();
         $FILE = isset($backtrace[0]['file']) ? $backtrace[0]['file'] : __FILE__;
         $LINE = isset($backtrace[0]['line']) ? $backtrace[0]['line'] : __LINE__;
-        $this->modx->log(modX::LOG_LEVEL_ERROR, '[Crontab] ' . $message, '', '', $FILE, $LINE);
+        $this->modx->log(modX::LOG_LEVEL_ERROR, '[Crontab] '.$message, '', '', $FILE, $LINE);
     }
 
 
@@ -504,8 +506,10 @@ class SchedulerService
         $exec_time = microtime(true) - $this->getOption('start_time');
         if ($exec_time + 1 >= $max_exec_time) {
             $this->ForcedStop = true;
+
             return true;
         }
+
         return false;
     }
 
@@ -524,7 +528,6 @@ class SchedulerService
                 $this->response($this->GetUsage());
             }
         }
-
     }
 
     /**
@@ -561,7 +564,6 @@ class SchedulerService
             }
             $this->_args = $data;
         }
-
     }
 
     public function getArgs()
@@ -579,7 +581,20 @@ class SchedulerService
         if (!empty($this->_args[$key])) {
             return $this->_args[$key];
         }
+
         return null;
+    }
+
+    public function version()
+    {
+        return $this->option('version');
+    }
+
+    public function option($key, $options = null, $default = null, $skipEmpty = false)
+    {
+        $key = 'crontabmanager_'.$key;
+
+        return $this->modx->getOption($key, $options, $default, $skipEmpty);
     }
 
 
