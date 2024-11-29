@@ -59,7 +59,7 @@ class AppManagerPackage
             'build' => $root.'_build/',
             'elements' => $root.'_build/elements/',
             'resolvers' => $root.'_build/resolvers/',
-            'files' => $root . '_build/files/',
+            'files' => $root.'_build/files/',
 
             'assets' => $assets,
             'core' => $core,
@@ -731,12 +731,22 @@ class AppManagerPackage
 
         // Файл с контроллерами запрещаем удалять
         $this->builder->putVehicle($this->builder->createVehicle(array(
-            'source' => $this->config['files'] . 'scheduler',
-            'target' => "return MODX_CORE_PATH;"
+            'source' => $this->config['files'].'scheduler',
+            'target' => "return MODX_CORE_PATH;",
         ), array(
             'vehicle_class' => 'xPDOFileVehicle',
             xPDOTransport::RESOLVE_FILES_REMOVE => false, // Запрещаем удалять файлы
             xPDOTransport::UNINSTALL_FILES => false, // Запрещаем удалять файлы
+        )));
+
+        // Artisan
+        $this->builder->putVehicle($this->builder->createVehicle(array(
+            'source' => $this->config['files'].'artisan',
+            'target' => "return MODX_CORE_PATH.'artisan';",
+        ), array(
+            'vehicle_class' => 'xPDOFileVehicle',
+            xPDOTransport::RESOLVE_FILES_REMOVE => true, // Запрещаем удалять файлы
+            xPDOTransport::UNINSTALL_FILES => true, // Запрещаем удалять файлы
         )));
 
         $this->info('Packing up transport package zip...');
