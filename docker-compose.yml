@@ -11,14 +11,14 @@ x-setting: &default-setting
     - "./.env:/var/www/html/.env"
     - './_backup:/var/www/html/_backup'
     # Package
-    - "./Extras/${PACKAGE_NAME}/core/components/${PACKAGE_NAME}:/var/www/html/core/components/${PACKAGE_NAME}:ro"
-    - "./Extras/${PACKAGE_NAME}/assets/components/${PACKAGE_NAME}:/var/www/html/public/assets/components/${PACKAGE_NAME}:ro"
+    - "./Extras/${PACKAGE_NAME}/core/components/${PACKAGE_NAME_LOWER}:/var/www/html/core/components/${PACKAGE_NAME_LOWER}:ro"
+    - "./Extras/${PACKAGE_NAME}/assets/components/${PACKAGE_NAME_LOWER}:/var/www/html/public/assets/components/${PACKAGE_NAME_LOWER}:ro"
 
 services:
   app:
     image: 'webnitros/modx-app:latest'
-    env_file:
-      - ./.env # variables from the env file are exported when the container starts
+    #env_file:
+    #  - ./.env # variables from the env file are exported when the container starts
     user: '82:82'
     <<: *default-setting
 

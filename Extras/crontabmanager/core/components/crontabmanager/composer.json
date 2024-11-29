@@ -1,0 +1,23 @@
+{
+    "name": "astep/crontabmanager",
+    "autoload": {
+        "psr-4": {
+            "Webnitros\\CronTabManager\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "webnitros",
+            "email": "info@bustep.ru"
+        }
+    ],
+    "require": {
+        "nesbot/carbon": "^1.0.0",
+        "cheprasov/php-cli-args": "^3.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
+    }
+}
