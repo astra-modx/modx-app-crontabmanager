@@ -35,6 +35,11 @@ class CommandCreate extends AbstractCrontabCommand
         // Получение значения аргумента
         $controller = $input->getArgument('name');
 
+        if (empty($controller)) {
+            $this->style()->error('Set name of controller');
+
+            return Command::FAILURE;
+        }
         if (strripos($controller, 'CrontabController') !== false) {
             $this->style()->error('Controller name must not start with "CrontabController"');
 
@@ -75,10 +80,9 @@ class CommandCreate extends AbstractCrontabCommand
             return Command::FAILURE;
         }
 
-        // Ваше логика для обработки названия контроллера
         $output->writeln('Create a controller with the name: '.$controllerName.' [command: php artisan '.$sig.' --d --name=water]');
+        $output->writeln('Path controller: '.$basePath);
 
-        #sleep(60);
         return self::SUCCESS;
     }
 

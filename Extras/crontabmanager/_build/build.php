@@ -739,16 +739,6 @@ class AppManagerPackage
             xPDOTransport::UNINSTALL_FILES => false, // Запрещаем удалять файлы
         )));
 
-        // Artisan
-        $this->builder->putVehicle($this->builder->createVehicle(array(
-            'source' => $this->config['files'].'artisan',
-            'target' => "return MODX_CORE_PATH.'artisan';",
-        ), array(
-            'vehicle_class' => 'xPDOFileVehicle',
-            xPDOTransport::RESOLVE_FILES_REMOVE => true, // Запрещаем удалять файлы
-            xPDOTransport::UNINSTALL_FILES => true, // Запрещаем удалять файлы
-        )));
-
         $this->info('Packing up transport package zip...');
         $this->builder->pack();
 
