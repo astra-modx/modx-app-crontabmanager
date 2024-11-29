@@ -79,7 +79,7 @@ class SchedulerService
     /**
      * Process the response and format in the proper response format.
      */
-    public function process($unLock = null, bool $command = false)
+    public function process($unLock = null, bool $command = false, $input = null)
     {
         $this->setMode();
         if ($this->scheduler) {
@@ -106,6 +106,10 @@ class SchedulerService
                         $controller = $controller->newInstance($this->modx, $this->config);
                         $controller->service = $this;
 
+
+                        if ($input instanceof \Symfony\Component\Console\Input\InputInterface) {
+                            $controller->createInput($input);
+                        }
                         if ($command && !$this->modx->getCount('CronTabManagerTask', ['path_task' => $this->scheduler.'.php'])) {
                             // For command run
                             $controller->process();
@@ -596,6 +600,5 @@ class SchedulerService
 
         return $this->modx->getOption($key, $options, $default, $skipEmpty);
     }
-
 
 }

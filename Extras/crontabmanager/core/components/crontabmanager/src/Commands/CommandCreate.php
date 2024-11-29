@@ -23,8 +23,8 @@ class CommandCreate extends AbstractCrontabCommand
     protected function configure()
     {
         $this
-            ->setDescription('Создаёт новый контроллер.')
-            ->addArgument('name', InputArgument::REQUIRED, 'Введите название контроллера'); // Добавление аргумента
+            ->setDescription('Creates a new controller.')
+            ->addArgument('name', InputArgument::REQUIRED, 'Enter the controller name'); // Добавление аргумента
     }
 
     public function handle(InputInterface $input, OutputInterface $output): int
@@ -36,7 +36,7 @@ class CommandCreate extends AbstractCrontabCommand
         $controller = $input->getArgument('name');
 
         if (strripos($controller, 'CrontabController') !== false) {
-            $this->style()->error('Название контроллера Не должно начинаться с "CrontabController"');
+            $this->style()->error('Controller name must not start with "CrontabController"');
 
             return Command::FAILURE;
         }
@@ -45,7 +45,7 @@ class CommandCreate extends AbstractCrontabCommand
 
         // Проверка, что имя контроллера состоит только из латинских символов
         if (!preg_match('/^CrontabController[a-zA-Z0-9]*$/', $controllerName)) {
-            $output->writeln('<error>Название контроллера должно начинаться с "CrontabController" и состоять только из латинских символов.</error>');
+            $output->writeln('<error>The controller name must start with "CrontabController" and consist of Latin characters only.</error>');
 
             return Command::FAILURE;
         }
@@ -66,37 +66,37 @@ class CommandCreate extends AbstractCrontabCommand
 
             return Command::FAILURE;
         }
-
-        $content = $this->template($controllerName); // Вызов шаблона
-        $data = $this->modx->getCacheManager()->writeFile($filePath, $content);
-
+        $sig = strtolower($controller);
+        $content = $this->template($sig, $controllerName);
+        $this->modx->getCacheManager()->writeFile($filePath, $content);
         if (!file_exists($filePath)) {
-            $this->style()->error('Не удалось создать файл '.$filePath);
+            $this->style()->error('Failed to create file '.$filePath);
 
             return Command::FAILURE;
         }
 
         // Ваше логика для обработки названия контроллера
-        $output->writeln('Создание контроллера с названием: '.$controllerName);
+        $output->writeln('Create a controller with the name: '.$controllerName.' [command: php artisan '.$sig.' --d --name=water]');
 
         #sleep(60);
         return self::SUCCESS;
     }
 
 
-    public function template(string $controllerName)
+    public function template(string $sig, string $controllerName)
     {
-        // Шаблон кода контроллера
         $controllerCode = <<<PHP
 <?php
 /**
- * New Command
+ * New Command "php artisan $sig --d --name=water"
  */
 class $controllerName extends modCrontabController
 {
+    protected \$signature = '$sig {--name}'; // no required arguments
     public function process()
     {
-        \$this->info("Задание выполнено");
+        \$name = \$this->input()->getArgument('name') ?? 'no name';
+        \$this->info('Hello: '.\$name);
     }
 }
 PHP;

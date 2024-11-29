@@ -13,7 +13,7 @@ use ReflectionClass;
 use SchedulerService;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
-use Webnitros\CronTabManager\Commands\CommandCreate;
+use Symfony\Component\Console\Input\InputArgument;
 use Webnitros\CronTabManager\Commands\TaskRun;
 use Webnitros\CronTabManager\Helpers\Convert;
 
@@ -94,7 +94,14 @@ class Builder
                 }
 
                 $command = $Convert->command($basename);
-                $commands[mb_strtolower($command)] = $comment;
+                $signature = mb_strtolower($command);
+                if ($reflectionClass->hasProperty('signature')) {
+                    $property = $reflectionClass->getProperty('signature');
+                    $property->setAccessible(true);
+                    $signature = $property->getValue(new $class($this->scheduler->modx));
+                }
+
+                $commands[$signature] = $comment;
             }
         }
 
@@ -103,7 +110,6 @@ class Builder
 
     public function commands()
     {
-
         $schedules = [
             \Webnitros\CronTabManager\Commands\Schedule\ScheduleList::class,
             \Webnitros\CronTabManager\Commands\Schedule\Work::class,
@@ -127,14 +133,26 @@ class Builder
             }
         }
 
-
         return $commands;
     }
 
     public function addContainer(string $command, string $desc)
     {
+        // первое слово перед пробелом
+        $args = explode(' ', $command, 2);
+        $command = array_shift($args);
+
         $Command = new TaskRun($command);
         $Command->setDescription($desc);
+
+        $Command->addArgument('d', InputArgument::OPTIONAL, 'Mode development');
+        foreach ($args as $arg) {
+            preg_match('/\{--(.*?)\}/', $arg, $matches);
+            if (!empty($matches)) {
+                $key = $matches[1];
+                $Command->addArgument($key, InputArgument::OPTIONAL);
+            }
+        }
         $this->application->add($Command);
     }
 
@@ -155,7 +173,6 @@ class Builder
 
         $application = $this->application();
 
-
         $name = 'list';
         if (!empty($command) && $name != $command && $application->has($command)) {
             $command = $application->get($command);
@@ -168,7 +185,6 @@ class Builder
         }
 
         $arguments = ($args = $this->arguments()) ? new ArrayInput($args) : null;
-
         $application->run($arguments);
     }
 

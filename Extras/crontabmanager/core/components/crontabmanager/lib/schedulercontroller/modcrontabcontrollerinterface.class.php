@@ -70,8 +70,8 @@ abstract class modCrontabController
     protected $managerLog = null;
 
     /**
-     * @param modX $modx The modX instance
-     * @param array $config An array of configuration properties, passed through from modRestService
+     * @param  modX  $modx  The modX instance
+     * @param  array  $config  An array of configuration properties, passed through from modRestService
      */
     public function __construct(modX $modx, array $config = array())
     {
@@ -88,6 +88,7 @@ abstract class modCrontabController
         register_shutdown_function(function () use ($task) {
             shutdownHandlerTask($task);
         });
+
         return true;
     }
 
@@ -112,8 +113,8 @@ abstract class modCrontabController
 
     public function timerEnd($id)
     {
-        $time_str = round(microtime(true) - $this->start_timer, 4) . ' сек.';
-        $this->print_msg("[{$id}] {$this->service->recordsCount}/" . $this->total . ' time: ' . $time_str);
+        $time_str = round(microtime(true) - $this->start_timer, 4).' сек.';
+        $this->print_msg("[{$id}] {$this->service->recordsCount}/".$this->total.' time: '.$time_str);
     }
 
     protected $listDeleted = null;
@@ -152,9 +153,9 @@ abstract class modCrontabController
     protected function print_msg($msg)
     {
         if (isset($_GET['connector_base_path_url'])) {
-            echo $msg . '<br>';
+            echo $msg.'<br>';
         } else {
-            echo $msg . PHP_EOL;
+            echo $msg.PHP_EOL;
         }
     }
 
@@ -188,6 +189,7 @@ abstract class modCrontabController
         if ($this->total <= 0) {
             return true;
         }
+
         return $this->defaultOffset > $this->total;
     }
 
@@ -219,10 +221,14 @@ abstract class modCrontabController
         $list = array();
         $objects = array();
         if (!$this->isOffsetTotal()) {
-
-            $c->sortby($this->getProperty($this->getOption('propertySort', 'sort'), $this->defaultSortField), $this->getProperty($this->getOption('propertySortDir', 'dir'), $this->defaultSortDirection));
+            $c->sortby(
+                $this->getProperty($this->getOption('propertySort', 'sort'), $this->defaultSortField),
+                $this->getProperty($this->getOption('propertySortDir', 'dir'), $this->defaultSortDirection)
+            );
             $limit = $this->getProperty($this->getOption('propertyLimit', 'limit'), $this->defaultLimit);
-            if (empty($limit)) $limit = $this->defaultLimit;
+            if (empty($limit)) {
+                $limit = $this->defaultLimit;
+            }
             $c->limit($limit, $this->getProperty($this->getOption('propertyOffset', 'start'), $this->defaultOffset));
             $objects = $this->modx->getIterator($this->classKey, $c);
 
@@ -241,6 +247,7 @@ abstract class modCrontabController
         }
 
         $this->afterPassingAllRecords();
+
         return $this->collection($list);
     }
 
@@ -260,7 +267,7 @@ abstract class modCrontabController
         $backtrace = debug_backtrace();
         $FILE = isset($backtrace[0]['file']) ? $backtrace[0]['file'] : __FILE__;
         $LINE = isset($backtrace[0]['line']) ? $backtrace[0]['line'] : __LINE__;
-        $this->modx->log(modX::LOG_LEVEL_ERROR, '[Crontab] ' . $message, '', '', $FILE, $LINE);
+        $this->modx->log(modX::LOG_LEVEL_ERROR, '[Crontab] '.$message, '', '', $FILE, $LINE);
     }
 
     /**
@@ -269,7 +276,7 @@ abstract class modCrontabController
      */
     protected function schedulerSessionGenerate()
     {
-        return 'scheduler_offset_' . str_ireplace('/', '_', $this->service->scheduler);
+        return 'scheduler_offset_'.str_ireplace('/', '_', $this->service->scheduler);
     }
 
     /**
@@ -301,8 +308,8 @@ abstract class modCrontabController
     /**
      * Get a REQUEST property for the controller
      *
-     * @param string $key
-     * @param mixed $default
+     * @param  string  $key
+     * @param  mixed  $default
      * @return mixed
      */
     public function getSession($key, $default = null)
@@ -311,6 +318,7 @@ abstract class modCrontabController
         if (array_key_exists($key, $this->session)) {
             $value = $this->session[$key];
         }
+
         return $value;
     }
 
@@ -318,8 +326,8 @@ abstract class modCrontabController
     /**
      * Set a request property for the controller
      *
-     * @param string $key
-     * @param string $value
+     * @param  string  $key
+     * @param  string  $value
      */
     public function setSession($key, $value)
     {
@@ -328,7 +336,7 @@ abstract class modCrontabController
 
     /**
      * Unset a request property for the controller
-     * @param string $key
+     * @param  string  $key
      */
     public function unsetSession($key)
     {
@@ -349,7 +357,6 @@ abstract class modCrontabController
      */
     public function setRecordsStop()
     {
-
         #$defaultLimit = $this->defaultLimit;
         $defaultOffset = $this->defaultOffset;
 
@@ -378,7 +385,7 @@ abstract class modCrontabController
     /**
      * Output a collection of objects as a list.
      *
-     * @param array $list
+     * @param  array  $list
      * @return array
      */
     public function collection($list = array())
@@ -390,7 +397,7 @@ abstract class modCrontabController
     /**
      * Returns an array of field-value pairs for the object when listing. Override to provide custom functionality.
      *
-     * @param xPDOObject|xPDOSimpleObject $object The current iterated object
+     * @param  xPDOObject|xPDOSimpleObject  $object  The current iterated object
      */
     protected function prepare($object)
     {
@@ -401,28 +408,26 @@ abstract class modCrontabController
     /**
      * Returns an array of field-value pairs for the object when listing. Override to provide custom functionality.
      *
-     * @param xPDOObject $object The current iterated object
+     * @param  xPDOObject  $object  The current iterated object
      */
     protected function afterPrepare(xPDOObject $object)
     {
-
     }
 
     /**
      * Returns an array of field-value pairs for the object when listing. Override to provide custom functionality.
      *
-     * @param xPDOObject $object The current iterated object
+     * @param  xPDOObject  $object  The current iterated object
      */
     protected function beforePrepare(xPDOObject $object)
     {
-
     }
 
     /**
      * Allows manipulation of the query object after the COUNT statement is called on listing calls. Override to
      * provide custom functionality.
      *
-     * @param xPDOQuery $c
+     * @param  xPDOQuery  $c
      * @return xPDOQuery
      */
     protected function prepareListQueryAfterCount(xPDOQuery $c)
@@ -434,7 +439,7 @@ abstract class modCrontabController
      * Allows manipulation of the query object before the COUNT statement is called on listing calls. Override to
      * provide custom functionality.
      *
-     * @param xPDOQuery $c
+     * @param  xPDOQuery  $c
      * @return xPDOQuery
      */
     protected function prepareListQueryBeforeCount(xPDOQuery $c)
@@ -446,8 +451,8 @@ abstract class modCrontabController
     /**
      * Get a REQUEST property for the controller
      *
-     * @param string $key
-     * @param mixed $default
+     * @param  string  $key
+     * @param  mixed  $default
      * @return mixed
      */
     public function getProperty($key, $default = null)
@@ -456,14 +461,15 @@ abstract class modCrontabController
         if (array_key_exists($key, $this->properties)) {
             $value = $this->properties[$key];
         }
+
         return $value;
     }
 
     /**
      * Set a request property for the controller
      *
-     * @param string $key
-     * @param string $value
+     * @param  string  $key
+     * @param  string  $value
      */
     public function setProperty($key, $value)
     {
@@ -472,7 +478,7 @@ abstract class modCrontabController
 
     /**
      * Unset a request property for the controller
-     * @param string $key
+     * @param  string  $key
      */
     public function unsetProperty($key)
     {
@@ -491,8 +497,8 @@ abstract class modCrontabController
     /**
      * Set a collection of properties for the controller
      *
-     * @param array $properties An array of properties
-     * @param bool $merge Optionally, only merge properties in if this is true
+     * @param  array  $properties  An array of properties
+     * @param  bool  $merge  Optionally, only merge properties in if this is true
      */
     public function setProperties(array $properties = array(), $merge = false)
     {
@@ -502,8 +508,8 @@ abstract class modCrontabController
     /**
      * Get a configuration option for this controller
      *
-     * @param string $key
-     * @param mixed $default
+     * @param  string  $key
+     * @param  mixed  $default
      * @return mixed
      */
     public function getOption($key, $default = null)
@@ -524,7 +530,7 @@ abstract class modCrontabController
         if (is_null($this->pdoFetch)) {
             /** @var pdoFetch $pdoFetch */
             $fqn = $this->modx->getOption('pdoFetch.class', null, 'pdotools.pdofetch', true);
-            $path = $this->modx->getOption('pdofetch_class_path', null, MODX_CORE_PATH . 'components/pdotools/model/', true);
+            $path = $this->modx->getOption('pdofetch_class_path', null, MODX_CORE_PATH.'components/pdotools/model/', true);
             if ($pdoClass = $this->modx->loadClass($fqn, $path, false, true)) {
                 $this->pdoFetch = new $pdoClass($this->modx, array());
             } else {
@@ -534,6 +540,7 @@ abstract class modCrontabController
         if ($this->pdoFetch === false) {
             return null;
         }
+
         return $this->pdoFetch->getChunk($file, $params);
     }
 
@@ -543,7 +550,7 @@ abstract class modCrontabController
      * @param $emails
      * @param $subject
      * @param $body
-     * @param array $files - список файлов которые нужно прицепить к письму (полный путь)
+     * @param  array  $files  - список файлов которые нужно прицепить к письму (полный путь)
      */
     public function sendMessage($emails, $subject, $body, $files = [])
     {
@@ -578,12 +585,12 @@ abstract class modCrontabController
             }
 
             if (!$mail->send()) {
-                $this->modx->log(modX::LOG_LEVEL_ERROR,
-                    'An error occurred while trying to send the email: ' . $mail->mailer->ErrorInfo
+                $this->modx->log(
+                    modX::LOG_LEVEL_ERROR,
+                    'An error occurred while trying to send the email: '.$mail->mailer->ErrorInfo
                 );
             }
             $mail->reset();
-
         }
     }
 
@@ -597,14 +604,14 @@ abstract class modCrontabController
     public function packFile($source, $target)
     {
         if (empty($source)) {
-            return 'empty ' . $source;
+            return 'empty '.$source;
         }
         if (!file_exists($source)) {
-            return 'file not exists' . $source;
+            return 'file not exists'.$source;
         }
 
         if (empty($target)) {
-            return 'empty ' . $target;
+            return 'empty '.$target;
         }
 
         $target_zip = dirname($source);
@@ -614,7 +621,7 @@ abstract class modCrontabController
         if (class_exists('ZipArchive', true) && $xpdo->loadClass('compression.xPDOZip', XPDO_CORE_PATH, true, true)) {
             $archive = new xPDOZip($xpdo, $target, array(
                 xPDOZip::CREATE => true,
-                xPDOZip::OVERWRITE => true
+                xPDOZip::OVERWRITE => true,
             ));
             if ($archive) {
                 $packResults = $archive->pack("{$source}");
@@ -632,8 +639,7 @@ abstract class modCrontabController
                     $packed = $archive->getErrors();
                 }
             }
-
-        } elseif (class_exists('PclZip') || include(XPDO_CORE_PATH . 'compression/pclzip.lib.php')) {
+        } elseif (class_exists('PclZip') || include(XPDO_CORE_PATH.'compression/pclzip.lib.php')) {
             $archive = new PclZip($target);
             if ($archive) {
                 $packResults = $archive->create("{$source}", PCLZIP_OPT_REMOVE_PATH, "{$target_zip}");
@@ -644,6 +650,7 @@ abstract class modCrontabController
                 }
             }
         }
+
         return $packed;
     }
 
@@ -660,4 +667,22 @@ abstract class modCrontabController
         $this->testsPath = $pathName;
     }
 
+
+    public function createInput(\Symfony\Component\Console\Input\InputInterface $input)
+    {
+        $this->input = $input;
+
+        return $this;
+    }
+
+    public ?\Symfony\Component\Console\Input\InputInterface $input = null;
+
+    public function input()
+    {
+        if ($this->input === null) {
+            $this->input = new \Symfony\Component\Console\Input\ArgvInput();
+        }
+
+        return $this->input;
+    }
 }

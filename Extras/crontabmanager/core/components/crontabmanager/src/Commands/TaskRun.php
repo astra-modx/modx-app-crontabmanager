@@ -8,10 +8,7 @@
 
 namespace Webnitros\CronTabManager\Commands;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Webnitros\CronTabManager\Commands\Abstracts\AbstractCrontabCommand;
 
@@ -20,14 +17,6 @@ class TaskRun extends AbstractCrontabCommand
 {
     protected function configure()
     {
-        $name = $this->getName();
-
-        $this
-            #->setHelp('This command allows you to create a user...')
-            ->setName($name)
-            ->setDescription('Mode development')
-            ->addArgument('d', InputArgument::REQUIRED, 'Mode development')#  ->addOption('d', null, InputOption::VALUE_NONE, 'Режим разработки')
-        ;
     }
 
     protected function handle(InputInterface $input, OutputInterface $output)
@@ -46,9 +35,12 @@ class TaskRun extends AbstractCrontabCommand
             ]);
         }
 
+
+
         $this->scheduler
             ->php($name)
-            ->process(null, true);
+            ->process(null, true, $input);
+
 
         return 1;
     }
