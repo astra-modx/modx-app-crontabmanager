@@ -1,5 +1,13 @@
 include .env
 
+help:
+	@echo ""
+	@echo "usage: make COMMAND:"
+	@echo ""
+	@echo "Commands:"
+	@echo "  run-app        Fast Start"
+
+
 #######################
 # Extras package
 #######################
@@ -8,6 +16,10 @@ package-build:
 
 package-install:
 	docker compose exec app bash -c "php ./docker/app/scripts/checking-add-ons.php"
+	@make cache-clear
+
+package-uninstall:
+	docker compose exec app bash -c "php ./docker/app/scripts/uninstall.php"
 	@make cache-clear
 
 package-build-deploy:
@@ -27,13 +39,10 @@ package-create-new:
 
 
 
+#######################
+# Docker
+#######################
 
-help:
-	@echo ""
-	@echo "usage: make COMMAND:"
-	@echo ""
-	@echo "Commands:"
-	@echo "  run-app        Fast Start"
 
 install:
 	@make build
