@@ -27,4 +27,5 @@ ht.access
 /core/components/
 /public/assets/components/
 /core/packages
+/core/scheduler/*
 /Extras/crontabmanager/core/components/crontabmanager/vendor
