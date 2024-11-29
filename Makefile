@@ -88,6 +88,8 @@ rollback:
 	docker compose exec app composer rollback
 composer:
 	docker compose exec app composer install
+composer-package:
+	docker compose exec app bash -c 'cd Extras/${PACKAGE_NAME}/core/components/${PACKAGE_NAME} && composer install --no-dev'
 cache-clear:
 	docker compose exec app bash -c 'rm -rf core/cache'
 
