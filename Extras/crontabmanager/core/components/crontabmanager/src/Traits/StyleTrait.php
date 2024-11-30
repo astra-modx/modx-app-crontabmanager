@@ -39,7 +39,7 @@ trait StyleTrait
 
     public function info($message)
     {
-        if ($this->service->isBrowser()) {
+        if ($this->service && $this->service->isBrowser()) {
             $this->print_msg('<info class="info">'.$message.'</info>');
         } else {
             $this->style()->block($message, 'INFO', 'fg=green', ' ', false);
@@ -48,7 +48,7 @@ trait StyleTrait
 
     public function error($message)
     {
-        if ($this->service->isBrowser()) {
+        if ($this->service && $this->service->isBrowser()) {
             $this->print_msg('<error class="error">'.$message.'</error>');
         } else {
             $this->style()->block($message, 'ERROR', 'fg=white;bg=red', ' ', false);
@@ -57,7 +57,7 @@ trait StyleTrait
 
     public function comment($message)
     {
-        if ($this->service->isBrowser()) {
+        if ($this->service && $this->service->isBrowser()) {
             $this->print_msg('<comment class="comment">'.$message.'</comment>');
         } else {
             $this->style()->comment($message);

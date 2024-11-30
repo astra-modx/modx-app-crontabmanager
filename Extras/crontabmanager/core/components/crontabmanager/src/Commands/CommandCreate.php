@@ -101,7 +101,7 @@ class $controllerName extends modCrontabController
     
     public function process()
     {
-        \$name = \$this->input()->getArgument('arg_name') ?? 'no name';
+        \$name = \$this->getArgument('arg_name', 'world');
         \$this->info('Hello: '.\$name);
     }
 }

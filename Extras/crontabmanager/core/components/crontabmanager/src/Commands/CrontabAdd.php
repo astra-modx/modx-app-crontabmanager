@@ -27,13 +27,13 @@ class CrontabAdd extends AbstractCrontabCommand
     {
         $this
             ->setDescription('Creates a new task in crontab')
-            ->addArgument('name', InputArgument::REQUIRED, 'Enter the command name'); // Добавление аргумента
+            ->addArgument('command', InputArgument::REQUIRED, 'Enter the command name'); // Добавление аргумента
     }
 
     public function handle(InputInterface $input, OutputInterface $output): int
     {
         // Получение значения аргумента
-        $command = trim($input->getArgument('name'));
+        $command = trim($input->getArgument('command'));
         if (empty($command)) {
             $this->style()->error('Set name of command');
 

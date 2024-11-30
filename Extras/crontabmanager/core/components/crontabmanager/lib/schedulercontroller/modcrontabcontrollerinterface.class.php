@@ -685,4 +685,19 @@ abstract class modCrontabController
 
         return $this->input;
     }
+
+
+    public function getArgument(string $name, $default = null)
+    {
+        if ($this->input()->hasArgument($name)) {
+            return $this->input()->getArgument($name);
+        }
+
+        return $default;
+    }
+
+    public function hasArgument(string $name)
+    {
+        return $this->input()->hasArgument($name);
+    }
 }
