@@ -127,8 +127,9 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
     public function getButtons()
     {
         $buttons = null;
+
         $buttons[] = [
-            'url' => 'https://astra-modx.github.io/modx-app-crontabmanager/command.html',
+            'url' => 'https://astra-modx.github.io/modx-app-crontabmanager/command.html?v='.$this->version,
             'text' => '<i class="icon-question-circle icon icon-large"></i>  Команды',
         ];
 
