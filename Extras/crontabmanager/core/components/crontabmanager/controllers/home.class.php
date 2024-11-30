@@ -128,7 +128,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
     {
         $buttons = null;
         $buttons[] = [
-            'url' => 'https://tteck.github.io/Proxmox/',
+            'url' => 'https://astra-modx.github.io/modx-app-crontabmanager/command.html',
             'text' => '<i class="icon-question-circle icon icon-large"></i>  Команды',
         ];
 

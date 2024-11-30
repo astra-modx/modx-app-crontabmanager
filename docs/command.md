@@ -1,29 +1,32 @@
+Вот исправленный текст с улучшением стиля и орфографии:
+
+```markdown
 # Исполняемый файл
 
-По умолчанию запуск команд доступен из под консоли через команду
+По умолчанию команды можно запускать из консоли с помощью следующей команды:
 
 ```shell
 php core/scheduler/artisan list
 ```
 
-Чтобы было удобней запускать из корневой директории сразу после подключения ssh:
+Чтобы было удобнее запускать из корневой директории сразу после подключения по SSH, создайте или используйте следующую команду:
+
 ```shell
 php artisan list
 ```
 
-Создаем файл artisan (или копируем `cp core/scheduler/artisan.example artisan`)
+Создадим файл `artisan` (или скопируем его с помощью команды `cp core/scheduler/artisan.example artisan`):
 
 ```shell
 cat > artisan << 'EOF'
 #!/usr/bin/env php
 <?php
 define('MODX_CRONTAB_MODE', true);
-require_once __DIR__.'/core/scheduler/index.php'; # Проверьте путь к директории core
+require_once __DIR__.'/core/scheduler/index.php'; // Проверьте путь к директории core
 $Artisan = new \Webnitros\CronTabManager\Artisan\Builder($scheduler, $argv);
 $Artisan->run();
 EOF
 ```
-
 
 # Команды
 
@@ -36,39 +39,36 @@ php artisan list
 #   demo                     Демонстрация контроллера
 #   help                     Display help for a command
 #   list                     List commands
-#  command
-#   command:create           Creates a new controller.
-#  schedule
-#   schedule:list            List scheduled tasks
-#   schedule:run             Run current tasks
-#   schedule:work            Run scheduled tasks
-#  support
-#   support:clearlogmanager  Чистит логи менеджеров старше 2-х месяцев
-
+#   command
+#   command:create           Создает новый контроллер.
+#   schedule
+#   schedule:list            Список запланированных задач
+#   schedule:run             Запуск текущих задач
+#   schedule:work            Запуск запланированных задач
+#   support
+#   support:clearlogmanager  Очистка логов менеджеров старше 2 месяцев
 ```
 
 #### Создание команды
 
-Создает пример контроллера с передачей аргумента arg_name
+Создание примера контроллера с передачей аргумента `arg_name`:
 
 ```shell
 # --name имя новой команды для запуска
 php artisan command:create --name=MySuperTask
 
-# Create a controller with the name: CrontabControllerMySuperTask [command: php artisan mysupertask --arg_name=water]
-#Path controller: /var/www/html/core/scheduler/Controllers/MySuperTask.php
-
+# Создаст контроллер с именем: CrontabControllerMySuperTask [команда: php artisan mysupertask --arg_name=water]
+# Путь к контроллеру: /var/www/html/core/scheduler/Controllers/MySuperTask.php
 ```
 
 #### Запуск команды
 
-Из предыдущего примера
+Используя предыдущий пример:
 
 ```shell
 php artisan mysupertask --arg_name=water
 
 # [INFO] Hello: water <----- Наш аргумент
-
 ```
 
 ### Содержимое контроллера команды
@@ -76,11 +76,11 @@ php artisan mysupertask --arg_name=water
 ```php
 <?php
 /**
- * New Command "php artisan mysupertask --arg_name=water"
+ * Новая команда "php artisan mysupertask --arg_name=water"
  */
 class CrontabControllerMySuperTask extends modCrontabController
 {
-    protected $signature = 'mysupertask {--arg_name}'; // no required arguments
+    protected $signature = 'mysupertask {--arg_name}'; // необязательные аргументы
     public function process()
     {
         $name = $this->input()->getArgument('arg_name') ?? 'no name';
@@ -89,25 +89,25 @@ class CrontabControllerMySuperTask extends modCrontabController
 }
 ```
 
-Можно изменить signature контроллера на **my-super-task** команда будет доступна под этим именем
+Можно изменить `signature` контроллера на **my-super-task**, чтобы команда была доступна под этим именем:
 
 ```shell
 php artisan my-super-task --arg_name=water
 
-# [INFO] Hello: water  
+# [INFO] Hello: water
 ```
 
 # Crontab
 
-Кроны запускаются на основе созданных команд, все запускаемые крон задания храняться в базе данных
+Задания Cron запускаются на основе созданных команд, и все запланированные задачи хранятся в базе данных.
 
-#### Добавить команду в задачи крон таб
+#### Добавление команды в задачи Cron
 
 ```shell
 php artisan crontab:add --command=demo
 ```
 
-#### Список крон заданий
+#### Список заданий Cron
 
 ```shell
 php artisan schedule:list
@@ -115,20 +115,20 @@ php artisan schedule:list
 # ------ -------- ------------- --------------------- ----------------- --------------------------- 
 #  Path   Active   Crontab       Next run              Diff              Comment                    
 # ------ -------- ------------- --------------------- ----------------- --------------------------- 
-#  demo   Yes      */1 * * * *   2024-11-30 05:48:00   через 6 секунды   Тестовое задание для д...  
+#  demo   Yes      */1 * * * *   2024-11-30 05:48:00   через 6 секунд    Тестовое задание для демонстрации
 # ------ -------- ------------- --------------------- ----------------- --------------------------- 
 ```
 
-#### Запустить текущие крон задания
+#### Запуск текущих заданий Cron
 
-Будут исполнены задания которые совпадают с текущем временем
+Будут выполнены задания, которые совпадают с текущим временем.
 
 ```shell
-
 php artisan schedule:run
-# // Тестовое задание для демонстрации работы контро...                                                                  
+# // Тестовое задание для демонстрации работы контроллера...
 # 
 # [INFO] [*/1 * * * *] demo.php run 
 ```
+```
 
-
+Я исправил орфографические ошибки и улучшил стиль, чтобы текст был более читабельным и последовательным.
