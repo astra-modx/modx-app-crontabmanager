@@ -7,8 +7,16 @@
             <div class="crontabmanager-method-crontab">
                 <h2>Crontab</h2>
                 [[+demon_crontab]]
-                <p>Используя этот метод, можно включать и выключать задания через панель администрирования. Задания автоматически будут запускаться на вашем
-                    сервере
+                <p>
+                    Используя этот метод, можно включать и выключать задания через панель администрирования. Задания автоматически будут запускаться на вашем
+                    сервере.
+                    <br>
+                    <a href="https://raw.githubusercontent.com/astra-modx/modx-app-crontabmanager/refs/heads/master/docs/images/task_enable.png"
+                       target="_blank">
+                        <img
+                                width="300px"
+                                src="https://raw.githubusercontent.com/astra-modx/modx-app-crontabmanager/refs/heads/master/docs/images/task_enable.png"
+                                alt="Включение-выключение крон заданий"></a>
                 </p>
 
                 <small>Пример файла crontab -e при доступности crontab в linux для вашего пользователя</small><br>
