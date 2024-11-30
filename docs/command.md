@@ -132,7 +132,7 @@ php artisan schedule:run
 # [INFO] [1 1 * * *] mysupertask.php run 
 ```
 
-## Настройка времени для крон
+## Настройка времени для crontab
 
 В административной части сайта можно настроить время для крон
 [/manager/?a=home&namespace=crontabmanager](crontabmanager)
