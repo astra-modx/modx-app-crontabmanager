@@ -318,3 +318,29 @@ $_lang['crontabmanager_next_run_human_hours'] = 'через [[+hours]] часо�
 $_lang['crontabmanager_next_run_human_days'] = 'через [[+days]] дней';
 
 $_lang['crontabmanager_button_help'] = 'Документация CrontabManager';
+
+$_lang['crontabmanager_task_cron_add'] = 'Добавить в cron';
+$_lang['crontabmanager_task_cron_remove'] = 'Удалить из cron';
+$_lang['crontabmanager_task_add_cron_confirm'] = 'Вы уверены что хотите добавить в crontabs это задание?';
+$_lang['crontabmanager_task_remove_cron_confirm'] = 'Вы уверены что хотите удалить из crontabs это задание?';
+
+# mute
+$_lang['crontabmanager_task_mute'] = 'Заглушить уведомления';
+$_lang['crontabmanager_task_mute_time'] = 'Заглушить уведомления на время';
+$_lang['crontabmanager_task_unmute'] = 'Снять молчание для уведомления';
+
+$_lang['crontabmanager_task_mute_confirm'] = 'Вы уверены что хотите залушить уведомления для этого задания до первого успешнего завершения?';
+$_lang['crontabmanager_task_unmute_confirm'] = 'Вы уверены что хотите снять молчание для уведомления для этого задания?';
+
+$_lang['crontabmanager_task_window_mute_time'] = 'Заглушить уведомления до даты';
+$_lang['crontabmanager_task_mute_time_date'] = 'Дата и время';
+$_lang['crontabmanager_task_mute_time_date_desc'] = 'Выберите дату и время после которой уведомления будут отправляться';
+$_lang['crontabmanager_task_err_get_task'] = 'Не удалось получить задание';
+$_lang['crontabmanager_task_err_time_current'] = 'Время мута меньше текущего времени';
+
+
+$_lang['crontabmanager_task_failed'] = 'Задание завершено неудачно';
+$_lang['crontabmanager_task_executed'] = 'Выполняется';
+
+
+

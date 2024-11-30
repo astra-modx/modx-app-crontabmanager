@@ -303,3 +303,10 @@ $_lang['crontabmanager_next_run_human_minutes'] = 'through [[+minutes]] minutes'
 $_lang['crontabmanager_next_run_human_hours'] = 'through [[+hours]] hours';
 $_lang['crontabmanager_next_run_human_days'] = 'through [[+days]] days';
 $_lang['crontabmanager_button_help'] = 'CrontabManager Documentation';
+
+$_lang['crontabmanager_task_cron_add'] = 'Add to cron';
+$_lang['crontabmanager_task_cron_remove'] = 'Remove from cron';
+$_lang['crontabmanager_task_add_cron_confirm'] = 'Are you sure you want to add this task to crontabs?';
+$_lang['crontabmanager_task_remove_cron_confirm'] = 'Are you sure you want to remove this task from crontabs?';
+
+// Mute

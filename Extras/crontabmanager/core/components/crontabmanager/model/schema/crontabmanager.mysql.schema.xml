@@ -29,6 +29,11 @@
         <field key="log_storage_time" dbtype="int" precision="10" phptype="integer" null="true" default="0"/>
 
         <field key="active" dbtype="tinyint" precision="1" phptype="boolean" null="true" default="1"/>
+        <field key="mute" dbtype="tinyint" precision="1" phptype="boolean" null="true" default="0"/>
+        <field key="mute_success" dbtype="tinyint" precision="1" phptype="boolean" null="true" default="0"/>
+
+        <field key="mute_time" dbtype="int" precision="20" phptype="timestamp" null="false" default="0"/>
+
 
         <index alias="createdon" name="createdon" primary="false" unique="false" type="BTREE">
             <column key="createdon" length="" collation="A" null="false"/>

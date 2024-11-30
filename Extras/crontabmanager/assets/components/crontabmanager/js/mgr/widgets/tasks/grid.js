@@ -12,9 +12,15 @@ CronTabManager.grid.Tasks = function (config) {
         getRowClass: function (rec) {
             // controller_exists
             console.log(rec.data);
-            return (!rec.data.active || !rec.data.controller_exists)
-                ? 'crontabmanager-row-disabled'
-                : ''
+
+            if (!rec.data.active || !rec.data.controller_exists) {
+                return 'crontabmanager-row-disabled'
+            }
+            if (rec.data.mute) {
+                return 'crontabmanager-row-mute'
+            }
+
+            return ''
         },
         renderer: function (v, p, record) {
             return record.data.description != '' && record.data.description != null ? '<div class="x-grid3-row-expander">&#160;</div>' : '&#160;'
@@ -50,7 +56,7 @@ CronTabManager.grid.Tasks = function (config) {
 Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
 
     getFields: function (config) {
-        return ['id', 'description', 'pid', 'controller_exists', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
+        return ['id', 'description', 'pid', 'mute', 'cron_enable', 'mute_success', 'mute_time', 'controller_exists', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
     },
 
     getColumns: function (config) {
@@ -70,6 +76,24 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             dataIndex: 'path_task',
             sortable: true,
             width: 200,
+            renderer: function (value, e, row) {
+
+
+                if (row.data.mute) {
+                    if (row.data.mute_success) {
+                        value += '<br><small title="Уведомления для этого задания загрулушены. До первого успешного завершения">mute:success</small>'
+                    } else {
+
+                        value += '<br><small title="Уведомления для этого задания загрулушены, до даты">mute:time ' + row.data.mute_time + '</small>'
+                    }
+                }
+
+                if (!row.data.cron_enable) {
+                    value += '<br><small style="color: darkred">Для автозапуска, нажмите иконку + "Добавить в cron"</small>'
+                }
+
+                return value
+            }
         }, {
             header: _('crontabmanager_task_time'),
             dataIndex: 'time',
@@ -351,7 +375,13 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
     unblockupTask: function (act, btn, e) {
         this.processors.confirm('unblockup', 'task_unblockup', {multiple: false})
     },
+    removeLog: function (act, btn, e) {
+        this.processors.confirm('removelog', 'task_removelog', {multiple: false})
+    },
 
+    manualStopTask: function (act, btn, e) {
+        this.processors.confirm('manualstop', 'task_manualstop', {multiple: false})
+    },
     readLog: function (act, btn, e) {
         if (this.win !== null) {
             this.win.destroy()
@@ -370,17 +400,66 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
         this.win.show()
     },
 
-    removeLog: function (act, btn, e) {
-        this.processors.confirm('removelog', 'task_removelog', {multiple: false})
+
+    muteItem: function (act, btn, e) {
+        this.processors.confirm('mute', 'task_mute', {multiple: false})
     },
 
-    manualStopTask: function (act, btn, e) {
-        this.processors.confirm('manualstop', 'task_manualstop', {multiple: false})
+    unmuteItem: function (act, btn, e) {
+        this.processors.confirm('unmute', 'task_unmute', {multiple: false})
+    },
+
+    addCron: function (act, btn, e) {
+        this.processors.confirm('addcron', 'task_add_cron', {multiple: false})
+    },
+    removeCron: function (act, btn, e) {
+        this.processors.confirm('removecron', 'task_remove_cron', {multiple: false})
     },
 
     win: null,
     runTask: function (act, btn, e) {
         this.runTaskWindow()
+    },
+    muteTime: function (btn, e, row) {
+
+        // crontabmanager-task-window-mute-time
+
+        if (typeof (row) != 'undefined') {
+            this.menu.record = row.data
+        } else if (!this.menu.record) {
+            return false
+        }
+        var id = this.menu.record.id
+
+        MODx.Ajax.request({
+            url: this.config.url,
+            params: {
+                action: 'mgr/task/get',
+                id: id
+            },
+            listeners: {
+                success: {
+                    fn: function (r) {
+                        var w = MODx.load({
+                            xtype: 'crontabmanager-task-window-mute-time',
+                            id: Ext.id(),
+                            record: r,
+                            listeners: {
+                                success: {
+                                    fn: function () {
+                                        this.refresh()
+                                    }, scope: this
+                                }
+                            }
+                        })
+                        w.reset()
+                        w.setValues(r.object)
+                        w.show(e.target)
+                    }, scope: this
+                }
+            }
+        })
+
     },
     runTaskWindow: function () {
 

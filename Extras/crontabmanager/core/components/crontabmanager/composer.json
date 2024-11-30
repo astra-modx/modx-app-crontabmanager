@@ -1,6 +1,9 @@
 {
     "name": "astep/crontabmanager",
     "autoload": {
+        "files": [
+            "src/Helpers/functions.php"
+        ],
         "psr-4": {
             "Webnitros\\CronTabManager\\": "src/"
         }

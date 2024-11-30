@@ -40,6 +40,8 @@ services:
     image: 'webnitros/modx-mysql:latest'
     networks:
       - backend
+    ports:
+      - ${NGINX_PORT:-3306}:3306
     env_file:
       - ./.env
     environment:

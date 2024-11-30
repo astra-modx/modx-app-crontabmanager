@@ -567,4 +567,49 @@ class CronTabManagerTask extends xPDOSimpleObject
         return $this->crontab()->expression($this);
     }
 
+    public function isEnableCron()
+    {
+        if (!Crontab::isAvailable()) {
+            return true;
+        }
+        return !empty($this->findCron());
+    }
+
+
+    public function muteSuccess()
+    {
+        $this->set('mute', 1);
+        $this->set('mute_success', 1);
+        return $this->save();
+    }
+
+    public function muteTime(int $date)
+    {
+        $this->set('mute', 1);
+        $this->set('mute_time', $date);
+        return $this->save();
+    }
+
+    /**
+     * Отключение мута
+     * @return bool
+     */
+    public function muteOff()
+    {
+        $this->set('mute', false);
+        $this->set('mute_success', false);
+        $this->set('mute_time', 0);
+
+        $this->updateFlag('mute', false);
+        $this->updateFlag('mute_success', false);
+        $this->updateFlag('mute_time', 0, true);
+
+        return true;
+    }
+
+    public function isMute()
+    {
+        return $this->get('mute');
+    }
+
 }

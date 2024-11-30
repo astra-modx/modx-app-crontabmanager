@@ -125,7 +125,6 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         $array['pid'] = $object->pid();
 
 
-
         $array['controller_exists'] = $object->controllerExists();
         $array['path_task_cli'] = $object->getPathCli();
 
@@ -139,6 +138,9 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
             $is_blocked = true;
         }
         $array['is_blocked'] = $is_blocked;
+
+        $CronisAvailable = Crontab::isAvailable();
+        $array['cron_enable'] = $object->isEnableCron();
 
 
         // sendSubscrib
@@ -192,6 +194,28 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
             );
         }
 
+
+        if ($CronisAvailable) {
+            if (!$array['cron_enable']) {
+                $array['actions'][] = array(
+                    'cls' => '',
+                    'icon' => 'icon icon-plus action-red',
+                    'title' => $this->modx->lexicon('crontabmanager_task_cron_add'),
+                    'action' => 'addCron',
+                    'button' => true,
+                    'menu' => true,
+                );
+            } else {
+                $array['actions'][] = array(
+                    'cls' => '',
+                    'icon' => 'icon icon-minus action-green ',
+                    'title' => $this->modx->lexicon('crontabmanager_task_cron_remove'),
+                    'action' => 'removeCron',
+                    'button' => false,
+                    'menu' => true,
+                );
+            }
+        }
         // readLog
         $array['actions'][] = array(
             'cls' => '',
@@ -202,6 +226,35 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
             'menu' => true,
         );
 
+
+        if (!$object->isMute()) {
+            $array['actions'][] = array(
+                'cls' => '',
+                'icon' => 'icon icon-music action-red',
+                'title' => $this->modx->lexicon('crontabmanager_task_mute'),
+                'action' => 'muteItem',
+                'button' => false,
+                'menu' => true,
+            );
+
+            $array['actions'][] = array(
+                'cls' => '',
+                'icon' => 'icon icon-clock-o action-red',
+                'title' => $this->modx->lexicon('crontabmanager_task_mute_time'),
+                'action' => 'muteTime',
+                'button' => false,
+                'menu' => true,
+            );
+        } else {
+            $array['actions'][] = array(
+                'cls' => '',
+                'icon' => 'icon icon-signal action-green ',
+                'title' => $this->modx->lexicon('crontabmanager_task_unmute'),
+                'action' => 'unmuteItem',
+                'button' => false,
+                'menu' => true,
+            );
+        }
 
         $array['actions'][] = '-';
         // unlock

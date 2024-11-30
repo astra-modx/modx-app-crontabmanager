@@ -35,6 +35,9 @@ $xpdo_meta_map['CronTabManagerTask']= array (
     'restart' => 0,
     'log_storage_time' => 0,
     'active' => 1,
+    'mute' => 0,
+    'mute_success' => 0,
+    'mute_time' => 0,
   ),
   'fieldMeta' => 
   array (
@@ -233,6 +236,30 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'phptype' => 'boolean',
       'null' => true,
       'default' => 1,
+    ),
+    'mute' => 
+    array (
+      'dbtype' => 'tinyint',
+      'precision' => '1',
+      'phptype' => 'boolean',
+      'null' => true,
+      'default' => 0,
+    ),
+    'mute_success' => 
+    array (
+      'dbtype' => 'tinyint',
+      'precision' => '1',
+      'phptype' => 'boolean',
+      'null' => true,
+      'default' => 0,
+    ),
+    'mute_time' => 
+    array (
+      'dbtype' => 'int',
+      'precision' => '20',
+      'phptype' => 'timestamp',
+      'null' => false,
+      'default' => 0,
     ),
   ),
   'indexes' => 
