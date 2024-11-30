@@ -75,15 +75,17 @@ php artisan mysupertask --arg_name=water
 
 ```php
 <?php
+
 /**
  * Новая команда "php artisan mysupertask --arg_name=water"
  */
 class CrontabControllerMySuperTask extends modCrontabController
 {
     protected $signature = 'mysupertask {--arg_name}'; // необязательные аргументы
+    
     public function process()
     {
-        $name = $this->input()->getArgument('arg_name') ?? 'no name';
+        $name = $this->getArgument('arg_name', 'world');
         $this->info('Hello: '.$name);
     }
 }
