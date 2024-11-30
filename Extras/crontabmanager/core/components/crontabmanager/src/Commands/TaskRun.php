@@ -40,12 +40,7 @@ class TaskRun extends AbstractCrontabCommand
             ]);
         }
 
-
-        $this->scheduler
-            ->php($name)
-            ->process(null, true, $input);
-
-
+        $this->scheduler->php($name)->process(null, true, $input);
         return 1;
     }
 }

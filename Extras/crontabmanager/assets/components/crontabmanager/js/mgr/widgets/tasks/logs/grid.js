@@ -24,27 +24,57 @@ CronTabManager.grid.LogsSync1c = function (config) {
 Ext.extend(CronTabManager.grid.LogsSync1c, CronTabManager.grid.Default, {
 
     getFields: function () {
-        return ['id', 'task_id', 'last_run', 'end_run', 'memory_usage', 'ignore_action','exec_time', 'auto_pause', 'pause', 'auto_pause_id', 'createdon', 'updatedon', 'completed', 'notification', 'actions']
+        return ['id', 'task_id', 'last_run', 'end_run', 'memory_usage', 'ignore_action', 'exec_time', 'auto_pause', 'pause', 'auto_pause_id', 'createdon', 'updatedon', 'completed', 'notification', 'actions']
     },
 
     getColumns: function () {
         return [
             {header: _('crontabmanager_task_log_id'), dataIndex: 'id', width: 20, sortable: true, hidden: true},
             {header: _('crontabmanager_task_log_last_run'), dataIndex: 'last_run', sortable: true, width: 100, renderer: CronTabManager.utils.formatDate},
-            {header: _('crontabmanager_task_log_end_run'), dataIndex: 'end_run', sortable: true, width: 100, renderer: CronTabManager.utils.formatDate},
+            {
+                header: _('crontabmanager_task_log_end_run'), dataIndex: 'end_run', sortable: true, width: 100,
+                renderer: function (value, e, row) {
+
+                    if (value === '') {
+                        return '---';
+                    }
+                    return CronTabManager.utils.formatDate(value);
+                    return String.format('<span class="crontabmanager_task_pid_{0}" title="{0}">{0}</span>', value)
+                }
+                //renderer: CronTabManager.utils.formatDate
+            },
             {header: _('crontabmanager_task_log_completed'), dataIndex: 'completed', sortable: true, width: 50, renderer: this._renderBoolean},
             {header: _('crontabmanager_task_log_ignore_action'), dataIndex: 'ignore_action', sortable: true, width: 50, renderer: this._renderBoolean},
             {header: _('crontabmanager_task_log_notification'), dataIndex: 'notification', sortable: true, width: 50, renderer: this._renderBoolean},
             {
-                header: _('crontabmanager_task_log_memory_usage'), dataIndex: 'memory_usage', sortable: true, width: 50, hidden: true, renderer: function (val, data, row) {
-                    return val+' mb'
+                header: _('crontabmanager_task_log_memory_usage'),
+                dataIndex: 'memory_usage',
+                sortable: true,
+                width: 50,
+                hidden: true,
+                renderer: function (val, data, row) {
+                    return val + ' mb'
                 }
             },
-            {header: _('crontabmanager_task_log_exec_time'), dataIndex: 'exec_time', sortable: true, width: 50, hidden: true, renderer: function (val, data, row) {
-                    return val+' s'
-                }},
+            {
+                header: _('crontabmanager_task_log_exec_time'),
+                dataIndex: 'exec_time',
+                sortable: true,
+                width: 50,
+                hidden: true,
+                renderer: function (val, data, row) {
+                    return val + ' s'
+                }
+            },
             {header: _('crontabmanager_task_log_createdon'), dataIndex: 'createdon', sortable: true, width: 70, renderer: CronTabManager.utils.formatDate},
-            {header: _('crontabmanager_task_log_updatedon'), dataIndex: 'updatedon', sortable: true, width: 70, hidden: true, renderer: CronTabManager.utils.formatDate},
+            {
+                header: _('crontabmanager_task_log_updatedon'),
+                dataIndex: 'updatedon',
+                sortable: true,
+                width: 70,
+                hidden: true,
+                renderer: CronTabManager.utils.formatDate
+            },
         ]
     },
 

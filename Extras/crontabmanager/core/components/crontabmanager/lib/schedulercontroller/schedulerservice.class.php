@@ -125,7 +125,8 @@ class SchedulerService
                         if ($input instanceof \Symfony\Component\Console\Input\InputInterface) {
                             $controller->createInput($input);
                         }
-                        if ($command && !$this->modx->getCount('CronTabManagerTask', ['path_task' => $this->scheduler.'.php'])) {
+                        $taskPath = $this->taskPath();
+                        if ($command && !$this->modx->getCount('CronTabManagerTask', ['path_task' => $taskPath])) {
                             // For command run
                             $controller->process();
                         } else {
@@ -493,6 +494,11 @@ class SchedulerService
         $this->scheduler = $controller;
 
         return $this;
+    }
+
+    public function taskPath()
+    {
+        return $this->scheduler.'.php';
     }
 
     public function getPath()

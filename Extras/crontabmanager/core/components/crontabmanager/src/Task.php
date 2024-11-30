@@ -101,6 +101,7 @@ class Task
 
     public function get(string $command)
     {
+        $command = trim($command);
         if ($items = $this->items()) {
             foreach ($items as $signature => $item) {
                 if ($signature == $command || $item['signature_command'] === $command || $item['controller'] === $command) {

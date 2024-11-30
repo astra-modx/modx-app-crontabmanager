@@ -9,6 +9,13 @@ CronTabManager.grid.Tasks = function (config) {
     this.exp = new Ext.grid.RowExpander({
         expandOnDblClick: false,
         tpl: new Ext.Template('<p class="desc">{description} <br>{message}</p>'),
+        getRowClass: function (rec) {
+            // controller_exists
+            console.log(rec.data);
+            return (!rec.data.active || !rec.data.controller_exists)
+                ? 'crontabmanager-row-disabled'
+                : ''
+        },
         renderer: function (v, p, record) {
             return record.data.description != '' && record.data.description != null ? '<div class="x-grid3-row-expander">&#160;</div>' : '&#160;'
         }
@@ -26,9 +33,10 @@ CronTabManager.grid.Tasks = function (config) {
             enableRowBody: true,
             autoFill: true,
             showPreview: true,
-            scrollOffset: 0,
+            scrollOffset: -10,
             getRowClass: function (rec) {
-                return !rec.data.active
+                // controller_exists
+                return (!rec.data.active || !rec.data.controller_exists)
                     ? 'crontabmanager-row-disabled'
                     : ''
             }
@@ -42,7 +50,7 @@ CronTabManager.grid.Tasks = function (config) {
 Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
 
     getFields: function (config) {
-        return ['id', 'description', 'pid', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
+        return ['id', 'description', 'pid', 'controller_exists', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
     },
 
     getColumns: function (config) {

@@ -172,7 +172,6 @@ class CronTabManagerTask extends xPDOSimpleObject
                 if (!$TaskLog = $this->xpdo->getObject('CronTabManagerTaskLog', $criteria)) {
                     $TaskLog = $this->xpdo->newObject('CronTabManagerTaskLog');
                     $TaskLog->set('last_run', $last_run);
-                    $TaskLog->set('end_run', $end_run);
                     $TaskLog->set('task_id', $task_id);
                     $TaskLog->set('hash', $hash);
                     $TaskLog->save();
@@ -215,6 +214,7 @@ class CronTabManagerTask extends xPDOSimpleObject
                 if ($TaskLog = $this->xpdo->getObject('CronTabManagerTaskLog', $criteria)) {
                     $TaskLog->set('completed', true);
 
+                    $TaskLog->set('end_run', $end_run);
                     // Статистика по заданию
                     $TaskLog->set('exec_time', $this->get('exec_time'));
                     $TaskLog->set('memory_usage', $this->get('memory_usage'));
@@ -540,6 +540,16 @@ class CronTabManagerTask extends xPDOSimpleObject
     public function getPath()
     {
         return $this->getOption('crontabmanager_link_path').'/'.$this->get('path_task');
+    }
+
+    public function controllerPath()
+    {
+        return $this->loadCronTabManager()->loadSchedulerService()->getOption('basePath').$this->get('path_task');
+    }
+
+    public function controllerExists()
+    {
+        return file_exists($this->controllerPath());
     }
 
     public function crontab()

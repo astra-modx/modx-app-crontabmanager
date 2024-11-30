@@ -125,6 +125,8 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         $array['pid'] = $object->pid();
 
 
+
+        $array['controller_exists'] = $object->controllerExists();
         $array['path_task_cli'] = $object->getPathCli();
 
         $array['lock'] = $object->isLockFile();
