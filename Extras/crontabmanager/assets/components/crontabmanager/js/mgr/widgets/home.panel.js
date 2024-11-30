@@ -3,66 +3,89 @@ CronTabManager.panel.Home = function (config) {
     Ext.apply(config, {
         baseCls: 'modx-formpanel',
         layout: 'anchor',
-        /*
-         stateful: true,
-         stateId: 'crontabmanager-panel-home',
-         stateEvents: ['tabchange'],
-         getState:function() {return {activeTab:this.items.indexOf(this.getActiveTab())};},
-         */
-        hideMode: 'offsets',
-        items: [{
-            html: '<h2>' + _('crontabmanager') + '</h2>',
-            cls: '',
-            style: {margin: '15px 0'}
-        }, {
-            xtype: 'modx-tabs',
-            defaults: {border: false, autoHeight: true},
-            border: true,
-            hideMode: 'offsets',
-            items: [
+        stateful: true,
+        stateId: 'crontabmanager-panel-home',
+        stateEvents: ['tabchange'],
+        getState: function () {
+            var index = this.items.indexOf(this.getActiveTab())
+            return {activeTab: index}
+        },
 
-                {
-                    title: _('crontabmanager_tasks'),
-                    layout: 'anchor',
-                    items: [{
-                        html: _('crontabmanager_intro_msg'),
-                        cls: 'panel-desc',
+        hideMode: 'offsets',
+        items: [
+            {
+                html: '<h2>' + _('crontabmanager') + '</h2>',
+                cls: '',
+                style: {margin: '15px 0'}
+            }, {
+                xtype: 'modx-tabs',
+                defaults: {border: false, autoHeight: true},
+                border: true,
+                hideMode: 'offsets',
+                items: [
+                    {
+                        title: _('crontabmanager_help'),
+                        id: 'crontabmanager_help',
+                        layout: 'anchor',
+                        deferredRender: true,
+                        items: [
+                            {
+                                html: '<p>' + _('crontabmanager_help_intro') + '</p>'
+                                , border: false
+                                , bodyCssClass: 'panel-desc'
+                                , bodyStyle: 'margin-bottom: 10px'
+                            }
+                            , {
+                                xtype: 'crontabmanager-form-setting-update'
+                            }
+                        ]
+                    },
+                    {
+                        title: _('crontabmanager_tasks'),
+                        layout: 'anchor',
+                        items: [{
+                            html: _('crontabmanager_intro_msg'),
+                            cls: 'panel-desc',
+                        }, {
+                            xtype: 'crontabmanager-grid-tasks',
+                            cls: 'main-wrapper',
+                        }]
                     }, {
-                        xtype: 'crontabmanager-grid-tasks',
-                        cls: 'main-wrapper',
-                    }]
-                }, {
-                    title: _('crontabmanager_rules'),
-                    layout: 'anchor',
-                    items: [{
-                        html: _('crontabmanager_rules_intro_msg'),
-                        cls: 'panel-desc',
+                        title: _('crontabmanager_rules'),
+                        layout: 'anchor',
+                        items: [{
+                            html: _('crontabmanager_rules_intro_msg'),
+                            cls: 'panel-desc',
+                        }, {
+                            xtype: 'crontabmanager-grid-tasks-rules',
+                            cls: 'main-wrapper',
+                        }]
                     }, {
-                        xtype: 'crontabmanager-grid-tasks-rules',
-                        cls: 'main-wrapper',
-                    }]
-                }, {
-                    title: _('crontabmanager_categories'),
-                    layout: 'anchor',
-                    items: [{
-                        html: _('crontabmanager_categories_intro_msg'),
-                        cls: 'panel-desc',
-                    }, {
-                        xtype: 'crontabmanager-grid-categories',
-                        cls: 'main-wrapper',
-                    }]
-                }, {
-                    title: _('crontabmanager_notifications'),
-                    layout: 'anchor',
-                    items: [{
-                        html: _('crontabmanager_notifications_intro_msg'),
-                        cls: 'panel-desc',
-                    }, {
-                        xtype: 'crontabmanager-grid-notifications',
-                        cls: 'main-wrapper',
-                    }]
-                },]
-        }]
+                        title: _('crontabmanager_categories'),
+                        layout: 'anchor',
+                        items: [{
+                            html: _('crontabmanager_categories_intro_msg'),
+                            cls: 'panel-desc',
+                        }, {
+                            xtype: 'crontabmanager-grid-categories',
+                            cls: 'main-wrapper',
+                        }]
+                    }
+                    , {
+                        title: _('crontabmanager_notifications'),
+                        layout: 'anchor',
+                        items: [{
+                            html: _('crontabmanager_notifications_intro_msg'),
+                            cls: 'panel-desc',
+                        }, {
+                            xtype: 'crontabmanager-grid-notifications',
+                            cls: 'main-wrapper',
+                        }]
+                    },
+
+
+                ]
+            }]
     })
     CronTabManager.panel.Home.superclass.constructor.call(this, config)
 }
@@ -71,8 +94,25 @@ Ext.reg('crontabmanager-panel-home', CronTabManager.panel.Home)
 
 Ext.onReady(function () {
 
+
+    setTimeout(function () {
+
+
+        var sourceDiv = document.getElementById('crontabmanager-panel-home-div-help');
+        var targetDiv = document.getElementById('crontabmanager_help');
+        console.log(targetDiv);
+        // Проверяем, что элементы найдены
+        if (sourceDiv && targetDiv) {
+            // Удаляем атрибут display: none из style
+            // Копируем содержимое из sourceDiv в targetDiv
+            targetDiv.innerHTML = sourceDiv.innerHTML;
+            targetDiv.style.display = '';  // Это удалит inline стиль display: none
+        }
+    }, 300)
+
+
+    // копировать из crontabmanager-panel-home-div-help в #crontabmanager_help
     if (CronTabManager.config.help_buttons.length > 0) {
-        console.log(121);
         CronTabManager.buttons.help = function (config) {
             config = config || {}
             for (var i = 0; i < CronTabManager.config.help_buttons.length; i++) {

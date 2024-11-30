@@ -219,13 +219,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                 xtype: 'label',
                 text: ' ' + _('crontabmanager_time_server') + ': ' + CronTabManager.config.time_server,
             },
-            {
-                xtype: 'label',
-                html: CronTabManager.config.crontab_is_available === 'yes'
-                    ? String.format('<span class="crontabmanager_crontab available" >{0}</span>', _('crontabmanager_crontab_available'))
-                    : String.format('<span class="crontabmanager_crontab not_available">{0}</span>', _('crontabmanager_crontab_not_available')),
-                //text: ' ' + _('crontabmanager_time_server') + ': ' + CronTabManager.config.crontab_is_available,
-            },
+
             '->', {
                 xtype: 'xcheckbox',
                 name: 'active',

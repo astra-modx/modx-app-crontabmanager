@@ -291,8 +291,8 @@ $_lang['crontabmanager_task_rule_tasks'] = 'Tasks';
 
 $_lang['crontabmanager_task_restart_after_failure'] = 'Restart task after failure';
 $_lang['crontabmanager_task_restart_after_failure_desc'] = 'If set, the task will be restarted after a failure. However, if the task fails again, no notification will be sent. Notifications will be sent only after the second failure.';
-$_lang['crontabmanager_crontab_available'] = 'The <b>crontab</b> command is available';
-$_lang['crontabmanager_crontab_not_available'] = 'The <b>crontab</b> command is not available';
+$_lang['crontabmanager_crontab_available'] = 'The <b>crontab</b> linux is available';
+$_lang['crontabmanager_crontab_not_available'] = 'The <b>crontab</b> linux is not available';
 
 $_lang['crontabmanager_next_run_human'] = 'Next: [[+minutes]] minutes[[+hours]]';
 $_lang['crontabmanager_next_run_human_hours'] = ' and [[+hours]] hours';

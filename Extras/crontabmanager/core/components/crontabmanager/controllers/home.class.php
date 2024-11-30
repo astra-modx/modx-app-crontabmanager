@@ -1,5 +1,10 @@
 <?php
 
+use Webnitros\CronTabManager\Crontab;
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 /**
  * The home manager controller for CronTabManager.
  *
@@ -43,7 +48,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
      */
     public function getLanguageTopics()
     {
-        return ['crontabmanager:manager', 'crontabmanager:default'];
+        return ['crontabmanager:manager', 'crontabmanager:default', 'crontabmanager:help'];
     }
 
 
@@ -88,12 +93,11 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
         $this->addJavascript('mgr/widgets/categories/windows.js');
         $this->addJavascript('mgr/widgets/notifications/grid.js');
         $this->addJavascript('mgr/widgets/notifications/windows.js');
+        $this->addJavascript('mgr/widgets/settings/form.js');
         $this->addJavascript('mgr/widgets/home.panel.js');
         $this->addJavascript('mgr/sections/home.js');
 
         $time_server = date('H:i:s', time());
-
-        $CrontabIsAvailable = \Webnitros\CronTabManager\Crontab::isAvailable() ? 'yes' : 'no';
 
         $this->CronTabManager->config['help_buttons'] = ($buttons = $this->getButtons()) ? $buttons : '';
 
@@ -103,10 +107,43 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
         CronTabManager.config.connector_url = "'.$this->CronTabManager->config['connectorUrl'].'";
         CronTabManager.config.connector_cron_url = "'.$this->CronTabManager->config['connectorCronUrl'].'";
         CronTabManager.config.time_server = "'.$time_server.'";
-        CronTabManager.config.crontab_is_available = "'.$CrontabIsAvailable.'";
         Ext.onReady(function() {MODx.load({ xtype: "crontabmanager-page-home"});});
         </script>'
         );
+    }
+
+    public function helpPage()
+    {
+        $BIN = CronTabManagerPhpExecutable($this->modx);
+
+        $path_scheduler = $this->CronTabManager->config['schedulerPath'];
+        $path = $this->CronTabManager->config['schedulerPath'].'/artisan';
+        $path_controllerh = $this->CronTabManager->loadSchedulerService()->getOption('basePath');
+
+        $path_controllerh = rtrim($path_controllerh, '/');
+        $shcedule_cron = '*/1    *       *       *       *       '.$BIN.' '.$path.' schedule:run 2>&1';
+        $user = get_current_user();
+        $props = [
+            'bin' => $BIN,
+            'path_scheduler' => $path_scheduler,
+            'path_artisan' => $path,
+            'path_controller' => $path_controllerh,
+            'user' => get_current_user(),
+            'schedule_cron' => $shcedule_cron,
+            'demon_crontab' => Crontab::isAvailable()
+                ? '<span class="crontabmanager_crontab available">'.$this->modx->lexicon('crontabmanager_crontab_available', ['user' => $user]).'</span>'
+                : '<span class="crontabmanager_crontab not_available">'.$this->modx->lexicon('crontabmanager_crontab_not_available', ['user' => $user]).'</span>',
+        ];
+
+
+        $uniqid = uniqid();
+        $tpl = file_get_contents($this->CronTabManager->config['corePath'].'elements/pages/help.tpl');
+
+        $chunk = $this->modx->newObject('modChunk', array('name' => "{tmp}-{$uniqid}"));
+        $chunk->setCacheable(false);
+        $output = $chunk->process($props, $tpl);
+
+        return $output;
     }
 
 
@@ -116,6 +153,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
     public function getTemplateFile()
     {
         $this->content .= '<div id="crontabmanager-panel-home-div"></div>';
+        $this->content .= $this->helpPage();
 
         return '';
     }

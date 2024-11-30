@@ -633,3 +633,31 @@ label[for=crontabmanager-grid-notifications-read]::before {
 #crontabmanager-grid-tasksruntask .comment {
     color: #666;
 }
+
+
+.crontabmanager_help_command_wrapper {
+    display: block;
+}
+
+.crontabmanager_help_command {
+    background-color: #e4e4e4;
+    border-radius: 5px;
+    margin-top: 5px;
+    display: inline-block;
+}
+
+.crontabmanager_help_command_pre {
+    padding: 10px 20px;
+    overflow: auto;
+    word-break: normal !important;
+    word-wrap: normal !important;
+    white-space: pre !important;
+}
+
+.crontabmanager_help_command_help {
+    margin-left: 0;
+}
+
+.crontabmanager-method-crontab {
+    margin: 20px 0;
+}
