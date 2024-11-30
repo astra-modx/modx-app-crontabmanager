@@ -1,6 +1,6 @@
 Changelog for CronTabManager.
 
-3.6.3-beta
+3.6.4-beta
 ==============
 - Заглушка уведомлений
 
