@@ -302,3 +302,4 @@ $_lang['crontabmanager_next_run_human_seconds'] = 'through [[+seconds]] seconds'
 $_lang['crontabmanager_next_run_human_minutes'] = 'through [[+minutes]] minutes';
 $_lang['crontabmanager_next_run_human_hours'] = 'through [[+hours]] hours';
 $_lang['crontabmanager_next_run_human_days'] = 'through [[+days]] days';
+$_lang['crontabmanager_button_help'] = 'CrontabManager Documentation';

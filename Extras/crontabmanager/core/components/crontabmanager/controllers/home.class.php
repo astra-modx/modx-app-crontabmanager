@@ -9,6 +9,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
     /** @var CronTabManager $CronTabManager */
     public $CronTabManager;
 
+    public $version = '1.0.0';
 
     /**
      *
@@ -18,6 +19,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
         $this->CronTabManager = $this->modx->getService('CronTabManager', 'CronTabManager', MODX_CORE_PATH.'components/crontabmanager/model/');
         $this->tokenIssuance();
         parent::initialize();
+        $this->version = $this->modx->getOption('crontabmanager_version');
     }
 
 
@@ -68,28 +70,26 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
      */
     public function loadCustomCssJs()
     {
-        $v = '?v='.$this->modx->getOption('crontabmanager_version');
-
-        $this->addCss($this->CronTabManager->config['cssUrl'].'mgr/main.css'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/crontabmanager.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/misc/strftime-min-1.3.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/misc/utils.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/misc/combo.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/misc/tree.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/misc/processorx.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/misc/default.grid.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/misc/default.window.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/widgets/tasks/grid.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/widgets/tasks/logs/grid.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/widgets/tasks/rules/grid.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/widgets/tasks/rules/windows.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/widgets/tasks/windows.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/widgets/categories/grid.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/widgets/categories/windows.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/widgets/notifications/grid.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/widgets/notifications/windows.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/widgets/home.panel.js'.$v);
-        $this->addJavascript($this->CronTabManager->config['jsUrl'].'mgr/sections/home.js'.$v);
+        $this->addCss('mgr/main.css');
+        $this->addJavascript('mgr/crontabmanager.js');
+        $this->addJavascript('mgr/misc/strftime-min-1.3.js');
+        $this->addJavascript('mgr/misc/utils.js');
+        $this->addJavascript('mgr/misc/combo.js');
+        $this->addJavascript('mgr/misc/tree.js');
+        $this->addJavascript('mgr/misc/processorx.js');
+        $this->addJavascript('mgr/misc/default.grid.js');
+        $this->addJavascript('mgr/misc/default.window.js');
+        $this->addJavascript('mgr/widgets/tasks/grid.js');
+        $this->addJavascript('mgr/widgets/tasks/logs/grid.js');
+        $this->addJavascript('mgr/widgets/tasks/rules/grid.js');
+        $this->addJavascript('mgr/widgets/tasks/rules/windows.js');
+        $this->addJavascript('mgr/widgets/tasks/windows.js');
+        $this->addJavascript('mgr/widgets/categories/grid.js');
+        $this->addJavascript('mgr/widgets/categories/windows.js');
+        $this->addJavascript('mgr/widgets/notifications/grid.js');
+        $this->addJavascript('mgr/widgets/notifications/windows.js');
+        $this->addJavascript('mgr/widgets/home.panel.js');
+        $this->addJavascript('mgr/sections/home.js');
 
         $time_server = date('H:i:s', time());
 
@@ -127,24 +127,33 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
     public function getButtons()
     {
         $buttons = null;
-        $name = 'CronTabManager';
-        $path = "Extras/{$name}/_build/build.php";
-        if (file_exists(MODX_BASE_PATH.$path)) {
-            $site_url = $this->modx->getOption('site_url').$path;
-            $buttons[] = [
-                'url' => $site_url,
-                'text' => $this->modx->lexicon('crontabmanager_button_install'),
-            ];
-            $buttons[] = [
-                'url' => $site_url.'?download=1&encryption_disabled=1',
-                'text' => $this->modx->lexicon('crontabmanager_button_download'),
-            ];
-            $buttons[] = [
-                'url' => $site_url.'?download=1',
-                'text' => $this->modx->lexicon('crontabmanager_button_download_encryption'),
-            ];
-        }
+        $buttons[] = [
+            'url' => 'https://tteck.github.io/Proxmox/',
+            'text' => '<i class="icon-question-circle icon icon-large"></i>  Команды',
+        ];
+
+        $buttons[] = [
+            'url' => 'https://docs.modx.pro/components/scheduler/',
+            'text' => '<i class="icon-question-circle icon icon-large"></i> '.$this->modx->lexicon('crontabmanager_button_help'),
+        ];
 
         return $buttons;
     }
+
+    /**
+     * Add an external Javascript file to the head of the page
+     *
+     * @param  string  $script
+     * @return void
+     */
+    public function addJavascript($script)
+    {
+        parent::addJavascript($this->CronTabManager->config['jsUrl'].$script.'?v='.$this->version);
+    }
+
+    public function addCss($script)
+    {
+        parent::addCss($this->CronTabManager->config['cssUrl'].$script.'?v='.$this->version);
+    }
+
 }

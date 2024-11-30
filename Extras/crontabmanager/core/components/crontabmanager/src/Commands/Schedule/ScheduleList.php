@@ -52,7 +52,7 @@ class ScheduleList extends AbstractCrontabCommand
         }
 
         // Данные таблицы
-        $headers = ['Path', 'Active', 'Crontab', 'Next run', 'Diff', 'Comment'];
+        $headers = ['Command', 'Active', 'Crontab', 'Next run', 'Diff', 'Comment'];
 
 
         // Вывод таблицы

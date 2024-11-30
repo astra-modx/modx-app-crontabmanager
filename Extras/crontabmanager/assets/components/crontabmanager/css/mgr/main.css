@@ -621,3 +621,15 @@ label[for=crontabmanager-grid-notifications-read]::before {
     color: darkred;
     border: 1px solid darkred;
 }
+
+#crontabmanager-grid-tasksruntask .info {
+    color: #5cb85c;
+}
+
+#crontabmanager-grid-tasksruntask .error {
+    color: darkred;
+}
+
+#crontabmanager-grid-tasksruntask .comment {
+    color: #666;
+}

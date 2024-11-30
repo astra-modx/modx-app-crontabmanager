@@ -16,13 +16,14 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Webnitros\CronTabManager\Commands\TaskRun;
 use Webnitros\CronTabManager\Helpers\Convert;
+use Webnitros\CronTabManager\Task;
 
 
 class Builder
 {
     private SchedulerService $scheduler;
     private Application $application;
-    private string $controller_path;
+
     private ?string $command;
     private array $args;
 
@@ -30,7 +31,7 @@ class Builder
     {
         $this->scheduler = $scheduler;
         $this->application = new Application('crontabmanager', $this->scheduler->version());
-        $this->controller_path = MODX_CORE_PATH.'scheduler/Controllers';
+
         $this->command = @trim((string)$args[1]);
         $this->args = $args;
     }
@@ -41,76 +42,11 @@ class Builder
     }
 
 
-    public function files($directory)
-    {
-        $files = glob($directory.'/*.php');
-        foreach (glob($directory.'/*', GLOB_ONLYDIR) as $subdirectory) {
-            $files = array_merge($files, $this->files($subdirectory));
-        }
-
-        return $files;
-    }
-
-
     public function generateCronLink()
     {
         $this->scheduler->generateCronLink();
     }
 
-    public function tasks()
-    {
-        $Convert = new Convert();
-        $controllers = null;
-        $files = $this->files($this->controller_path);
-        foreach ($files as $file) {
-            if (strripos($file, 'default.php') !== false) {
-                continue;
-            }
-            $controllers[] = $file;
-        }
-
-        $commands = [];
-        if ($controllers) {
-            foreach ($controllers as $controller) {
-                require_once $controller;
-                $basename = str_ireplace($this->controller_path.'/', '', $controller);
-                $basename = rtrim($basename, '.php');
-                $class = 'CrontabController'.$basename;
-                $class = str_ireplace('/', '', $class);
-                $reflectionClass = new ReflectionClass($class);
-                if ($reflectionClass->hasProperty('description')) {
-                    $property = $reflectionClass->getProperty('description');
-                    $property->setAccessible(true);
-                    $comment = $property->getValue(new $class($this->scheduler->modx));
-                } else {
-                    $comment = $reflectionClass->getDocComment();
-                    if (!empty($comment)) {
-                        $comment = str_ireplace('/**', '', $comment);
-                        $comment = str_ireplace('*/', '', $comment);
-                        $comment = str_ireplace('*', '', $comment);
-                        $comment = trim($comment);
-                    } else {
-                        $comment = '-';
-                    }
-                }
-
-                $controller = $Convert->command($basename);
-                $signature = mb_strtolower($controller);
-                if ($reflectionClass->hasProperty('signature')) {
-                    $property = $reflectionClass->getProperty('signature');
-                    $property->setAccessible(true);
-                    $signature = $property->getValue(new $class($this->scheduler->modx));
-                }
-
-                $commands[$signature] = [
-                    'controller' => $controller,
-                    'description' => $comment,
-                ];
-            }
-        }
-
-        return $commands;
-    }
 
     public function commands()
     {
@@ -119,6 +55,7 @@ class Builder
             \Webnitros\CronTabManager\Commands\Schedule\Work::class,
             \Webnitros\CronTabManager\Commands\Schedule\Run::class,
             \Webnitros\CronTabManager\Commands\CommandCreate::class,
+            \Webnitros\CronTabManager\Commands\CrontabAdd::class,
         ];
 
 
@@ -130,7 +67,9 @@ class Builder
 
 
         $commands = [];
-        if ($tasks = $this->tasks()) {
+
+        $Task = new Task($this->scheduler);
+        if ($tasks = $Task->items()) {
             ksort($tasks);
             foreach ($tasks as $signature => $description) {
                 $commands[$signature] = $description;
@@ -194,7 +133,8 @@ class Builder
             $application->setDefaultCommand($name, true);
         }
 
-        $arguments = ($args = $this->arguments()) ? new ArrayInput($args) : null;
+        $arguments = ($args = $this->arguments()) ? new ArrayInput($args) : new ArrayInput([]);
+
         $application->run($arguments);
     }
 

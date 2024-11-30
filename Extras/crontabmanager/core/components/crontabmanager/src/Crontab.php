@@ -28,6 +28,13 @@ class Crontab
     }
 
 
+    public function expression(CronTabManagerTask $task, $separator = ' ')
+    {
+        $CronExpression = new CronExpression($this->cronTime($task, $separator));
+
+        return $CronExpression;
+    }
+
     public function cronTime(CronTabManagerTask $task, $separator = ' ')
     {
         $time = array(

@@ -18,7 +18,7 @@ use Webnitros\CronTabManager\Commands\Abstracts\AbstractCrontabCommand;
 class CommandCreate extends AbstractCrontabCommand
 {
     protected static $defaultName = 'command:create';
-    protected static $defaultDescription = 'Create crontab task';
+    protected static $defaultDescription = 'Create command controller';
 
     protected function configure()
     {
@@ -80,7 +80,7 @@ class CommandCreate extends AbstractCrontabCommand
             return Command::FAILURE;
         }
 
-        $output->writeln('Create a controller with the name: '.$controllerName.' [command: php artisan '.$sig.' --d --name=water]');
+        $output->writeln('Create a controller with the name: '.$controllerName.' [command: php artisan '.$sig.' --arg_name=water]');
         $output->writeln('Path controller: '.$filePath);
 
         return self::SUCCESS;
@@ -91,15 +91,17 @@ class CommandCreate extends AbstractCrontabCommand
     {
         $controllerCode = <<<PHP
 <?php
+
 /**
- * New Command "php artisan $sig --d --name=water"
+ * New Command "php artisan $sig --arg_name=water"
  */
 class $controllerName extends modCrontabController
 {
-    protected \$signature = '$sig {--name}'; // no required arguments
+    protected \$signature = '$sig {--arg_name}'; // no required arguments
+    
     public function process()
     {
-        \$name = \$this->input()->getArgument('name') ?? 'no name';
+        \$name = \$this->input()->getArgument('arg_name') ?? 'no name';
         \$this->info('Hello: '.\$name);
     }
 }

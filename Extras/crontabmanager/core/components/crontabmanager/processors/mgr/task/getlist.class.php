@@ -114,21 +114,11 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         $array['actions'] = array();
 
 
-        $time = array(
-            $this->eiEmpt($array['minutes']),
-            $this->eiEmpt($array['hours']),
-            $this->eiEmpt($array['days']),
-            $this->eiEmpt($array['months']),
-            $this->eiEmpt($array['weeks']),
-        );
-
-        $cron = new CronExpression(implode(' ', $time));
+        $crontab = $object->crontab();
+        $time = $object->cronTime();
+        $cron = $object->expression();
         $nextRun = $cron->getNextRunDate();
-        $Crontab = new Crontab();
-        $array['next_run_human'] = $Crontab->diff($this->modx, $cron);
-
-
-        #$array['next_run'] = $CronExpression->getNextRunDate()->;
+        $array['next_run_human'] = $crontab->diff($this->modx, $cron);
         $array['next_run'] = $nextRun->format('Y-m-d H:i:s');
 
 
@@ -139,7 +129,7 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
 
         $array['lock'] = $object->isLockFile();
         $array['is_blocked_time'] = $object->isBlockUpTask();
-        $array['time'] = implode(' ', $time);
+        $array['time'] = $time;
 
 
         $is_blocked = false;

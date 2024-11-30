@@ -181,6 +181,7 @@ class CronTabManager
             'modelPath' => $corePath . 'model/',
             'processorsPath' => $corePath . 'processors/',
             'customPath' => $corePath . 'custom/',
+            'templatesPath' => $corePath . 'elements/templates/',
             'json_response' => false,
 
             'connectorUrl' => $assetsUrl . 'connector.php',

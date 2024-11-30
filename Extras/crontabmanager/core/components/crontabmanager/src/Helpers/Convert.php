@@ -14,7 +14,12 @@ class Convert
 
     public function command(string $path)
     {
-        $path = rtrim($path, '.php');
+
+
+        if (strripos($path, '.') !== false) {
+            $path = strstr($path, '.', true);
+        }
+
         $command = str_ireplace('/', ':', $path);
         $pattern = "/\r?\n/";
         $replacement = "";

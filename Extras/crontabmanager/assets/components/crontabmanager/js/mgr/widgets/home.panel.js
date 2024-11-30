@@ -72,7 +72,7 @@ Ext.reg('crontabmanager-panel-home', CronTabManager.panel.Home)
 Ext.onReady(function () {
 
     if (CronTabManager.config.help_buttons.length > 0) {
-
+        console.log(121);
         CronTabManager.buttons.help = function (config) {
             config = config || {}
             for (var i = 0; i < CronTabManager.config.help_buttons.length; i++) {
@@ -91,14 +91,17 @@ Ext.onReady(function () {
             loadPaneURl: function (b) {
                 var url = b.url
                 var text = b.text
-                if (!url || !url.length) { return false }
+                if (!url || !url.length) {
+                    return false
+                }
+
                 if (url.substring(0, 4) !== 'http') {
                     url = MODx.config.base_help_url + url
                 }
                 MODx.helpWindow = new Ext.Window({
                     title: text
-                    , width: 850
-                    , height: 350
+                    , width: 1200
+                    , height: 550
                     , resizable: true
                     , maximizable: true
                     , modal: false

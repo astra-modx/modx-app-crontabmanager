@@ -36,8 +36,12 @@ class Run extends AbstractCrontabCommand
                 if ($cron->isDue()) {
                     $description = $object->description;
 
-                    $comment = !empty($description) ? ' comment: '.mb_strimwidth($description, 0, 25, "...") : '';
-                    $this->info('run: '.$path.$comment);
+                    $comment = !empty($description) ? mb_strimwidth($description, 0, 50, "...") : '';
+                    if (!empty($comment)) {
+                        $this->comment($comment);
+                    }
+
+                    $this->info('['.$time.'] '.$path.' run');
                     $cli = $object->getPath();
                     if (file_exists($cli)) {
                         $log = $object->getFileLogPath();

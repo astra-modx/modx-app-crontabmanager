@@ -75,12 +75,27 @@ class SchedulerService
         }
     }
 
+    public $isCommand = false;
+
+    public function isCommand()
+    {
+        return $this->isCommand;
+    }
+
+    public $isBrowser = false;
+
+    public function isBrowser()
+    {
+        return $this->isBrowser;
+    }
 
     /**
      * Process the response and format in the proper response format.
      */
-    public function process($unLock = null, bool $command = false, $input = null)
+    public function process($unLock = null, bool $command = false, $input = null, $browser = false)
     {
+        $this->isCommand = $command;
+        $this->isBrowser = $browser;
         $this->setMode();
         if ($this->scheduler) {
             if ($controllerName = $this->getController()) {

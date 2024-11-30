@@ -316,3 +316,5 @@ $_lang['crontabmanager_next_run_human_seconds'] = 'через [[+seconds]] се�
 $_lang['crontabmanager_next_run_human_minutes'] = 'через [[+minutes]] минуты';
 $_lang['crontabmanager_next_run_human_hours'] = 'через [[+hours]] часов';
 $_lang['crontabmanager_next_run_human_days'] = 'через [[+days]] дней';
+
+$_lang['crontabmanager_button_help'] = 'Документация CrontabManager';
