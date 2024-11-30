@@ -644,6 +644,7 @@ label[for=crontabmanager-grid-notifications-read]::before {
     border-radius: 5px;
     margin-top: 5px;
     display: inline-block;
+    max-width: 800px;
 }
 
 .crontabmanager_help_command_pre {
@@ -659,5 +660,10 @@ label[for=crontabmanager-grid-notifications-read]::before {
 }
 
 .crontabmanager-method-crontab {
-    margin: 20px 0;
+    margin: 20px 20px;
+}
+
+
+.crontabmanager-method-crontab.not_available {
+    opacity: 0.5;
 }

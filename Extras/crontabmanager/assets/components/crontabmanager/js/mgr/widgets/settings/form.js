@@ -23,6 +23,23 @@ CronTabManager.form.UpdateSetting = function (config) {
     })
     CronTabManager.form.UpdateSetting.superclass.constructor.call(this, config)
 
+
+    this.on('afterrender', function () {
+        setTimeout(function () {
+            var $this = this
+            var sourceDiv = document.getElementById('crontabmanager-panel-home-div-help');
+            var targetDiv = document.getElementById('crontabmanager_help');
+
+            // Проверяем, что элементы найдены
+            if (sourceDiv && targetDiv) {
+                // Удаляем атрибут display: none из style
+                // Копируем содержимое из sourceDiv в targetDiv
+                targetDiv.innerHTML = sourceDiv.innerHTML;
+                targetDiv.style.display = '';  // Это удалит inline стиль display: none
+            }
+
+        }, 300)
+    })
 }
 Ext.extend(CronTabManager.form.UpdateSetting, MODx.FormPanel, {
 

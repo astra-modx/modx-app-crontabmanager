@@ -116,6 +116,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
     {
         $BIN = CronTabManagerPhpExecutable($this->modx);
 
+        $isAvailable =Crontab::isAvailable();
         $path_scheduler = $this->CronTabManager->config['schedulerPath'];
         $path = $this->CronTabManager->config['schedulerPath'].'/artisan';
         $path_controllerh = $this->CronTabManager->loadSchedulerService()->getOption('basePath');
@@ -125,6 +126,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
         $user = get_current_user();
         $props = [
             'bin' => $BIN,
+            'class_crontab' => $isAvailable ? 'available' : 'not_available',
             'path_scheduler' => $path_scheduler,
             'path_artisan' => $path,
             'path_controller' => $path_controllerh,

@@ -4,7 +4,7 @@
         <div id="contactus" style="width: 100%">
             Ваш консольный пользователя: <b>[[+user]]</b>
 
-            <div class="crontabmanager-method-crontab">
+            <div class="crontabmanager-method-crontab [[+class_crontab]]">
                 <h2>Crontab</h2>
                 [[+demon_crontab]]
                 <p>
@@ -44,22 +44,33 @@
                     <div class="crontabmanager_help_command">
                         <pre class="crontabmanager_help_command_pre">crontab -e</pre>
                     </div>
+
+                    <span style="    padding: 0px 20px;
+    display: inline-block;
+    position: relative;
+    top: -14px;">под ROOT пользователем </span>
+                    <div class="crontabmanager_help_command">
+                        <pre class="crontabmanager_help_command_pre">crontab -u [[+user]] -e</pre>
+                    </div>
+
                     <br>
-                    <small>Откроется редактор <a target="_blank" href="https://www.digitalocean
-                .com/community/tutorials/how-to-use-cron-to-automate-tasks-ubuntu-1804">nano</a>. При первом запуске может спросить какой редактор
-                        по умолчанию</small><br>
-                    <small>Внимание!! Не выполняйте команду crontab -e под ROOT пользователем, иначе после исполнения команды у сайта пропадут доступы к
+                    <small>Внимание!! Не выполняйте команду crontab -e под ROOT пользователем без явного указания USER, иначе после исполнения команды у сайта
+                        пропадут доступы к
                         созданным
                         файлам.</small>
+                    <br>
+
                 </div>
 
-
+                <p>Откроется редактор <a style="color: #1775ef" target="_blank" href="https://www.digitalocean
+                .com/community/tutorials/how-to-use-cron-to-automate-tasks-ubuntu-1804">nano</a>. При первом запуске может спросить какой редактор
+                    по умолчанию</p>
                 <p>Добавьте строку в конец файла</p>
                 <div class="crontabmanager_help_command">
                     <pre class="crontabmanager_help_command_pre">[[+schedule_cron]]</pre>
                 </div>
                 <p>Сохраните изменения и выполните выход из файла: <b>CTRL+x && Yes Enter</b></p>
-                <p>Пример</p>
+                <p>Пример как будет выглядить crontab</p>
                 <div class="crontabmanager_help_command">
                     <pre class="crontabmanager_help_command_pre">
 # modX component CronTabManager
@@ -110,7 +121,7 @@ stdout_logfile=/dev/stdout
                 <h2>Crontab File</h2>
                 <p>Вместо добавления в crontab заданий, они добавляются в один файл с кронами, который можно использователь для подключения в ручную</p>
 
-                <small>Пример файла</small><br>
+                <small>Пример файла: <b>[[+path_scheduler]]/crontabs/[[+user]]</b></small><br>
                 <div class="crontabmanager_help_command">
                     <pre class="crontabmanager_help_command_pre">
 # modX component CronTabManager

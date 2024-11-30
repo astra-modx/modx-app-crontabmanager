@@ -24,23 +24,6 @@ CronTabManager.panel.Home = function (config) {
                 hideMode: 'offsets',
                 items: [
                     {
-                        title: _('crontabmanager_help'),
-                        id: 'crontabmanager_help',
-                        layout: 'anchor',
-                        deferredRender: true,
-                        items: [
-                            {
-                                html: '<p>' + _('crontabmanager_help_intro') + '</p>'
-                                , border: false
-                                , bodyCssClass: 'panel-desc'
-                                , bodyStyle: 'margin-bottom: 10px'
-                            }
-                            , {
-                                xtype: 'crontabmanager-form-setting-update'
-                            }
-                        ]
-                    },
-                    {
                         title: _('crontabmanager_tasks'),
                         layout: 'anchor',
                         items: [{
@@ -83,6 +66,23 @@ CronTabManager.panel.Home = function (config) {
                         }]
                     },
 
+                    {
+                        title: _('crontabmanager_help'),
+                        id: 'crontabmanager_help',
+                        layout: 'anchor',
+                        deferredRender: true,
+                        items: [
+                            {
+                                html: '<p>' + _('crontabmanager_help_intro') + '</p>'
+                                , border: false
+                                , bodyCssClass: 'panel-desc'
+                                , bodyStyle: 'margin-bottom: 10px'
+                            }
+                            , {
+                                xtype: 'crontabmanager-form-setting-update'
+                            }
+                        ]
+                    },
 
                 ]
             }]
@@ -93,22 +93,6 @@ Ext.extend(CronTabManager.panel.Home, MODx.Panel)
 Ext.reg('crontabmanager-panel-home', CronTabManager.panel.Home)
 
 Ext.onReady(function () {
-
-
-    setTimeout(function () {
-
-
-        var sourceDiv = document.getElementById('crontabmanager-panel-home-div-help');
-        var targetDiv = document.getElementById('crontabmanager_help');
-        console.log(targetDiv);
-        // Проверяем, что элементы найдены
-        if (sourceDiv && targetDiv) {
-            // Удаляем атрибут display: none из style
-            // Копируем содержимое из sourceDiv в targetDiv
-            targetDiv.innerHTML = sourceDiv.innerHTML;
-            targetDiv.style.display = '';  // Это удалит inline стиль display: none
-        }
-    }, 300)
 
 
     // копировать из crontabmanager-panel-home-div-help в #crontabmanager_help
