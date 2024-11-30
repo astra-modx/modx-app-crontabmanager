@@ -106,7 +106,7 @@ php artisan my-super-task --arg_name=water
 #### Добавление команды в задачи Cron
 
 ```shell
-php artisan crontab:add --command=demo
+php artisan crontab:add --command=mysupertask
 ```
 
 #### Список заданий Cron
@@ -129,7 +129,7 @@ php artisan schedule:list
 php artisan schedule:run
 # // Тестовое задание для демонстрации работы контроллера...
 # 
-# [INFO] [*/1 * * * *] demo.php run 
+# [INFO] [1 1 * * *] mysupertask.php run 
 ```
 ```
 
