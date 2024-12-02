@@ -71,6 +71,9 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             dataIndex: 'category_name',
             sortable: true,
             width: 70,
+            renderer: function (value, e, row) {
+                return value ? value : '---'
+            }
         }, {
             header: _('crontabmanager_task_path_task'),
             dataIndex: 'path_task',
@@ -319,7 +322,19 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             }
         })
         w.reset()
-        w.setValues({active: false})
+        w.setValues({
+            active: false,
+            minutes: '*/5',
+            hours: '*',
+            days: '*',
+            months: '*',
+            weeks: '*',
+            minutes_condition: '*/5',
+            hours_condition: '*',
+            days_condition: '*',
+            months_condition: '*',
+            weeks_condition: '*'
+        })
         w.setValues({log_storage_time: CronTabManager.config.log_storage_time})
         w.show(e.target)
     },
@@ -331,6 +346,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
         }
         var id = this.menu.record.id
 
+
         MODx.Ajax.request({
             url: this.config.url,
             params: {
@@ -340,6 +356,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             listeners: {
                 success: {
                     fn: function (r) {
+
                         var w = MODx.load({
                             xtype: 'crontabmanager-task-window-update',
                             id: Ext.id(),

@@ -36,8 +36,10 @@ $_lang['crontabmanager_task_createdon'] = 'Дата создания';
 $_lang['crontabmanager_task_updatedon'] = 'Дата обновления';
 $_lang['crontabmanager_task_date_start'] = 'Дата запуска';
 $_lang['crontabmanager_task_description'] = 'Описание задания';
+$_lang['crontabmanager_task_description_placeholder'] = 'Краткое описание что делает задание';
 $_lang['crontabmanager_task_path_task'] = 'Путь к файлу';
-$_lang['crontabmanager_task_path_task_desc'] = '<em>Укажите путь к контроллеру в планировщик в виде: report/count.php. Все контроллеры расположены в: scheduler/Controllers/</em>';
+$_lang['crontabmanager_task_path_task_desc'] = '<em>Укажите путь к контроллеру в планировщик в виде: report/count.php. Все контроллеры расположены в: core/scheduler/Controllers/</em>';
+$_lang['crontabmanager_task_path_task_placeholder'] = 'например demo.php (относительно пути core/scheduler/Controllers/)';
 $_lang['crontabmanager_task_lock_file'] = 'Файл блокировки';
 $_lang['crontabmanager_task_last_run'] = 'Последний запуск';
 $_lang['crontabmanager_task_end_run'] = 'Завершен';
@@ -45,11 +47,11 @@ $_lang['crontabmanager_task_status'] = 'Статус';
 $_lang['crontabmanager_task_pid'] = 'PID';
 $_lang['crontabmanager_task_time'] = 'Время запуска';
 $_lang['crontabmanager_task_start_task'] = 'Запустить задание';
-$_lang['crontabmanager_task_minutes'] = 'Минуты';
-$_lang['crontabmanager_task_hours'] = 'Часы';
-$_lang['crontabmanager_task_days'] = 'Дни';
-$_lang['crontabmanager_task_months'] = 'Месяца';
-$_lang['crontabmanager_task_weeks'] = 'Дни недели';
+$_lang['crontabmanager_task_minutes'] = 'Минута';
+$_lang['crontabmanager_task_hours'] = 'Час';
+$_lang['crontabmanager_task_days'] = 'День';
+$_lang['crontabmanager_task_months'] = 'Месяц';
+$_lang['crontabmanager_task_weeks'] = 'День недели';
 $_lang['crontabmanager_task_processor'] = 'Путь к процессору';
 $_lang['crontabmanager_task_reboot'] = 'Перезапустить';
 $_lang['crontabmanager_task_disable'] = 'Отключить задание';
@@ -76,7 +78,7 @@ $_lang['CronTabManagerTask_err_remove'] = 'Не удалось удалить з
 $_lang['crontabmanager_show_crontabs'] = 'Смотреть crontabs';
 $_lang['crontabmanager_show_pids'] = 'Смотреть pids';
 $_lang['crontabmanager_task_active_desc'] = 'Если снять галочку, то задание будет отключено в планировщике cron и не будет запускаться в фоновом режиме';
-$_lang['crontabmanager_task_path_task_desc'] = 'Например, если контроллер находится в корне, то путь к контроллеру будет следующим: "core/scheduler/Controllers/count.php"';
+$_lang['crontabmanager_task_path_task_desc'] = 'Контроллеры для запуска находятся в "core/scheduler/Controllers/"';
 
 
 // Task Log
@@ -309,13 +311,13 @@ $_lang['crontabmanager_task_restart_after_failure_desc'] = 'Если устан�
 $_lang['crontabmanager_crontab_available'] = 'linux <b>crontab</b> доступе для вашего пользователя <b>[[+user]]</b>.';
 $_lang['crontabmanager_crontab_not_available'] = 'linux <b>crontab</b> недоступен для вашего пользователя <b>[[+user]]</b>.';
 
-$_lang['crontabmanager_next_run_human'] = 'Через: [[+minutes]] минут[[+hours]]';
-$_lang['crontabmanager_next_run_human_hours'] = ' и [[+hours]] часов';
+$_lang['crontabmanager_next_run_human'] = 'Следующий запуск через: [[+minutes]] минут';
+$_lang['crontabmanager_next_run_human_hours'] = ' и [[+hours]] час.';
 
-$_lang['crontabmanager_next_run_human_seconds'] = 'через [[+seconds]] секунды';
-$_lang['crontabmanager_next_run_human_minutes'] = 'через [[+minutes]] минуты';
-$_lang['crontabmanager_next_run_human_hours'] = 'через [[+hours]] часов';
-$_lang['crontabmanager_next_run_human_days'] = 'через [[+days]] дней';
+$_lang['crontabmanager_next_run_human_seconds'] = 'Следующий запуск через [[+seconds]] сек.';
+$_lang['crontabmanager_next_run_human_minutes'] = 'Следующий запуск через [[+minutes]] мин.';
+$_lang['crontabmanager_next_run_human_hours'] = ' Следующий запуск через [[+hours]] час.';
+$_lang['crontabmanager_next_run_human_days'] = 'Следующий запуск через [[+days]] дн.';
 
 $_lang['crontabmanager_button_help'] = 'Документация CrontabManager';
 
@@ -341,6 +343,9 @@ $_lang['crontabmanager_task_err_time_current'] = 'Время мута меньш
 
 $_lang['crontabmanager_task_failed'] = 'Задание завершено неудачно';
 $_lang['crontabmanager_task_executed'] = 'Выполняется';
+
+
+$_lang['crontabmanager_window_regex_minute'] = 'Введите правильное cron-выражение для минут';
 
 
 

@@ -22,7 +22,7 @@ class Run extends AbstractCrontabCommand
 
     public function handle(InputInterface $input, OutputInterface $output): int
     {
-        $Crontab = new Crontab();
+        $rows = array();
         /* @var CronTabManagerTask $object */
         $q = $this->modx->newQuery('CronTabManagerTask');
         $q->where(array(
@@ -31,25 +31,38 @@ class Run extends AbstractCrontabCommand
         if ($objectList = $this->modx->getCollection('CronTabManagerTask', $q)) {
             foreach ($objectList as $object) {
                 $path = $object->path_task;
-                $time = $Crontab->cronTime($object);
-                $cron = new CronExpression($time);
-                if ($cron->isDue()) {
+                $Crontab = $object->crontab();
+                $status = 'pending';
+                if ($Crontab->isDue()) {
+                    $status = 'running';
                     $description = $object->description;
 
                     $comment = !empty($description) ? mb_strimwidth($description, 0, 50, "...") : '';
                     if (!empty($comment)) {
                         $this->comment($comment);
                     }
-
-                    $this->info('['.$time.'] '.$path.' run');
                     $cli = $object->getPath();
                     if (file_exists($cli)) {
                         $log = $object->getFileLogPath();
                         shell_exec('php '.$cli.' > '.$log.' 2>&1 &');
                     }
                 }
+
+                $rows[] = [
+                    'command' => $Crontab->command(),
+                    'crontab' => str_pad($Crontab->time(), 10, ' ', STR_PAD_RIGHT),
+                    'Status' => $status,
+                    'Next run' => $Crontab->nextRunHuman(),
+                ];
             }
         }
+
+        // Данные таблицы
+        $headers = ['Command', 'Crontab', 'Status', 'Next run'];
+
+        // Вывод таблицы
+        $this->style()->table($headers, $rows);
+
 
         return self::SUCCESS;
     }

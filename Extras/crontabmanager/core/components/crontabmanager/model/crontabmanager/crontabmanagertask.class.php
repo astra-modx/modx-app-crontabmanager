@@ -1,6 +1,7 @@
 <?php
 
 use Webnitros\CronTabManager\Crontab;
+use Webnitros\CronTabManager\CrontabTask;
 
 class CronTabManagerTask extends xPDOSimpleObject
 {
@@ -552,19 +553,15 @@ class CronTabManagerTask extends xPDOSimpleObject
         return file_exists($this->controllerPath());
     }
 
+    protected ?CrontabTask $crontab = null;
+
     public function crontab()
     {
-        return new Crontab();
-    }
+        if (is_null($this->crontab)) {
+            $this->crontab = new CrontabTask($this);
+        }
 
-    public function cronTime()
-    {
-        return $this->crontab()->cronTime($this);
-    }
-
-    public function expression()
-    {
-        return $this->crontab()->expression($this);
+        return $this->crontab;
     }
 
     public function isEnableCron()
@@ -572,14 +569,15 @@ class CronTabManagerTask extends xPDOSimpleObject
         if (!Crontab::isAvailable()) {
             return true;
         }
+
         return !empty($this->findCron());
     }
-
 
     public function muteSuccess()
     {
         $this->set('mute', 1);
         $this->set('mute_success', 1);
+
         return $this->save();
     }
 
@@ -587,6 +585,7 @@ class CronTabManagerTask extends xPDOSimpleObject
     {
         $this->set('mute', 1);
         $this->set('mute_time', $date);
+
         return $this->save();
     }
 

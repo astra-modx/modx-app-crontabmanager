@@ -26,26 +26,19 @@ class ScheduleList extends AbstractCrontabCommand
 
     public function handle(InputInterface $input, OutputInterface $output): int
     {
-        $Convert = new Convert();
-        $Crontab = new Crontab();
-
+        $rows = array();
         /* @var CronTabManagerTask $object */
         $q = $this->modx->newQuery('CronTabManagerTask');
         if ($objectList = $this->modx->getCollection('CronTabManagerTask', $q)) {
             foreach ($objectList as $object) {
                 $description = $object->description;
-                $time = $Crontab->cronTime($object);
-
-                $cron = new CronExpression($time);
-                $NextRun = $cron->getNextRunDate();
-
-                $next_run_human = $Crontab->diff($this->modx, $cron);
+                $Crontab = $object->crontab();
                 $rows[] = [
-                    'command' => $Convert->command($object->path_task),
+                    'command' => $Crontab->command(),
                     'active' => $object->active ? 'Yes' : 'No',
-                    'crontab' => $time,
-                    'nextRun' => $NextRun->format('Y-m-d H:i:s'),
-                    'nextRunHuman' => $next_run_human,
+                    'crontab' => $Crontab->time(),
+                    'nextRun' => $Crontab->getNextRunDateFormat(),
+                    'nextRunHuman' => $Crontab->nextRunHuman(),
                     'comment' => !empty($description) ? mb_strimwidth($description, 0, 25, "...") : '---',
                 ];
             }

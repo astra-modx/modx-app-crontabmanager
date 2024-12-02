@@ -30,33 +30,9 @@ class Crontab
 
     public function expression(CronTabManagerTask $task, $separator = ' ')
     {
-        $CronExpression = new CronExpression($this->cronTime($task, $separator));
-
-        return $CronExpression;
+        return new CronExpression($task->cronTime($separator));
     }
 
-    public function cronTime(CronTabManagerTask $task, $separator = ' ')
-    {
-        $time = array(
-            $this->eiEmpt($task->get('minutes')),
-            $this->eiEmpt($task->get('hours')),
-            $this->eiEmpt($task->get('days')),
-            $this->eiEmpt($task->get('days')),
-            $this->eiEmpt($task->get('weeks')),
-        );
-
-        return implode($separator, $time);
-    }
-
-
-    public function eiEmpt($val)
-    {
-        if (is_numeric($val)) {
-            return $val;
-        }
-
-        return empty($val) ? '*' : $val;
-    }
 
     public function diff(\modX $modx, CronExpression $cron)
     {

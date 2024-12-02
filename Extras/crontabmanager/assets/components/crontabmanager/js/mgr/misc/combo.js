@@ -310,3 +310,68 @@ CronTabManager.combo.Classes = function (config) {
 }
 Ext.extend(CronTabManager.combo.Classes, MODx.combo.ComboBox)
 Ext.reg('crontabmanager-combo-classes', CronTabManager.combo.Classes)
+
+
+/**
+ * Filter Active
+ * @param config
+ * @constructor
+ */
+CronTabManager.combo.condition = function (config) {
+    config = config || {}
+    var field = config.field || 'minutes'
+
+
+    var dataTime = CronTabManager.config.time_cron[field];
+
+    var data = []
+    for (var i = 0; i < dataTime.length; i++) {
+        var row = dataTime[i];
+        data.push([row['value'], row['name']])
+    }
+
+
+    Ext.applyIf(config, {
+        emptyText: _('bxsender_mailsender_transport')
+        , hiddenName: field+'_condition'
+        , store: new Ext.data.ArrayStore({
+            id: 1
+            , fields: ['condition', 'display']
+            , data: data
+            /* , data: [
+                 ['*', _('crontabmanager_condition_my')],
+                 ['*!/1', _('crontabmanager_condition_' + field)],
+                 ['*!/5', _('crontabmanager_condition_' + field + '_5')],
+                 ['*!/10', _('crontabmanager_condition_' + field + '_10')],
+                 ['*!/15', _('crontabmanager_condition_' + field + '_15')],
+                 ['*!/30', _('crontabmanager_condition_' + field + '_30')],
+             ]*/
+        })
+        , mode: 'local'
+        , valueField: 'condition'
+        , displayField: 'display'
+        , listeners: {
+            'select': {
+                fn: function (f, value) {
+                    var field = f.id.split("source-")[1];
+                    var id = f.id.split("-source-")[0];
+                    var val = value.data.condition
+                    if (val === 'my') {
+                        val = '*'
+                    }
+                    Ext.getCmp(id + '-target-' + field).setValue(val)
+                }, scope: this
+            }
+        }
+    })
+    CronTabManager.combo.condition.superclass.constructor.call(this, config)
+
+    this.on('render', function () {
+        //this.getEl().setFormValue('*/5')
+       /* this.getEl().addKeyListener(Ext.EventObject.ENTER, function () {
+            this._triggerSearch()
+        }, this)*/
+    })
+}
+Ext.extend(CronTabManager.combo.condition, MODx.combo.ComboBox)
+Ext.reg('crontabmanager-combo-condition', CronTabManager.combo.condition)

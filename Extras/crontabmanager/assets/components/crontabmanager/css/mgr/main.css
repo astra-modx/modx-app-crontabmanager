@@ -10,7 +10,13 @@
     opacity: .6;
     color: #555;
 }
-.crontabmanager-row-mute { font-style: italic; opacity: .9; color: cadetblue; }
+
+.crontabmanager-row-mute {
+    font-style: italic;
+    opacity: .9;
+    color: cadetblue;
+}
+
 .x-grid3-col-actions {
     padding: 3px 0 3px 5px;
 }
@@ -667,3 +673,31 @@ label[for=crontabmanager-grid-notifications-read]::before {
 .crontabmanager-method-crontab.not_available {
     opacity: 0.5;
 }
+
+
+.crontabmanager_time_crontab {
+    padding: 0 5px;
+    margin-top: 0;
+    border: 0;
+}
+.crontabmanager_time_crontab .x-fieldset-body{
+    padding: 0px 0px;
+}
+
+.crontabmanager_time_crontab .x-form-item.x-tab-item {
+    display: inline-block;
+}
+
+.crontabmanager_time_crontab .x-form-item.x-tab-item:nth-child(2) {
+    position: absolute;
+    top: 12px;
+    left: 190px;
+}
+
+/*
+.crontabmanager_time_crontab .x-form-field-trigger-wrap {
+   position: absolute;
+    top: -8px;
+    left: 10px;
+}
+*/

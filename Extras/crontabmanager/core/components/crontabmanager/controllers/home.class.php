@@ -48,7 +48,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
      */
     public function getLanguageTopics()
     {
-        return ['crontabmanager:manager', 'crontabmanager:default', 'crontabmanager:help'];
+        return ['crontabmanager:manager', 'crontabmanager:default', 'crontabmanager:cron', 'crontabmanager:help'];
     }
 
 
@@ -101,9 +101,14 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
 
         $this->CronTabManager->config['help_buttons'] = ($buttons = $this->getButtons()) ? $buttons : '';
 
+
+        $config = $this->CronTabManager->config;
+        $config['time_cron'] = $this->CronTabManager->lexiconCronTime();
+
+
         $this->addHtml(
             '<script type="text/javascript">
-        CronTabManager.config = '.json_encode($this->CronTabManager->config).';
+        CronTabManager.config = '.json_encode($config).';
         CronTabManager.config.connector_url = "'.$this->CronTabManager->config['connectorUrl'].'";
         CronTabManager.config.connector_cron_url = "'.$this->CronTabManager->config['connectorCronUrl'].'";
         CronTabManager.config.time_server = "'.$time_server.'";
@@ -116,10 +121,11 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
     {
         $BIN = CronTabManagerPhpExecutable($this->modx);
 
-        $isAvailable =Crontab::isAvailable();
+        $isAvailable = Crontab::isAvailable();
         $path_scheduler = $this->CronTabManager->config['schedulerPath'];
         $path = $this->CronTabManager->config['schedulerPath'].'/artisan';
         $path_controllerh = $this->CronTabManager->loadSchedulerService()->getOption('basePath');
+
 
         $path_controllerh = rtrim($path_controllerh, '/');
         $shcedule_cron = '*/1    *       *       *       *       '.$BIN.' '.$path.' schedule:run 2>&1';
@@ -134,7 +140,8 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
             'schedule_cron' => $shcedule_cron,
             'demon_crontab' => Crontab::isAvailable()
                 ? '<span class="crontabmanager_crontab available">'.$this->modx->lexicon('crontabmanager_crontab_available', ['user' => $user]).'</span>'
-                : '<span class="crontabmanager_crontab not_available">'.$this->modx->lexicon('crontabmanager_crontab_not_available', ['user' => $user]).'</span>',
+                : '<span class="crontabmanager_crontab not_available">'.$this->modx->lexicon('crontabmanager_crontab_not_available', ['user' => $user]
+                ).'</span>',
         ];
 
 
@@ -147,6 +154,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
 
         return $output;
     }
+
 
 
     /**

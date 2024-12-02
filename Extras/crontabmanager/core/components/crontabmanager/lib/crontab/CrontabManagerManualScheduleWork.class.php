@@ -49,7 +49,7 @@ class CrontabManagerManualScheduleWork extends CrontabManagerManual
         ));
         if ($objectList = $modx->getCollection('CronTabManagerTask', $q)) {
             foreach ($objectList as $object) {
-                $time = $Crontab->cronTime($object, '	    ');
+                $time = $object->cronTime('	    ');
                 #$path = $object->path_task;
                 $cli = $object->getPath();
                 $log = $object->getFileLogPath();

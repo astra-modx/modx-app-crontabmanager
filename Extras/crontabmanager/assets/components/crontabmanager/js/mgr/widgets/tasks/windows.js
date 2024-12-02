@@ -48,6 +48,37 @@ Ext.extend(CronTabManager.window.CreateTask, CronTabManager.window.Default, {
         }]
     },
 
+    cronTime: function (config, field) {
+
+        return [
+            {
+                columnWidth: .4
+                , layout: 'form'
+                , items: [
+                    {
+                        xtype: 'textfield',
+                        id: config.id + '-target-' + field,
+                        name: field,
+                        value: '*',
+                        fieldLabel: _('crontabmanager_task_' + field),
+                        anchor: '100%',
+                        regex: /^(\*|[0-5]?\d)(-([0-5]?\d))?((\/|\,)[0-5]?\d)*$/,
+                        regexText: _('crontabmanager_window_regex_' + field),
+                    },
+                    {
+                        xtype: 'crontabmanager-combo-condition',
+                        cls: 'desc-under',
+                        field: field,
+                        name: field + '_condition',
+                        id: config.id + '-source-' + field,
+                        emptyText: '*',
+                        fieldLabel: '',
+                        anchor: '100%',
+                    }
+                ]
+            },
+        ];
+    },
     getFieldsTask: function (config) {
         return [
             {xtype: 'hidden', name: 'id', id: config.id + '-id'},
@@ -66,6 +97,7 @@ Ext.extend(CronTabManager.window.CreateTask, CronTabManager.window.Default, {
                             id: config.id + '-path_task',
                             anchor: '99%',
                             allowBlank: false,
+                            emptyText: _('crontabmanager_task_path_task_placeholder'),
                         }
                     ]
                 }, {
@@ -75,11 +107,12 @@ Ext.extend(CronTabManager.window.CreateTask, CronTabManager.window.Default, {
                     items: [
                         {
                             xtype: 'crontabmanager-combo-parent',
-                            fieldLabel: _('crontabmanager_task_parent'),
+                            fieldLabel: _('crontabmanager_task_parent_empty'),
                             name: 'parent',
                             id: config.id + '-parent',
                             anchor: '99%',
-                            allowBlank: false,
+                            emptyText: _('crontabmanager_task_parent_empty'),
+                            allowBlank: true,
                         },
                     ],
                 }]
@@ -91,12 +124,173 @@ Ext.extend(CronTabManager.window.CreateTask, CronTabManager.window.Default, {
                 cls: 'desc-under',
             },
 
+
             {
+                layout: 'column',
+                items: [{
+                    columnWidth: .5,
+                    layout: 'form',
+                    defaults: {msgTarget: 'under'},
+                    items: [
+                        // Время запуска
+
+                        {
+                            xtype: 'displayfield',
+                            fieldLabel: 'Время запуска',
+                            html: 'Выберите время автоматического запуска'
+                        },
+
+                        // minutes
+                        {
+                            xtype: 'fieldset'
+                            , layout: 'column'
+                            , cls: 'crontabmanager_time_crontab'
+                            , defaults: {msgTarget: 'under', border: false}
+                            , items: this.cronTime(config, 'minutes')
+                        },
+                        {
+                            xtype: 'fieldset'
+                            , layout: 'column'
+                            , cls: 'crontabmanager_time_crontab'
+                            , defaults: {msgTarget: 'under', border: false}
+                            , items: this.cronTime(config, 'hours')
+                        },
+
+                        {
+                            xtype: 'fieldset'
+                            , layout: 'column'
+                            , cls: 'crontabmanager_time_crontab'
+                            , defaults: {msgTarget: 'under', border: false}
+                            , items: this.cronTime(config, 'days')
+                        },
+
+                        {
+                            xtype: 'fieldset'
+                            , layout: 'column'
+                            , cls: 'crontabmanager_time_crontab'
+                            , defaults: {msgTarget: 'under', border: false}
+                            , items: this.cronTime(config, 'months')
+                        },
+
+                        {
+                            xtype: 'fieldset'
+                            , layout: 'column'
+                            , cls: 'crontabmanager_time_crontab'
+                            , defaults: {msgTarget: 'under', border: false}
+                            , items: this.cronTime(config, 'weeks')
+                        },
+                    ]
+                }, {
+                    columnWidth: .5,
+                    layout: 'form',
+                    defaults: {msgTarget: 'under'},
+                    items: [
+
+                        {
+                            xtype: 'modx-snippet',
+                            fieldLabel: _('crontabmanager_task_description'),
+                            name: 'description',
+                            id: config.id + '-description',
+                            emptyText: _('crontabmanager_task_description_placeholder'),
+                            height: 100,
+                            anchor: '99%'
+                        },
+
+                        {
+                            columnWidth: .5,
+                            layout: 'form',
+                            defaults: {msgTarget: 'under'},
+                            items: [
+                                {
+                                    xtype: 'xcheckbox',
+                                    boxLabel: _('crontabmanager_task_mode_develop'),
+                                    name: 'mode_develop',
+                                    id: config.id + '-mode_develop',
+                                    checked: true,
+                                },
+                                {
+                                    html: _('crontabmanager_task_mode_develop_desc'),
+                                    cls: 'desc-under',
+                                },
+                                {
+                                    xtype: 'xcheckbox',
+                                    boxLabel: _('crontabmanager_task_active'),
+                                    name: 'active',
+                                    id: config.id + '-active',
+                                    checked: true,
+                                },
+                                {
+                                    html: _('crontabmanager_task_active_desc'),
+                                    cls: 'desc-under',
+                                },
+                            ]
+                        },
+
+                        {
+                            xtype: 'textarea',
+                            fieldLabel: _('crontabmanager_task_description'),
+                            name: 'description',
+                            id: config.id + '-description',
+                            emptyText: _('crontabmanager_task_description_placeholder'),
+                            height: 100,
+                            anchor: '99%'
+                        },
+                    ],
+                }]
+
+            },
+
+
+            // hours
+            /* {
+                 xtype: 'fieldset'
+                 , layout: 'column'
+                 , style: 'padding:15px 5px;'
+                 , defaults: {msgTarget: 'under', border: false}
+                 , items: [
+                     {
+                         columnWidth: .2
+                         , layout: 'form'
+                         , items: [
+                             {
+                                 xtype: 'textfield',
+                                 id: config.id + '-target-hours',
+                                 name: 'hours',
+                                 value: '*',
+                                 emptyText: '*',
+                                 fieldLabel: _('crontabmanager_task_hours'),
+                                 anchor: '100%',
+                                 regex: /^(\*|[0-5]?\d)(-([0-5]?\d))?((\/|\,)[0-5]?\d)*$/,
+                                 regexText: 'Введите правильное cron-выражение для часа',
+                             }
+                         ]
+                     },
+                     {
+                         columnWidth: .4
+                         , layout: 'form'
+                         , style: 'margin: 13px 0 0 5px;'
+                         , items: [
+                             {
+                                 xtype: 'crontabmanager-combo-condition',
+                                 id: config.id + '-source-hours',
+                                 value: 'Своё',
+                                 emptyText: 'Своё',
+                                 fieldLabel: '',
+                                 anchor: '100%',
+                             }
+                         ]
+                     }
+                 ]
+             },
+ */
+
+            /*{
                 xtype: 'fieldset'
                 , layout: 'column'
                 , style: 'padding:15px 5px;text-align:center;'
                 , defaults: {msgTarget: 'under', border: false}
-                , items: [{
+                , items: [
+                {
                     columnWidth: .20
                     , layout: 'form'
                     , items: [
@@ -173,55 +367,29 @@ Ext.extend(CronTabManager.window.CreateTask, CronTabManager.window.Default, {
                             }
                         ]
                     }]
-            },
+            },*/
 
-            {
-                layout: 'column',
-                items: [{
-                    columnWidth: .5,
-                    layout: 'form',
-                    defaults: {msgTarget: 'under'},
-                    items: [
-                        {
-                            xtype: 'xcheckbox',
-                            boxLabel: _('crontabmanager_task_mode_develop'),
-                            name: 'mode_develop',
-                            id: config.id + '-mode_develop',
-                            checked: true,
-                        },
-                        {
-                            html: _('crontabmanager_task_mode_develop_desc'),
-                            cls: 'desc-under',
-                        },
-                        {
-                            xtype: 'xcheckbox',
-                            boxLabel: _('crontabmanager_task_active'),
-                            name: 'active',
-                            id: config.id + '-active',
-                            checked: true,
-                        },
-                        {
-                            html: _('crontabmanager_task_active_desc'),
-                            cls: 'desc-under',
-                        },
-                    ]
-                }, {
-                    columnWidth: .5,
-                    layout: 'form',
-                    defaults: {msgTarget: 'under'},
-                    items: [
-                        {
-                            xtype: 'textarea',
-                            fieldLabel: _('crontabmanager_task_description'),
-                            name: 'description',
-                            id: config.id + '-description',
-                            height: 100,
-                            anchor: '99%'
-                        },
-                    ],
-                }]
+            /* {
+                 layout: 'column',
+                 items: [
 
-            },
+                     {
+                         columnWidth: .5,
+                         layout: 'form',
+                         defaults: {msgTarget: 'under'},
+                         items: [
+                             {
+                                 xtype: 'textarea',
+                                 fieldLabel: _('crontabmanager_task_description'),
+                                 name: 'description',
+                                 id: config.id + '-description',
+                                 height: 100,
+                                 anchor: '99%'
+                             },
+                         ],
+                     }]
+
+             },*/
 
         ]
     },
@@ -321,46 +489,3 @@ CronTabManager.window.UpdateTask = function (config) {
 }
 Ext.extend(CronTabManager.window.UpdateTask, CronTabManager.window.CreateTask)
 Ext.reg('crontabmanager-task-window-update', CronTabManager.window.UpdateTask)
-
-
-/**
- * muteTimeItem
- */
-
-CronTabManager.window.MuteTime = function (config) {
-    config = config || {}
-    config.url = CronTabManager.config.connector_url
-
-    Ext.applyIf(config, {
-        title: _('crontabmanager_task_window_mute_time'),
-        width: 600,
-        cls: 'crontabmanager_windows',
-        baseParams: {
-            action: 'mgr/task/mutetime',
-        },
-        fields: [
-            {xtype: 'hidden', name: 'id', id: config.id + '-id'},
-            {
-                xtype: 'xdatetime',
-                fieldLabel: _('crontabmanager_task_mute_time_date'),
-                name: 'mute_time',
-                id: config.id + '-mute_time',
-                anchor: '99%',
-                allowBlank: false,
-                dateWidth: 153,
-                timeWidth: 153,
-                timeFormat: 'H:i',
-                dateFormat: 'd.m.Y',
-                minDate: new Date().toLocaleDateString(),
-                minValue: new Date().toLocaleDateString()
-            },
-            {
-                html: _('crontabmanager_task_mute_time_date_desc'),
-                cls: 'desc-under',
-            },
-        ],
-    })
-    CronTabManager.window.MuteTime.superclass.constructor.call(this, config)
-}
-Ext.extend(CronTabManager.window.MuteTime, CronTabManager.window.Default)
-Ext.reg('crontabmanager-task-window-mute-time', CronTabManager.window.MuteTime)

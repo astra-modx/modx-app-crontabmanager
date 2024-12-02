@@ -44,7 +44,7 @@ class CronTabManagerTaskCreateProcessor extends modObjectCreateProcessor
         }
 
         $this->setProperty('status', 1);
-        $this->setProperty('active', false);
+        #$this->setProperty('active', false);
         $this->setCheckbox('active');
         return parent::beforeSet();
     }
