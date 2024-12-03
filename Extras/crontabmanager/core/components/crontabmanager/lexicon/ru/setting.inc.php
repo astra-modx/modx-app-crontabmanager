@@ -56,3 +56,6 @@ $_lang['setting_crontabmanager_rest_client_id_desc'] = 'Уникальный и�
 
 $_lang['setting_crontabmanager_rest_controller'] = 'Путь к контроллеру rest';
 $_lang['setting_crontabmanager_rest_controller_desc'] = 'Можно указать свой уникальный путь. По умолчанию assets/components/crontabmanager/rest.php';
+
+$_lang['setting_crontabmanager_save_to_file'] = 'Разрешить записывать кроны в файл';
+$_lang['setting_crontabmanager_save_to_file_desc'] = 'Установите Да, чтобы все сохраненные крон задания писались в файл core/scheduler/crontabs/USER';

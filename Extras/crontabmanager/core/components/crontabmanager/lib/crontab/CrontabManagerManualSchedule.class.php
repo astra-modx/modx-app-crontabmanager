@@ -4,7 +4,7 @@ if (!class_exists('CrontabManagerManual')) {
     include_once dirname(dirname(dirname(__FILE__))).'/lib/crontab/CrontabManagerManual.php';
 }
 
-class CrontabManagerManualScheduleWork extends CrontabManagerManual
+class CrontabManagerManualSchedule extends CrontabManagerManual
 {
     /**
      * Replaces cron contents
@@ -14,12 +14,15 @@ class CrontabManagerManualScheduleWork extends CrontabManagerManual
      */
     protected function _replaceCronContents()
     {
-        # $ret = file_put_contents($this->file_crontab_path, $this->cronContent);
-        # if (!$ret) {
-        #     throw new \UnexpectedValueException(
-        #         'Не удалось записать' . "\n" . $this->cronContent, $ret
-        #     );
-        # }
+        if ($this->isSaveToFile()) {
+            $ret = file_put_contents($this->file_crontab_path, $this->cronContent);
+            if (!$ret) {
+                throw new \UnexpectedValueException(
+                    'Не удалось записать'."\n".$this->cronContent, $ret
+                );
+            }
+        }
+
         return $this;
     }
 

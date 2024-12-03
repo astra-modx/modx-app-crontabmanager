@@ -16,6 +16,7 @@ x-setting: &default-setting
     - './_backup:/var/www/html/_backup'
     - './config.core.php:/var/www/html/config.core.php'
     - './docker/app/scripts/uninstall.php:/var/www/html/docker/app/scripts/uninstall.php'
+    - './docker/app/scripts/checking-add-ons.php:/var/www/html/docker/app/scripts/checking-add-ons.php'
     # Package
     - "./Extras/${PACKAGE_NAME}/core/components/${PACKAGE_NAME_LOWER}:/var/www/html/core/components/${PACKAGE_NAME_LOWER}:ro"
     - "./Extras/${PACKAGE_NAME}/assets/components/${PACKAGE_NAME_LOWER}:/var/www/html/public/assets/components/${PACKAGE_NAME_LOWER}:ro"

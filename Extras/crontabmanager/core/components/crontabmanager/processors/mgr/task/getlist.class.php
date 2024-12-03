@@ -113,6 +113,7 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         $array['next_run'] = $Crontab->getNextRunDateFormat();
 
 
+
         $array['pid'] = $object->pid();
 
 

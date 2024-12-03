@@ -60,7 +60,7 @@ return [
 
     'handler_class' => [
         'xtype' => 'textfield',
-        'value' => 'CrontabManagerHandlerFile',
+        'value' => '',
         'area' => 'crontabmanager_main',
     ],
 
@@ -109,5 +109,10 @@ return [
         'area' => 'crontabmanager_rest',
     ],
 
+    'save_to_file' => [
+        'xtype' => 'combo-boolean',
+        'value' => 0,
+        'area' => 'crontabmanager_main',
+    ],
 
 ];

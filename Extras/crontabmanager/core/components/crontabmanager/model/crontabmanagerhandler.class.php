@@ -40,7 +40,7 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
     protected $CrontabManager = null;
     protected $loadClass = 'Bin';
 
-    /* @var CrontabManagerManual|CrontabManagerManualFile $crontab */
+    /* @var CrontabManagerManual $crontab */
     protected $crontab = null;
     /* @var CronEntry $job */
     private $job;
@@ -70,8 +70,13 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
             require $this->CrontabManager->config['corePath'].'/lib/crontab/CrontabManagerManual.php';
         }
 
-        //CrontabManagerManualBin
-        $class = 'CrontabManagerManual'.$this->loadClass;
+        $class = $this->loadClass === 'Bin' ? 'CrontabManagerManualBin' : 'CrontabManagerManual'.$this->loadClass;
+
+        // Проверка доступности crontab
+        if (!cronTabManagerIsAvailable()) {
+            $class = 'CrontabManagerManualSchedule';
+        }
+
         if (!class_exists($class)) {
             require $this->CrontabManager->config['corePath'].'/lib/crontab/'.$class.'.class.php';
         }
@@ -81,7 +86,11 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
 
             return false;
         }
-        $this->crontab = new $class();
+
+
+        // Разрешить запись в файл кронзаданий
+        $save_to_file = $this->CrontabManager->option('save_to_file');
+        $this->crontab = new $class($save_to_file);
 
         $user = cronTabManagerCurrentUser() ?? 'cron';
         $this->crontab->file_crontab_path = $this->CrontabManager->config['schedulerPath'].'/crontabs/'.$user;

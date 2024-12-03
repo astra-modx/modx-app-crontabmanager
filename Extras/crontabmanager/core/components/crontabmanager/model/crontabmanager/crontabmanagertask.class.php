@@ -32,8 +32,9 @@ class CronTabManagerTask extends xPDOSimpleObject
         if (is_null($this->CronTabManager)) {
             $CronTabManager = $this->xpdo->getService('crontabmanager', 'CronTabManager', MODX_CORE_PATH.'components/crontabmanager/model/');
             if (!$CronTabManager instanceof CronTabManager) {
-                throw new Exception("Error load class CronTabManager", '', __METHOD__, __FILE__, __LINE__);
+                throw new Exception("Error load class CronTabManager");
             }
+            $this->CronTabManager = $CronTabManager;
         }
 
         return $this->CronTabManager;
@@ -502,6 +503,8 @@ class CronTabManagerTask extends xPDOSimpleObject
 
     public function controllerPath()
     {
+        $this->loadCronTabManager()->loadSchedulerService()->getOption('basePath');
+
         return $this->loadCronTabManager()->loadSchedulerService()->getOption('basePath').$this->get('path_task');
     }
 

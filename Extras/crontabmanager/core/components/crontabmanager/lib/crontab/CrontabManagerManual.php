@@ -1,7 +1,7 @@
 <?php
 
-require dirname(__FILE__) . '/CliTool.php';
-require dirname(__FILE__) . '/CronEntry.php';
+require dirname(__FILE__).'/CliTool.php';
+require dirname(__FILE__).'/CronEntry.php';
 
 /**
  * @author   Ryan Faerman <ryan.faerman@gmail.com>
@@ -58,6 +58,11 @@ class CrontabManagerManual
     public $user = null;
 
     /**
+     * Разрешить запись в файл с кронами
+     * @var bool
+     */
+    public $saveToFile = false;
+    /**
      * Location to save the crontab file.
      *
      * @var string
@@ -99,9 +104,22 @@ class CrontabManagerManual
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(bool $saveToFile = false)
     {
+        $this->saveToFile = $saveToFile;
         $this->_setTempFile();
+    }
+
+    public function saveToFile(bool $saveToFile)
+    {
+        $this->saveToFile = $saveToFile;
+
+        return $this;
+    }
+
+    public function isSaveToFile()
+    {
+        return $this->saveToFile;
     }
 
     /**
@@ -125,17 +143,18 @@ class CrontabManagerManual
             unlink($this->_tmpfile);
         }
         $tmpDir = sys_get_temp_dir();
-        $tmpDir = dirname(MODX_BASE_PATH) . $tmpDir; // TODO добавлен абсолютный путь
+        $tmpDir = dirname(MODX_BASE_PATH).$tmpDir; // TODO добавлен абсолютный путь
         $this->_tmpfile = tempnam($tmpDir, 'cronman');
         chmod($this->_tmpfile, 0666);
+
         return $this;
     }
 
     /**
      * Creates new job
      *
-     * @param string $jobSpec
-     * @param string $group
+     * @param  string  $jobSpec
+     * @param  string  $group
      *
      * @return CronEntry
      */
@@ -147,14 +166,13 @@ class CrontabManagerManual
     /**
      * Adds job to managed list
      *
-     * @param CronEntry $job
-     * @param string $file optional
+     * @param  CronEntry  $job
+     * @param  string  $file  optional
      *
      * @return CrontabManagerManual
      */
     public function add(CronEntry $job, $file = null)
     {
-
         if (!$file) {
             $this->jobs[] = $job;
         } else {
@@ -165,20 +183,22 @@ class CrontabManagerManual
             }
             $this->files[$file][] = $job;
         }
+
         return $this;
     }
 
     /**
      * Replace job with another one
      *
-     * @param CronEntry $from
-     * @param CronEntry $to
+     * @param  CronEntry  $from
+     * @param  CronEntry  $to
      *
      * @return CrontabManagerManual
      */
     public function replace(CronEntry $from, CronEntry $to)
     {
         $this->replace[] = array($from, $to);
+
         return $this;
     }
 
@@ -190,8 +210,8 @@ class CrontabManagerManual
     /**
      * Parse input cron file to cron entires
      *
-     * @param string $path
-     * @param string $hash
+     * @param  string  $path
+     * @param  string  $hash
      *
      * @return CronEntry[]
      * @throws \InvalidArgumentException
@@ -222,13 +242,14 @@ class CrontabManagerManual
                 }
             }
         }
+
         return $jobs;
     }
 
     /**
      * Reads cron file and adds jobs to list
      *
-     * @param string $filename
+     * @param  string  $filename
      *
      * @returns CrontabManagerManual
      * @throws \InvalidArgumentException
@@ -239,7 +260,8 @@ class CrontabManagerManual
         if (!$path || !is_readable($path)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    '"%s" don\'t exists or isn\'t readable', $filename
+                    '"%s" don\'t exists or isn\'t readable',
+                    $filename
                 )
             );
         }
@@ -260,19 +282,19 @@ class CrontabManagerManual
     /**
      * Disable file from crontab
      *
-     * @param string $filename
+     * @param  string  $filename
      *
      * @return CrontabManagerManual
      * @throws \InvalidArgumentException
      */
     public function disable($filename)
     {
-
         $path = realpath($filename);
         if (!$path || !is_readable($path)) {
             throw new \InvalidArgumentException(
                 sprintf(
-                    '"%s" don\'t exists or isn\'t readable', $filename
+                    '"%s" don\'t exists or isn\'t readable',
+                    $filename
                 )
             );
         }
@@ -289,21 +311,24 @@ class CrontabManagerManual
     /**
      * Calculates short hash of string
      *
-     * @param string $input
+     * @param  string  $input
      * @return string
      */
     private function _shortHash($input)
     {
         $hash = base_convert(
-            $this->_signedInt(crc32($input)), 10, 36
+            $this->_signedInt(crc32($input)),
+            10,
+            36
         );
+
         return $hash;
     }
 
     /**
      * Gets signed int from unsigned 64bit int
      *
-     * @param integer $in
+     * @param  integer  $in
      * @return integer
      */
     private static function _signedInt($in)
@@ -314,6 +339,7 @@ class CrontabManagerManual
         } else {
             $out = $in;
         }
+
         return $out;
     }
 
@@ -329,26 +355,21 @@ class CrontabManagerManual
             $cmd .= sprintf('sudo -u %s ', $this->user);
         }
         $cmd .= $this->crontab;
+
         return $cmd;
     }
 
     /**
-     * Save the jobs to disk, remove existing cron
-     *
-     * @param boolean $includeOldJobs optional
-     *
-     * @return boolean
-     * @throws \UnexpectedValueException
+     * @param $includeOldJobs
+     * @return void
      */
     public function save($includeOldJobs = true)
     {
-
         $this->cronContent = '';
         if ($includeOldJobs) {
             try {
                 $this->cronContent = $this->listJobs();
             } catch (\UnexpectedValueException $e) {
-
             }
         }
         $this->cronContent = $this->_prepareContents($this->cronContent);
@@ -358,20 +379,24 @@ class CrontabManagerManual
     /**
      * Replaces cron contents
      *
-     * @throws \UnexpectedValueException
      * @return CrontabManagerManual
+     * @throws \UnexpectedValueException
      */
     protected function _replaceCronContents()
     {
         file_put_contents($this->_tmpfile, $this->cronContent, LOCK_EX);
-        $out = $this->_exec($this->_command() . ' ' .
-            $this->_tmpfile . ' 2>&1', $ret);
+        $out = $this->_exec(
+            $this->_command().' '.
+            $this->_tmpfile.' 2>&1',
+            $ret
+        );
         $this->_setTempFile();
         if ($ret != 0) {
             throw new \UnexpectedValueException(
-                $out . "\n" . $this->cronContent, $ret
+                $out."\n".$this->cronContent, $ret
             );
         }
+
         return $this;
     }
 
@@ -396,7 +421,7 @@ class CrontabManagerManual
     private $_after = 'End of autogenerated code.';
 
     /**
-     * @param string $contents
+     * @param  string  $contents
      *
      * @return string
      */
@@ -418,8 +443,9 @@ class CrontabManagerManual
             $contents = $this->_removeBlock($contents, $hash);
             $contents = $this->_addBlock($contents, $file, $hash);
         }
-        if ($this->jobs)
+        if ($this->jobs) {
             $contents[] = '';
+        }
         foreach ($this->jobs as $job) {
             $contents[] = $job;
         }
@@ -427,11 +453,12 @@ class CrontabManagerManual
         $out = $this->_doReplace($contents);
         $out = preg_replace('/[\n]{3,}/m', "\n\n", $out);
         $out = preg_replace('/^\h*\v+/m', '', $out);// TODO строка пустая добавлялась
-        return trim($out) . "\n";
+
+        return trim($out)."\n";
     }
 
     /**
-     * @param array $contents
+     * @param  array  $contents
      *
      * @return string
      */
@@ -446,20 +473,21 @@ class CrontabManagerManual
             /* @var $toTob CronEntry */
             $out = str_replace($from, $toTob, $out);
         }
+
         return $out;
     }
 
     /**
-     * @param array $contents
-     * @param string $file
-     * @param string $hash
+     * @param  array  $contents
+     * @param  string  $file
+     * @param  string  $hash
      *
      * @return array
      */
     private function _addBlock(array $contents, $file, $hash)
     {
-        $pre = sprintf('# ' . $this->_beginBlock, $hash);
-        $pre .= sprintf(' ' . $this->_before, $file);
+        $pre = sprintf('# '.$this->_beginBlock, $hash);
+        $pre .= sprintf(' '.$this->_before, $file);
         $contents[] = $pre;
         $contents[] = '';
 
@@ -470,23 +498,23 @@ class CrontabManagerManual
         }
 
         $contents[] = '';
-        $after = sprintf('# ' . $this->_endBlock, $hash);
-        $after .= ' ' . $this->_after;
+        $after = sprintf('# '.$this->_endBlock, $hash);
+        $after .= ' '.$this->_after;
         $contents[] = $after;
 
         return $contents;
     }
 
     /**
-     * @param array $contents
-     * @param string $hash
+     * @param  array  $contents
+     * @param  string  $hash
      *
      * @return array
      */
     private function _removeBlock(array $contents, $hash)
     {
-        $from = sprintf('# ' . $this->_beginBlock, $hash);
-        $to = sprintf('# ' . $this->_endBlock, $hash);
+        $from = sprintf('# '.$this->_beginBlock, $hash);
+        $to = sprintf('# '.$this->_endBlock, $hash);
         $cut = false;
         $toCut = array();
         foreach ($contents as $no => $line) {
@@ -503,22 +531,24 @@ class CrontabManagerManual
         foreach ($toCut as $lineNo) {
             unset($contents[$lineNo]);
         }
+
         return $contents;
     }
 
     /**
      * Runs command in terminal
      *
-     * @param string $command
-     * @param integer $returnVal
+     * @param  string  $command
+     * @param  integer  $returnVal
      *
      * @return string
      */
-    private function _exec($command, & $returnVal)
+    private function _exec($command, &$returnVal)
     {
         ob_start();
         system($command, $returnVal);
         $output = ob_get_clean();
+
         return $output;
     }
 
@@ -530,11 +560,11 @@ class CrontabManagerManual
      */
     public function listJobs()
     {
-        $out = $this->_exec($this->_command() . ' -l', $retVal);
+        $out = $this->_exec($this->_command().' -l', $retVal);
         if ($retVal != 0) {
-            // TODO не срабатывает при первом запуске
-            //throw new \UnexpectedValueException('No cron file or no permissions to list', $retVal);
+            throw new \UnexpectedValueException('No cron file or no permissions to list', $retVal);
         }
+
         return $out;
     }
 
@@ -565,7 +595,7 @@ class CrontabManagerManual
      * $crontab->save(false);
      * </pre>
      *
-     * @param string $job id or part of description of the job you wanna delete
+     * @param  string  $job  id or part of description of the job you wanna delete
      * @return int number of jobs deleted
      */
     function deleteJob($job = null)
@@ -575,10 +605,9 @@ class CrontabManagerManual
             $data = array();
             $oldJobs = explode("\n", $this->listJobs()); // get the old jobs
             if (is_array($oldJobs)) {
-
                 foreach ($oldJobs as $oldJob) {
                     if ($oldJob != '') {
-                        if (!preg_match('/' . $job . '/', $oldJob)) {
+                        if (!preg_match('/'.$job.'/', $oldJob)) {
                             $newJob = new CronEntry($oldJob, $this);
                             $newJob->lineComment = '';
                             $data[] = $newJob;
@@ -591,6 +620,7 @@ class CrontabManagerManual
 
             $this->jobs = $data;
         }
+
         return $jobsDeleted;
     }
 
@@ -604,7 +634,7 @@ class CrontabManagerManual
      * $result = $crontab->jobExists("* * * * * /path/to/job");
      * </pre>
      *
-     * @param string $job id or part of description of the job you wanna verify if exists or not
+     * @param  string  $job  id or part of description of the job you wanna verify if exists or not
      * @return boolean [true|false] true if exists. false if not exists
      */
     function jobExists($job = null)
@@ -614,13 +644,14 @@ class CrontabManagerManual
             if (is_array($jobs)) {
                 foreach ($jobs as $oneJob) {
                     if ($oneJob != '') {
-                        if (preg_match('/' . $job . '/', $oneJob)) {
+                        if (preg_match('/'.$job.'/', $oneJob)) {
                             return true;
                         }
                     }
                 }
             }
         }
+
         return false;
     }
 

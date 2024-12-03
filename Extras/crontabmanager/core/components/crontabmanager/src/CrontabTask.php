@@ -124,16 +124,25 @@ class CrontabTask
     }
 
 
+    public function manager()
+    {
+        if ($Crontab = $this->task->loadCronTabManager()) {
+            if ($manager = $Crontab->loadManager()) {
+                return $manager;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Записать крон задание
      * @return bool
      */
     public function addCron()
     {
-        if ($Crontab = $this->task->loadCronTabManager()) {
-            if ($manager = $Crontab->loadManager()) {
-                return $manager->process($this->task, 'add');
-            }
+        if ($manager = $this->manager()) {
+            return $manager->process($this->task, 'add');
         }
 
         return false;
@@ -146,10 +155,8 @@ class CrontabTask
      */
     public function removeCron()
     {
-        if ($Crontab = $this->task->loadCronTabManager()) {
-            if ($manager = $Crontab->loadManager()) {
-                return $manager->process($this->task, 'remove');
-            }
+        if ($manager = $this->manager()) {
+            return $manager->process($this->task, 'remove');
         }
 
         return false;
@@ -161,10 +168,8 @@ class CrontabTask
      */
     public function findCron()
     {
-        if ($Crontab = $this->task->loadCronTabManager()) {
-            if ($manager = $Crontab->loadManager()) {
-                return $manager->findHashTask($this->task->get('path_task'), $this->task->get('id'));
-            }
+        if ($manager = $this->manager()) {
+            return $manager->findHashTask($this->task->get('path_task'), $this->task->get('id'));
         }
 
         return false;

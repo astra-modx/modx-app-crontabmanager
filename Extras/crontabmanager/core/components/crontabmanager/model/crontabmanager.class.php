@@ -149,7 +149,6 @@ class CronTabManager
     /* @var CrontabManagerHandler $ctm */
     protected $ctm = null;
 
-
     /**
      * Class loading for job management
      * @return bool|null|CrontabManagerHandler
@@ -432,6 +431,13 @@ if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
         }
 
         return $times;
+    }
+
+    public function option($key, $options = null, $default = null, $skipEmpty = false)
+    {
+        $key = 'crontabmanager_'.$key;
+
+        return $this->modx->getOption($key, $options, $default, $skipEmpty);
     }
 
 }
