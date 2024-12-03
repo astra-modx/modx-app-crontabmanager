@@ -25,7 +25,6 @@ class Pid
             $arrays = array_filter($arrays);
 
             if (is_array($arrays) && count($arrays) > 0) {
-
                 foreach ($arrays as $array) {
                     list($user, $pid, $cpu, $mem, $vsz, $rss, $tty, $stat, $start, $time, $command, $process) = preg_split('/\s+/', $array);
                     if ($command !== $commandPhp) {

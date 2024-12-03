@@ -4,11 +4,11 @@ $xpdo_meta_map['CronTabManagerToken']= array (
   'version' => '1.1',
   'table' => 'ctma_api_token',
   'extends' => 'xPDOSimpleObject',
-  'tableMeta' => 
+  'tableMeta' =>
   array (
     'engine' => 'InnoDB',
   ),
-  'fields' => 
+  'fields' =>
   array (
     'user_id' => 0,
     'createdon' => 0,
@@ -17,9 +17,9 @@ $xpdo_meta_map['CronTabManagerToken']= array (
     'token' => '',
     'active' => 1,
   ),
-  'fieldMeta' => 
+  'fieldMeta' =>
   array (
-    'user_id' => 
+    'user_id' =>
     array (
       'dbtype' => 'int',
       'precision' => '10',
@@ -27,7 +27,7 @@ $xpdo_meta_map['CronTabManagerToken']= array (
       'null' => true,
       'default' => 0,
     ),
-    'createdon' => 
+    'createdon' =>
     array (
       'dbtype' => 'int',
       'precision' => '20',
@@ -35,7 +35,7 @@ $xpdo_meta_map['CronTabManagerToken']= array (
       'null' => false,
       'default' => 0,
     ),
-    'updatedon' => 
+    'updatedon' =>
     array (
       'dbtype' => 'int',
       'precision' => '20',
@@ -43,7 +43,7 @@ $xpdo_meta_map['CronTabManagerToken']= array (
       'null' => false,
       'default' => 0,
     ),
-    'valid_until' => 
+    'valid_until' =>
     array (
       'dbtype' => 'int',
       'precision' => '20',
@@ -51,7 +51,7 @@ $xpdo_meta_map['CronTabManagerToken']= array (
       'null' => false,
       'default' => 0,
     ),
-    'token' => 
+    'token' =>
     array (
       'dbtype' => 'varchar',
       'precision' => '32',
@@ -59,7 +59,7 @@ $xpdo_meta_map['CronTabManagerToken']= array (
       'null' => false,
       'default' => '',
     ),
-    'active' => 
+    'active' =>
     array (
       'dbtype' => 'tinyint',
       'precision' => '1',
@@ -68,17 +68,17 @@ $xpdo_meta_map['CronTabManagerToken']= array (
       'default' => 1,
     ),
   ),
-  'indexes' => 
+  'indexes' =>
   array (
-    'user_id' => 
+    'user_id' =>
     array (
       'alias' => 'user_id',
       'primary' => false,
       'unique' => false,
       'type' => 'BTREE',
-      'columns' => 
+      'columns' =>
       array (
-        'user_id' => 
+        'user_id' =>
         array (
           'length' => '',
           'collation' => 'A',
@@ -86,15 +86,15 @@ $xpdo_meta_map['CronTabManagerToken']= array (
         ),
       ),
     ),
-    'createdon' => 
+    'createdon' =>
     array (
       'alias' => 'createdon',
       'primary' => false,
       'unique' => false,
       'type' => 'BTREE',
-      'columns' => 
+      'columns' =>
       array (
-        'createdon' => 
+        'createdon' =>
         array (
           'length' => '',
           'collation' => 'A',
@@ -102,15 +102,15 @@ $xpdo_meta_map['CronTabManagerToken']= array (
         ),
       ),
     ),
-    'valid_until' => 
+    'valid_until' =>
     array (
       'alias' => 'valid_until',
       'primary' => false,
       'unique' => false,
       'type' => 'BTREE',
-      'columns' => 
+      'columns' =>
       array (
-        'valid_until' => 
+        'valid_until' =>
         array (
           'length' => '',
           'collation' => 'A',
@@ -118,15 +118,15 @@ $xpdo_meta_map['CronTabManagerToken']= array (
         ),
       ),
     ),
-    'token' => 
+    'token' =>
     array (
       'alias' => 'token',
       'primary' => false,
       'unique' => false,
       'type' => 'BTREE',
-      'columns' => 
+      'columns' =>
       array (
-        'token' => 
+        'token' =>
         array (
           'length' => '',
           'collation' => 'A',
@@ -134,15 +134,15 @@ $xpdo_meta_map['CronTabManagerToken']= array (
         ),
       ),
     ),
-    'active' => 
+    'active' =>
     array (
       'alias' => 'active',
       'primary' => false,
       'unique' => false,
       'type' => 'BTREE',
-      'columns' => 
+      'columns' =>
       array (
-        'active' => 
+        'active' =>
         array (
           'length' => '',
           'collation' => 'A',
@@ -151,9 +151,9 @@ $xpdo_meta_map['CronTabManagerToken']= array (
       ),
     ),
   ),
-  'aggregates' => 
+  'aggregates' =>
   array (
-    'User' => 
+    'User' =>
     array (
       'class' => 'modUser',
       'local' => 'user_id',

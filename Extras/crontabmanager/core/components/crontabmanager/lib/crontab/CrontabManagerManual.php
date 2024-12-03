@@ -393,7 +393,8 @@ class CrontabManagerManual
         $this->_setTempFile();
         if ($ret != 0) {
             throw new \UnexpectedValueException(
-                $out."\n".$this->cronContent, $ret
+                $out."\n".$this->cronContent,
+                $ret
             );
         }
 
@@ -654,5 +655,4 @@ class CrontabManagerManual
 
         return false;
     }
-
 }

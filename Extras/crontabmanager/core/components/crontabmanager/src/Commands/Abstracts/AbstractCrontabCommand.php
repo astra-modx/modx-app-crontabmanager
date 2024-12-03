@@ -20,6 +20,7 @@ use Webnitros\CronTabManager\Traits\StyleTrait;
 class AbstractCrontabCommand extends Command
 {
     use StyleTrait;
+
     public ?\modX $modx;
     public ?CronTabManager $CronTabManager = null;
     public ?SchedulerService $scheduler = null;
@@ -44,6 +45,4 @@ class AbstractCrontabCommand extends Command
 
         return self::SUCCESS;
     }
-
-
 }

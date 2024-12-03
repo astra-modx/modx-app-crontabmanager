@@ -1,2 +1,4 @@
 <?php
-class CronTabManagerHash extends xPDOSimpleObject {}
+class CronTabManagerHash extends xPDOSimpleObject
+{
+}

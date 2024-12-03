@@ -470,7 +470,7 @@ class CronTabManagerTask extends xPDOSimpleObject
      */
     public function isModeDevelop()
     {
-        return (boolean)$this->get('mode_develop');
+        return (bool)$this->get('mode_develop');
     }
 
     public function remove(array $ancestors = array())
@@ -560,5 +560,4 @@ class CronTabManagerTask extends xPDOSimpleObject
     {
         return $this->get('mute');
     }
-
 }

@@ -29,7 +29,6 @@ class CronTabManagerTaskSendProcessor extends modObjectGetProcessor
 
         return parent::process();
     }
-
 }
 
 return 'CronTabManagerTaskSendProcessor';

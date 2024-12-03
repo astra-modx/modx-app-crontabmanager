@@ -28,7 +28,6 @@ interface CrontabManagerHandlerInterface
      * @return bool|string
      */
     public function findHashTask($path_task = null, $task_id = null);
-
 }
 
 class CrontabManagerHandler implements CrontabManagerHandlerInterface

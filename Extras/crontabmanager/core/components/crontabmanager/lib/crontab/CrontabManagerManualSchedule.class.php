@@ -18,7 +18,8 @@ class CrontabManagerManualSchedule extends CrontabManagerManual
             $ret = file_put_contents($this->file_crontab_path, $this->cronContent);
             if (!$ret) {
                 throw new \UnexpectedValueException(
-                    'Не удалось записать'."\n".$this->cronContent, $ret
+                    'Не удалось записать'."\n".$this->cronContent,
+                    $ret
                 );
             }
         }
@@ -57,6 +58,4 @@ class CrontabManagerManualSchedule extends CrontabManagerManual
 
         return implode("\n", $content);
     }
-
-
 }

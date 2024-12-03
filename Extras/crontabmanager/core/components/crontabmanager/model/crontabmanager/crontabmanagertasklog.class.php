@@ -1,6 +1,6 @@
 <?php
-class CronTabManagerTaskLog extends xPDOSimpleObject {
-
+class CronTabManagerTaskLog extends xPDOSimpleObject
+{
     /**
      * {@inheritdoc}
      */

@@ -346,6 +346,3 @@ $_lang['crontabmanager_task_executed'] = 'Выполняется';
 
 
 $_lang['crontabmanager_window_regex_minute'] = 'Введите правильное cron-выражение для минут';
-
-
-

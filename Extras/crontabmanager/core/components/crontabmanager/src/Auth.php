@@ -9,7 +9,7 @@
 namespace Webnitros\CronTabManager;
 
 use CronTabManager;
-use GetPhoto\Oauth2\Client\Provider\OauthProvider;
+use CronTabManagerToken;
 use modRestServer;
 use modUser;
 
@@ -28,7 +28,6 @@ class Auth
 
     public function process()
     {
-
     }
 
 
@@ -57,11 +56,10 @@ class Auth
         }
 
 
-        $url = $this->CronTabManager->modx->getOption('crontabmanager_rest_controller', null,'');
+        $url = $this->CronTabManager->modx->getOption('crontabmanager_rest_controller', null, '');
         $redirect_uri = $_REQUEST['redirect_uri'];
         $redirect_uri .= '?token=' . $token . '&username=' . $username . '&rest_url=' . $url;
         $this->CronTabManager->modx->sendRedirect($redirect_uri, false, '', 302);
-
     }
 
 
@@ -75,6 +73,4 @@ class Auth
             __CLASS__
         );
     }
-
-
 }

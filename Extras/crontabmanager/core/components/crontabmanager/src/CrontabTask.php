@@ -15,7 +15,6 @@ use DateTime;
 
 class CrontabTask
 {
-
     private CronTabManagerTask $task;
     private CronExpression $expression;
 
@@ -174,6 +173,4 @@ class CrontabTask
 
         return false;
     }
-
-
 }

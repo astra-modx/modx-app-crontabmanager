@@ -29,7 +29,6 @@ class CronTabManagerTaskRemoveLogProcessor extends modObjectGetProcessor
         }
         return parent::process();
     }
-
 }
 
 return 'CronTabManagerTaskRemoveLogProcessor';

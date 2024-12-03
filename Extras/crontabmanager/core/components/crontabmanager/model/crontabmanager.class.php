@@ -288,13 +288,13 @@ if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
 
 
     /* This method returns an error response
-	 *
-	 * @param string $message A lexicon key for error message
-	 * @param array $data Additional data, for example cart status
-	 * @param array $placeholders Array with placeholders for lexicon entry
-	 *
-	 * @return array|string $response
-	 * */
+     *
+     * @param string $message A lexicon key for error message
+     * @param array $data Additional data, for example cart status
+     * @param array $placeholders Array with placeholders for lexicon entry
+     *
+     * @return array|string $response
+     * */
     public function error($message = '', $data = array(), $placeholders = array())
     {
         $response = array(
@@ -440,4 +440,22 @@ if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
         return $this->modx->getOption($key, $options, $default, $skipEmpty);
     }
 
+    public function chunk(string $name, array $data = [])
+    {
+        // Получаем имя файла без расширения
+        $name = pathinfo($name, PATHINFO_FILENAME);
+        $name .= '.tpl';
+
+        $path = $this->config['corePath'].'elements/templates/'.$name;
+        if (!file_exists($path)) {
+            return 'File not found: '.$path;
+        }
+
+        $tpl = file_get_contents($path);
+        $uniqid = uniqid();
+        $chunk = $this->modx->newObject('modChunk', array('name' => "{tmp}-{$uniqid}"));
+        $chunk->setCacheable(false);
+
+        return $chunk->process($data, $tpl);
+    }
 }

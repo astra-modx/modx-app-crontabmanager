@@ -2,7 +2,6 @@
 
 class CronTabManagerRule extends xPDOSimpleObject
 {
-
     /**
      * {@inheritdoc}
      */
@@ -67,5 +66,4 @@ class CronTabManagerRule extends xPDOSimpleObject
         }
         return $this->tasks;
     }
-
 }

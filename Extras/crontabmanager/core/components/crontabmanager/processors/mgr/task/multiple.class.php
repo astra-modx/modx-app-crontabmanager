@@ -6,7 +6,7 @@ class CronTabManagerTaskMultipleProcessor extends modProcessor
      */
     public function process()
     {
-        
+
         if (!$method = $this->getProperty('method', false)) {
             return $this->failure();
         }
@@ -28,7 +28,6 @@ class CronTabManagerTaskMultipleProcessor extends modProcessor
         }
         return $this->success();
     }
-
 }
 
 return 'CronTabManagerTaskMultipleProcessor';

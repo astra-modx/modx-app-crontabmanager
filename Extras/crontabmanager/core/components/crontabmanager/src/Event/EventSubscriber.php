@@ -13,5 +13,4 @@ use modX;
 interface EventSubscriber
 {
     public function handleEvent($eventType, $data);
-
 }

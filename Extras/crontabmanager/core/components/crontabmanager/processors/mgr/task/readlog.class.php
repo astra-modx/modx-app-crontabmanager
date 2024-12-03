@@ -32,9 +32,7 @@ class CronTabManagerTaskGetProcessor extends modObjectGetProcessor
         } else {
             return $this->success($this->modx->lexicon('crontabmanager_not_log_content'), ['yesLog' => $yesLog, 'content' => $content]);
         }
-
     }
-
 }
 
 return 'CronTabManagerTaskGetProcessor';

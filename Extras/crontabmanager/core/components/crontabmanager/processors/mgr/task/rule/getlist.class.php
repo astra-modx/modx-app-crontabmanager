@@ -116,7 +116,6 @@ class CronTabManagerRuleGetListProcessor extends modObjectGetListProcessor
 
         return $array;
     }
-
 }
 
 return 'CronTabManagerRuleGetListProcessor';

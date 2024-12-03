@@ -38,7 +38,6 @@ class msAddFieldActiveGetListProcessor extends modObjectProcessor
     {
         return parent::outputArray($array, $count);
     }
-
 }
 
 return 'msAddFieldActiveGetListProcessor';

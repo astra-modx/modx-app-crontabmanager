@@ -60,7 +60,6 @@ trait CreateRule
             if (empty($url)) {
                 $this->modx->error->addField('url', $this->modx->lexicon('crontabmanager_task_rule_err_url'));
             }
-
         }
 
 
@@ -98,7 +97,6 @@ trait CreateRule
                 $this->tasks = $tmp;
             }
         }
-
     }
 
 
@@ -110,5 +108,4 @@ trait CreateRule
         }
         return parent::afterSave();
     }
-
 }

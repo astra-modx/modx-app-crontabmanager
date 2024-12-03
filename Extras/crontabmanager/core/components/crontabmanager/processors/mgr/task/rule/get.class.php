@@ -3,25 +3,27 @@
 /**
  * Get an Task
  */
-class CronTabManagerRuleGetProcessor extends modObjectGetProcessor {
-	public $objectType = 'CronTabManagerRule';
-	public $classKey = 'CronTabManagerRule';
-	public $languageTopics = array('crontabmanager:default');
-	public $permission = 'crontabmanager_view';
+class CronTabManagerRuleGetProcessor extends modObjectGetProcessor
+{
+    public $objectType = 'CronTabManagerRule';
+    public $classKey = 'CronTabManagerRule';
+    public $languageTopics = array('crontabmanager:default');
+    public $permission = 'crontabmanager_view';
 
-	/**
-	 * We doing special check of permission
-	 * because of our objects is not an instances of modAccessibleObject
-	 *
-	 * @return mixed
-	 */
-	public function process() {
-		if (!$this->checkPermissions()) {
-			return $this->failure($this->modx->lexicon('access_denied'));
-		}
+    /**
+     * We doing special check of permission
+     * because of our objects is not an instances of modAccessibleObject
+     *
+     * @return mixed
+     */
+    public function process()
+    {
+        if (!$this->checkPermissions()) {
+            return $this->failure($this->modx->lexicon('access_denied'));
+        }
 
-		return parent::process();
-	}
+        return parent::process();
+    }
 
     /**
      * Return the response
@@ -34,7 +36,6 @@ class CronTabManagerRuleGetProcessor extends modObjectGetProcessor {
         $array['categories'] = empty($cat) ? '{}' : $this->toJSON($this->object->excludeTasks());
         return $this->success('', $array);
     }
-
 }
 
 return 'CronTabManagerRuleGetProcessor';

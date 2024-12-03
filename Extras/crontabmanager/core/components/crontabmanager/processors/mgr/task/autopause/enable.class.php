@@ -5,7 +5,6 @@ require_once(dirname(__FILE__) . '/update.class.php');
  */
 class CronTabManagerAutoPauseEnableProcessor extends CronTabManagerAutoPauseUpdateProcessor
 {
-
     /**
      * @return bool
      */
@@ -16,7 +15,6 @@ class CronTabManagerAutoPauseEnableProcessor extends CronTabManagerAutoPauseUpda
         );
         return true;
     }
-
 }
 
 return 'CronTabManagerAutoPauseEnableProcessor';

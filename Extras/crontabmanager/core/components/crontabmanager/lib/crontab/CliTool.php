@@ -106,7 +106,7 @@ class CliTool
         if (
             ($this->_isSet('enable', 'e') && $this->_isSet('disable', 'd')) ||
             ($this->_isNotSet('enable', 'e') && $this->_isNotSet('disable', 'd'))
-            ) {
+        ) {
             throw new \UnexpectedValueException(
                 '--enable|-e or --disable|-d opt is required, but only one of them'
             );
@@ -310,11 +310,12 @@ class CliTool
             require_once __DIR__ . '/CronEntry.php';
         }
     }
-
 }
 
-if (PHP_SAPI == 'cli' && isset($_SERVER['argv'])
-    && realpath($_SERVER['argv'][0]) == __FILE__) {
+if (
+    PHP_SAPI == 'cli' && isset($_SERVER['argv'])
+    && realpath($_SERVER['argv'][0]) == __FILE__
+) {
     @session_write_close();
     exit(CliTool::run());
 }

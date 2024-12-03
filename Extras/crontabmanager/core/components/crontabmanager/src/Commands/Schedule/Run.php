@@ -64,5 +64,4 @@ class Run extends AbstractCrontabCommand
 
         return self::SUCCESS;
     }
-
 }

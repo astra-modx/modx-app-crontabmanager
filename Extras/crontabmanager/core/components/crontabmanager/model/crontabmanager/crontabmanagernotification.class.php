@@ -2,7 +2,6 @@
 
 class CronTabManagerNotification extends xPDOSimpleObject
 {
-
     /**
      * {@inheritdoc}
      */

@@ -11,7 +11,6 @@ namespace Webnitros\CronTabManager;
 
 class Misc
 {
-
     public static function when()
     {
         return [

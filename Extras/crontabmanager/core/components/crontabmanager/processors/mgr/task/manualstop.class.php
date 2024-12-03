@@ -33,7 +33,6 @@ class CronTabManagerTaskManualStopProcessor extends modObjectGetProcessor
 
         return parent::process();
     }
-
 }
 
 return 'CronTabManagerTaskManualStopProcessor';

@@ -4,19 +4,19 @@ $xpdo_meta_map['CronTabManagerCategory']= array (
   'version' => '1.1',
   'table' => 'ctma_categories',
   'extends' => 'xPDOSimpleObject',
-  'tableMeta' => 
+  'tableMeta' =>
   array (
     'engine' => 'InnoDB',
   ),
-  'fields' => 
+  'fields' =>
   array (
     'name' => '',
-    'description' => NULL,
+    'description' => null,
     'active' => 1,
   ),
-  'fieldMeta' => 
+  'fieldMeta' =>
   array (
-    'name' => 
+    'name' =>
     array (
       'dbtype' => 'varchar',
       'precision' => '255',
@@ -24,13 +24,13 @@ $xpdo_meta_map['CronTabManagerCategory']= array (
       'null' => false,
       'default' => '',
     ),
-    'description' => 
+    'description' =>
     array (
       'dbtype' => 'text',
       'phptype' => 'string',
       'null' => true,
     ),
-    'active' => 
+    'active' =>
     array (
       'dbtype' => 'tinyint',
       'precision' => '1',
@@ -39,17 +39,17 @@ $xpdo_meta_map['CronTabManagerCategory']= array (
       'default' => 1,
     ),
   ),
-  'indexes' => 
+  'indexes' =>
   array (
-    'active' => 
+    'active' =>
     array (
       'alias' => 'active',
       'primary' => false,
       'unique' => false,
       'type' => 'BTREE',
-      'columns' => 
+      'columns' =>
       array (
-        'active' => 
+        'active' =>
         array (
           'length' => '',
           'collation' => 'A',

@@ -65,7 +65,6 @@ class CronTabManagerTaskGetProcessor extends modObjectGetProcessor
 
         return $this->success('', $values);
     }
-
 }
 
 return 'CronTabManagerTaskGetProcessor';

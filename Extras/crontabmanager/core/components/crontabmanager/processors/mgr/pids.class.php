@@ -38,7 +38,6 @@ class CronTabManagerPidsProcessor extends modProcessor
         $today = date('H:i', time());
         exit('# pids - time ' . $today . '<pre style="background-color: #eee; overflow-x: scroll; padding: 5px 15px" contenteditable="true">' . ' ' . PHP_EOL . $out . PHP_EOL . PHP_EOL . '</pre>');
     }
-
 }
 
 return 'CronTabManagerPidsProcessor';

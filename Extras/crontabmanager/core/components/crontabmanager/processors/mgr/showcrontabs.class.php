@@ -22,7 +22,6 @@ class CronTabManagerShowCrontabsProcessor extends modProcessor
         $out = implode('<br>', $list);
         exit('Готовый список с крон заданиями добавленных в crontab<br><br><pre style="background-color: #eee; overflow-x: scroll; padding: 5px 15px" contenteditable="true">'.'# modX component CronTabManager author Stapenko Andrey '.PHP_EOL.$out.PHP_EOL.PHP_EOL.'</pre>');
     }
-
 }
 
 return 'CronTabManagerShowCrontabsProcessor';

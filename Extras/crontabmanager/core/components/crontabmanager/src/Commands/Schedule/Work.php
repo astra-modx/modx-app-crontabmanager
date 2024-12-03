@@ -25,5 +25,4 @@ class Work extends Run
 
         return self::SUCCESS;
     }
-
 }

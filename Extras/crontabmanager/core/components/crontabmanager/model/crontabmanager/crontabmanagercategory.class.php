@@ -1,2 +1,4 @@
 <?php
-class CronTabManagerCategory extends xPDOSimpleObject {}
+class CronTabManagerCategory extends xPDOSimpleObject
+{
+}

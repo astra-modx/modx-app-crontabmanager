@@ -47,5 +47,4 @@ class ScheduleList extends AbstractCrontabCommand
 
         return self::SUCCESS;
     }
-
 }

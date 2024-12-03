@@ -84,10 +84,9 @@ class Rest
 
                 if (!$User->get('active')) {
                     return 'Пользователь не активный, доступ запрещен';
-                } else if (!$hasPermission) {
+                } elseif (!$hasPermission) {
                     return 'Отсутствую права на удаленный доступ к rest, доступ запрещен';
                 } else {
-
                     $tokens = null;
                     $q = $this->modx->newQuery('CronTabManagerToken');
                     $q->select($this->modx->getSelectColumns('CronTabManagerToken', 'CronTabManagerToken'));
@@ -118,7 +117,7 @@ class Rest
     public function checkClientId()
     {
         $client_id = $this->get('client_id');
-        $SettingClinetId = $this->CronTabManager->modx->getOption('crontabmanager_rest_client_id', NULL, 'CLIENT_ID');
+        $SettingClinetId = $this->CronTabManager->modx->getOption('crontabmanager_rest_client_id', null, 'CLIENT_ID');
         if ($SettingClinetId != $client_id) {
             return 'Указан не верный client_id';
         }
@@ -158,7 +157,6 @@ class Rest
                     }
                     break;
                 default:
-
                     break;
             }
             if (!$run) {
@@ -210,7 +208,9 @@ class Rest
      */
     public function eiEmpt($val)
     {
-        if (is_numeric($val)) return $val;
+        if (is_numeric($val)) {
+            return $val;
+        }
         return empty($val) ? '*' : $val;
     }
 

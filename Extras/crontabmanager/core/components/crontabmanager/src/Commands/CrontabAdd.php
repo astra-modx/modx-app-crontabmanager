@@ -76,6 +76,4 @@ class CrontabAdd extends AbstractCrontabCommand
 
         return self::SUCCESS;
     }
-
-
 }

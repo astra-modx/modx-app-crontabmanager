@@ -99,7 +99,6 @@ class CronTabManagerAutoPauseGetListProcessor extends modObjectGetListProcessor
 
         return $array;
     }
-
 }
 
 return 'CronTabManagerAutoPauseGetListProcessor';

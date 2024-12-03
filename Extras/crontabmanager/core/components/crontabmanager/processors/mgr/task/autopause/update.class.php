@@ -48,7 +48,6 @@ class CronTabManagerAutoPauseUpdateProcessor extends modObjectUpdateProcessor
 
         return parent::beforeSet();
     }
-
 }
 
 return 'CronTabManagerAutoPauseUpdateProcessor';

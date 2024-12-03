@@ -99,7 +99,6 @@ class CronTabManagerCategoryGetListProcessor extends modObjectGetListProcessor
         );
         return $array;
     }
-
 }
 
 return 'CronTabManagerCategoryGetListProcessor';

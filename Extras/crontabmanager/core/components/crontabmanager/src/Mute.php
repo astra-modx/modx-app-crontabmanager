@@ -14,7 +14,6 @@ use Webnitros\CronTabManager\Analyzer\LogAnalyzer;
 
 class Mute
 {
-
     /**
      * Упрпавление заглушкой задания для автоматического восстановления после провала
      * @param \Webnitros\CronTabManager\Analyzer\LogAnalyzer $LogAnalyzer
@@ -30,7 +29,6 @@ class Mute
         $mute_success = $task->get('mute_success');
 
         if ($task->get('mute')) {
-
             // Заглушка задания до первого успешного завершения
             if ($mute_success) {
                 if ($successfulAfterFailed && $successful) {
@@ -39,11 +37,8 @@ class Mute
                     $task->muteOff();
                 }
             }
-
-
         }
         if ($task->get('mute')) {
-
             // Заглушка задания на определенное время, по наступлению этого времени загрулшка снимается
             $mute_time = $task->get('mute_time');
             if ($mute_time) {
@@ -52,7 +47,6 @@ class Mute
                     $task->muteOff();
                 }
             }
-
         }
 
 

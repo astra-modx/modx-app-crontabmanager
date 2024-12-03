@@ -116,7 +116,6 @@ if (!function_exists('shutdownHandlerTask')) {
                                     $params['email'] = @$result['email'];
                                     break;
                                 case 'Telegram':
-
                                     $params['token'] = @$result['token'];
                                     $params['chat_id'] = @$result['chat_id'];
                                     break;

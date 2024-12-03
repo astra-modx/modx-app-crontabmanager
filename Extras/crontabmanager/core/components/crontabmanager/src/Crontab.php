@@ -10,7 +10,6 @@ namespace Webnitros\CronTabManager;
 
 class Crontab
 {
-
     /**
      * Проверка доступности crontab
      * @return bool

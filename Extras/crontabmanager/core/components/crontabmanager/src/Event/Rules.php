@@ -15,6 +15,8 @@ use Webnitros\CronTabManager\Analyzer\LogAnalyzer;
 
 class Rules
 {
+    private CronTabManagerTask $task;
+    private array $rules;
 
     public function __construct(CronTabManagerTask $task, array $rules)
     {
@@ -80,7 +82,6 @@ class Rules
         }
 
         if ($rules && is_array($rules)) {
-
             foreach ($rules as &$rule) {
                 $criteria = $rule['criteria'];
                 $event = null;

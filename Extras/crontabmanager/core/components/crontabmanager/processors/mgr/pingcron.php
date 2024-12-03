@@ -16,7 +16,6 @@ class CronTabManagerPingCronProcessor extends modProcessor
             return $this->failure($this->modx->lexicon('crontabmanager_crontab_not_available'));
         }
     }
-
 }
 
 return 'CronTabManagerPingCronProcessor';

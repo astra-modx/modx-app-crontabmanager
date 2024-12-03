@@ -28,7 +28,6 @@ class CronTabManagerNotificationMultipleProcessor extends modProcessor
         }
         return $this->success();
     }
-
 }
 
 return 'CronTabManagerNotificationMultipleProcessor';

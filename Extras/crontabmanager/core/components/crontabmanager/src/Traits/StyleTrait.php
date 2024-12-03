@@ -63,6 +63,4 @@ trait StyleTrait
             $this->style()->comment($message);
         }
     }
-
-
 }

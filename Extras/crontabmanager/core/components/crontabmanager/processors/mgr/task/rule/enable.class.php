@@ -5,7 +5,6 @@ require_once(dirname(__FILE__) . '/update.class.php');
  */
 class CronTabManagerRuleEnableProcessor extends CronTabManagerRuleUpdateProcessor
 {
-
     /**
      * @return bool
      */
@@ -16,7 +15,6 @@ class CronTabManagerRuleEnableProcessor extends CronTabManagerRuleUpdateProcesso
         );
         return true;
     }
-
 }
 
 return 'CronTabManagerRuleEnableProcessor';

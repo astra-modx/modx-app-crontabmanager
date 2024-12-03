@@ -42,4 +42,3 @@ $_lang['crontabmanager_condition_time_weeks_4'] = 'Every Thursday';
 $_lang['crontabmanager_condition_time_weeks_5'] = 'Every Friday';
 $_lang['crontabmanager_condition_time_weeks_6'] = 'Every Saturday';
 $_lang['crontabmanager_condition_time_weeks_7'] = 'Every Sunday';
-

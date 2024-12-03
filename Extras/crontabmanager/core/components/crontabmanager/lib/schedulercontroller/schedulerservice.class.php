@@ -64,7 +64,7 @@ class SchedulerService
         ), $config);
 
         // Включения механизма блокирования
-        $this->isSetCompletionTime = (boolean)$this->modx->getOption('crontabmanager_set_completion_time', $config, true);
+        $this->isSetCompletionTime = (bool)$this->modx->getOption('crontabmanager_set_completion_time', $config, true);
 
         // Авторизоваться под пользователем
         $this->user_id = (int)$this->modx->getOption('crontabmanager_user_id', $config, 0);
@@ -188,7 +188,7 @@ class SchedulerService
                 'task_id' => $this->CronTabManagerTask->get('id'),
                 'createdon:<' => $createdon,
             );
-            if ($count = (boolean)$this->modx->getCount('CronTabManagerTaskLog', $criteria)) {
+            if ($count = (bool)$this->modx->getCount('CronTabManagerTaskLog', $criteria)) {
                 $sql = "DELETE FROM {$this->modx->getTableName('CronTabManagerTaskLog')} WHERE task_id = {$task_id} and createdon <= {$createdon}";
                 $this->modx->exec($sql);
             }
@@ -285,13 +285,13 @@ class SchedulerService
     }
 
     /* This method returns an error response
-	 *
-	 * @param string $message A lexicon key for error message
-	 * @param array $data Additional data, for example cart status
-	 * @param array $placeholders Array with placeholders for lexicon entry
-	 *
-	 * @return array|string $response
-	 * */
+     *
+     * @param string $message A lexicon key for error message
+     * @param array $data Additional data, for example cart status
+     * @param array $placeholders Array with placeholders for lexicon entry
+     *
+     * @return array|string $response
+     * */
     public function error($message = '', $data = array(), $placeholders = array())
     {
         $response = array(
@@ -373,7 +373,7 @@ class SchedulerService
         if (!empty($modx)) {
             $queryTime = $modx->queryTime;
             $queryTime = sprintf("%2.4f s", $queryTime);
-            $queries = isset ($modx->executedQueries) ? $modx->executedQueries : 0;
+            $queries = isset($modx->executedQueries) ? $modx->executedQueries : 0;
 
             $phpTime = $totalTime - $queryTime;
             $phpTime = sprintf("%2.4f s", $phpTime);
@@ -392,7 +392,7 @@ class SchedulerService
     public function setMode()
     {
         if (isset($_GET['mode'])) {
-            $this->mode = (boolean)$_GET['mode'];
+            $this->mode = (bool)$_GET['mode'];
         }
     }
 
@@ -621,5 +621,4 @@ class SchedulerService
 
         return $this->modx->getOption($key, $options, $default, $skipEmpty);
     }
-
 }

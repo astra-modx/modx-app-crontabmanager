@@ -63,7 +63,7 @@ class CronTabManagerTaskBlockUpProcessor extends modObjectProcessor
         if (!$object->save()) {
             return $this->failure($this->modx->lexicon('crontabmanager_task_err_save'));
         }
-        return $this->success($this->modx->lexicon('crontabmanager_task_blockup_minutes_add',array('minutes' => $minutes)));
+        return $this->success($this->modx->lexicon('crontabmanager_task_blockup_minutes_add', array('minutes' => $minutes)));
     }
 }
 

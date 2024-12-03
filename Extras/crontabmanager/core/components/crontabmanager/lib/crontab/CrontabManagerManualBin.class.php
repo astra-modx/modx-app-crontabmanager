@@ -4,5 +4,4 @@ if (!class_exists('CrontabManagerManual')) {
 }
 class CrontabManagerManualBin extends CrontabManagerManual
 {
-
 }

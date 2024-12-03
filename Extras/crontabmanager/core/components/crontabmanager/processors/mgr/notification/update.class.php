@@ -84,8 +84,6 @@ class CronTabManagerNotificationUpdateProcessor extends modObjectUpdateProcessor
         }
         return true;
     }
-
-
 }
 
 return 'CronTabManagerNotificationUpdateProcessor';

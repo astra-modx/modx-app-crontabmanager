@@ -2,7 +2,6 @@
 
 class CronTabManagerAutoPause extends xPDOSimpleObject
 {
-
     /**
      * {@inheritdoc}
      */
@@ -22,6 +21,4 @@ class CronTabManagerAutoPause extends xPDOSimpleObject
     {
         return $this->get('when') . ': ' . $this->get('from') . ' to ' . $this->get('to');
     }
-
-
 }

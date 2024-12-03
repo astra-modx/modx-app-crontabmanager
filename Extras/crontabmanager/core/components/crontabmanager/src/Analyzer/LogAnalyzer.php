@@ -16,7 +16,6 @@ use Webnitros\CronTabManager\Event\Subscription;
 
 class LogAnalyzer
 {
-
     //private $eventSubscription;
 
     public $last;
@@ -199,5 +198,4 @@ class LogAnalyzer
     {
         return (bool)$this->types['successful'];
     }
-
 }

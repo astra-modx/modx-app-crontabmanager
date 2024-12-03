@@ -11,7 +11,6 @@ namespace Webnitros\CronTabManager\Helpers;
 
 class Convert
 {
-
     public function command(string $path)
     {
 

@@ -1,7 +1,7 @@
 <?php
 
 $xpdo_meta_map = array (
-  'xPDOSimpleObject' => 
+  'xPDOSimpleObject' =>
   array (
     0 => 'CronTabManagerTask',
     1 => 'CronTabManagerCategory',
@@ -10,7 +10,7 @@ $xpdo_meta_map = array (
     4 => 'CronTabManagerNotification',
     5 => 'CronTabManagerRule',
   ),
-  'xPDOObject' => 
+  'xPDOObject' =>
   array (
     0 => 'CronTabManagerRuleMemberTask',
   ),

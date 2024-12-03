@@ -67,7 +67,6 @@ class CronTabManagerRuleGetNodesProcessor extends modProcessor
                 }
             }
         } else {
-
             $id = str_ireplace('web_', '', $id);
 
             $q = $this->modx->newQuery('CronTabManagerTask');
@@ -86,7 +85,6 @@ class CronTabManagerRuleGetNodesProcessor extends modProcessor
         exit(json_encode($this->categories));
         // TODO: Implement process() method.
     }
-
 }
 
 return 'CronTabManagerRuleGetNodesProcessor';

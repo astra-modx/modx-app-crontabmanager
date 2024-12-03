@@ -1,2 +1,4 @@
 <?php
-class CronTabManagerRuleMemberTask extends xPDOObject {}
+class CronTabManagerRuleMemberTask extends xPDOObject
+{
+}

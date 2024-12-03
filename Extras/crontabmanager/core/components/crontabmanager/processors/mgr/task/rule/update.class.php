@@ -7,6 +7,7 @@ include_once MODX_CORE_PATH . 'components/crontabmanager/processors/mgr/task/rul
 class CronTabManagerRuleUpdateProcessor extends modObjectUpdateProcessor
 {
     use CreateRule;
+
     /* @var CronTabManagerRule $object */
     public $object = 'CronTabManagerRule';
     public $objectType = 'CronTabManagerRule';
@@ -22,8 +23,6 @@ class CronTabManagerRuleUpdateProcessor extends modObjectUpdateProcessor
         }
         return parent::initialize();
     }
-
-
 }
 
 return 'CronTabManagerRuleUpdateProcessor';

@@ -21,7 +21,7 @@ class SheldulerGeneratorLink
         $this->modx = $modx;
     }
 
-    public function process($basePath,$basePathControllersLink)
+    public function process($basePath, $basePathControllersLink)
     {
         $this->basePath = $basePath;
         $this->basePathControllersLink = $basePathControllersLink;
@@ -32,10 +32,9 @@ class SheldulerGeneratorLink
     /**
      * Создание ссылка на файл для задания крон
      */
-    static private function createTaskCron($task, $basePath,$basePathControllersLink)
+    private static function createTaskCron($task, $basePath, $basePathControllersLink)
     {
         if (!empty($task)) {
-
             $dirLink = $basePathControllersLink;
             $link = $dirLink . '/' . $task . '.php';
             $dir = $dirLink . '' . dirname('/' . $task);
@@ -53,9 +52,7 @@ class SheldulerGeneratorLink
             $fp = fopen($link, 'w+');
             fwrite($fp, $output);
             fclose($fp);
-
         }
-
     }
 
     /**
@@ -63,7 +60,7 @@ class SheldulerGeneratorLink
      * @param $dir
      * @return array
      */
-    static private function myscandir($dir)
+    private static function myscandir($dir)
     {
         $list = scandir($dir);
         unset($list[0], $list[1]);
@@ -77,7 +74,9 @@ class SheldulerGeneratorLink
      */
     private function get_dir($dir)
     {
-        if (empty($dir)) return false;
+        if (empty($dir)) {
+            return false;
+        }
 
         $list = $this->myscandir($dir);
         foreach ($list as $file) {
@@ -90,12 +89,11 @@ class SheldulerGeneratorLink
                     $task = $dir . $file;
                     $task = str_ireplace($this->basePath, '', $task);
                     $task = str_ireplace('.php', '', $task);
-                    $this->createTaskCron($task, dirname($this->basePath),$this->basePathControllersLink);
+                    $this->createTaskCron($task, dirname($this->basePath), $this->basePathControllersLink);
                     #unlink($dir.$file);
                 }
             }
         }
         return true;
     }
-
 }

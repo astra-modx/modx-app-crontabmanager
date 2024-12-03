@@ -43,5 +43,3 @@ $_lang['crontabmanager_condition_time_weeks_4'] = 'Каждый четверг';
 $_lang['crontabmanager_condition_time_weeks_5'] = 'Каждую пятницу';
 $_lang['crontabmanager_condition_time_weeks_6'] = 'Каждую субботу';
 $_lang['crontabmanager_condition_time_weeks_7'] = 'Каждое воскресенье';
-
-

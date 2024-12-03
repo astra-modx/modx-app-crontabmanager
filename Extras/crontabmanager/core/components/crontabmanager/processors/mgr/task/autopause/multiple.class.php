@@ -28,7 +28,6 @@ class CronTabManagerAutoPauseMultipleProcessor extends modProcessor
         }
         return $this->success();
     }
-
 }
 
 return 'CronTabManagerAutoPauseMultipleProcessor';

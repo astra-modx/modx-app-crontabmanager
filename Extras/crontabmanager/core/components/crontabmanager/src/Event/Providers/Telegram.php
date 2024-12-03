@@ -16,8 +16,6 @@ use Webnitros\CronTabManager\Event\Providers;
 
 class Telegram extends Providers implements EventSubscriber
 {
-
-
     public function handleEvent($eventType, $data)
     {
         $modx = $this->task->xpdo;
@@ -80,5 +78,4 @@ class Telegram extends Providers implements EventSubscriber
         }
         return 'date:' . $result['result']['date'];
     }
-
 }

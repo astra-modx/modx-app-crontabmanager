@@ -24,5 +24,4 @@ abstract class Providers
         $this->task = $notification->getOne('Task');
         $this->notification = $notification;
     }
-
 }

@@ -39,7 +39,6 @@ class CronTabManagerTaskLogClearProcessor extends modObjectProcessor
         }
         return $this->success();
     }
-
 }
 
 return 'CronTabManagerTaskLogClearProcessor';

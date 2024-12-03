@@ -345,7 +345,8 @@ class CronEntry
         if ($commentEntry) {
             $hash = base_convert(
                 $this->_signedInt(crc32($entry . $this->group)),
-                10, 36
+                10,
+                36
             );
             $comments = is_array($this->comments) ? $this->comments : array();
             $comments = $this->_fixComments($comments);
@@ -378,10 +379,10 @@ class CronEntry
         }
         return $out;
     }
-    
+
     /**
      * Fix comments by adding # sign
-     * 
+     *
      * @param array $comments
      * @return array
      */

@@ -23,10 +23,6 @@ class CronTabManagerRuleCreateProcessor extends modObjectCreateProcessor
         }
         return parent::initialize();
     }
-
-
-
-
 }
 
 return 'CronTabManagerRuleCreateProcessor';

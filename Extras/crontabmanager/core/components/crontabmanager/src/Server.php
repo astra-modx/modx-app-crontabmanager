@@ -27,7 +27,7 @@ class Server
     public function process()
     {
         $status = 200;
-        $enable = $this->CronTabManager->modx->getOption('crontabmanager_rest_enable', NULL, false);
+        $enable = $this->CronTabManager->modx->getOption('crontabmanager_rest_enable', null, false);
         if ($enable) {
             try {
                 $Rest = new Rest($this->CronTabManager);
@@ -114,6 +114,4 @@ class Server
         504 => 'Gateway Timeout',
         505 => 'HTTP Version Not Supported',
     );
-
-
 }

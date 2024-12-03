@@ -39,7 +39,6 @@ class CronTabManagerClassGetListProcessor extends modProcessor
 
         return $this->outputArray($classes);
     }
-
 }
 
 return 'CronTabManagerClassGetListProcessor';

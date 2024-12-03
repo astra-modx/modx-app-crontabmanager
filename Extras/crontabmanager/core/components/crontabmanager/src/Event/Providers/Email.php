@@ -20,11 +20,9 @@ class Email extends Providers implements EventSubscriber
 {
     public function handleEvent($eventType, $data)
     {
-
-
         // отправка email уведомления
         /* @var CronTabManager $CronTabManager */
-        $CronTabManager = $this->task->xpdo->getService('crontabmanager', 'CronTabManager', MODX_CORE_PATH . 'components/crontabmanager/model/');
+        $CronTabManager = $this->task->xpdo->getService('crontabmanager', 'CronTabManager', MODX_CORE_PATH.'components/crontabmanager/model/');
 
         $emails = $data['email'];
         if (empty($emails)) {
@@ -45,8 +43,8 @@ class Email extends Providers implements EventSubscriber
         $modx = $this->task->xpdo;
 
         $site_url = $modx->getOption('site_url');
-        $blockup_url = $site_url . 'assets/components/crontabmanager/action/blockup.php';
-        $log_url = $site_url . 'assets/components/crontabmanager/action/log.php';
+        $blockup_url = $site_url.'assets/components/crontabmanager/action/blockup.php';
+        $log_url = $site_url.'assets/components/crontabmanager/action/log.php';
 
 
         $Log = $this->notification->getOne('Log');
@@ -72,17 +70,17 @@ class Email extends Providers implements EventSubscriber
         switch ($eventType) {
             case 'successful':
                 $subject = $CronTabManager->modx->lexicon('crontabmanager_email_successful_subject', $data);
-                $message = $CronTabManager->modx->lexicon('crontabmanager_email_successful_message', $data);
+                $message = $CronTabManager->chunk('email/successful.tpl', $data);
                 break;
             case 'successful_after_failed':
                 $subject = $CronTabManager->modx->lexicon('crontabmanager_email_successful_after_failed_message', $data);
-                $message = $CronTabManager->modx->lexicon('crontabmanager_email_successful_message', $data);
+                $message = $CronTabManager->chunk('email/successful.tpl', $data);
                 break;
             case 'fails':
             case 'fails_after_successful':
             case 'fails_new_problem':
                 $subject = $CronTabManager->modx->lexicon('crontabmanager_email_fails_subject', $data);
-                $message = $CronTabManager->modx->lexicon('crontabmanager_email_fails_message', $data);
+                $message = $CronTabManager->chunk('email/fails.tpl', $data);
                 break;
         }
 
@@ -94,6 +92,5 @@ class Email extends Providers implements EventSubscriber
 
 
         return true;
-
     }
 }
