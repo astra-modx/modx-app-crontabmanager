@@ -4,9 +4,6 @@
  * Get a list of Tasks
  */
 
-use Cron\CronExpression;
-use Webnitros\CronTabManager\Crontab;
-
 class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
 {
     /* @var CronTabManager $CronTabManager */
@@ -93,9 +90,7 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
 
 
     /**
-     * @param  xPDOObject  $object
-     *
-     * @return array
+     * @return string
      */
     public function eiEmpt($val)
     {
@@ -135,7 +130,7 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         }
         $array['is_blocked'] = $is_blocked;
 
-        $CronisAvailable = Crontab::isAvailable();
+        $CronisAvailable = cronTabManagerIsAvailable();
         $array['cron_enable'] = $object->isEnableCron();
 
 

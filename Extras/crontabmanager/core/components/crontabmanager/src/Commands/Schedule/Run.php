@@ -11,9 +11,7 @@ namespace Webnitros\CronTabManager\Commands\Schedule;
 use CronTabManagerTask;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Cron\CronExpression;
 use Webnitros\CronTabManager\Commands\Abstracts\AbstractCrontabCommand;
-use Webnitros\CronTabManager\Crontab;
 
 class Run extends AbstractCrontabCommand
 {
@@ -65,14 +63,6 @@ class Run extends AbstractCrontabCommand
 
 
         return self::SUCCESS;
-    }
-
-    public function runTask(string $path)
-    {
-        $path = str_ireplace('.php', '', $path);
-        $path = rtrim($path, '.php');
-        $this->scheduler->php($path);
-        $this->scheduler->process();
     }
 
 }

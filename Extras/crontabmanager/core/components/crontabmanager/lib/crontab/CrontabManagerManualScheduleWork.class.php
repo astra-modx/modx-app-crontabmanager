@@ -1,8 +1,5 @@
 <?php
 
-use Cron\CronExpression;
-use Webnitros\CronTabManager\Crontab;
-
 if (!class_exists('CrontabManagerManual')) {
     include_once dirname(dirname(dirname(__FILE__))).'/lib/crontab/CrontabManagerManual.php';
 }
@@ -41,7 +38,6 @@ class CrontabManagerManualScheduleWork extends CrontabManagerManual
 
         $command = CronTabManagerPhpExecutable($modx);
 
-        $Crontab = new Crontab();
         /* @var CronTabManagerTask $object */
         $q = $modx->newQuery('CronTabManagerTask');
         $q->where(array(
@@ -49,8 +45,7 @@ class CrontabManagerManualScheduleWork extends CrontabManagerManual
         ));
         if ($objectList = $modx->getCollection('CronTabManagerTask', $q)) {
             foreach ($objectList as $object) {
-                $time = $object->cronTime('	    ');
-                #$path = $object->path_task;
+                $time = $object->crontab()->time('	    ');
                 $cli = $object->getPath();
                 $log = $object->getFileLogPath();
                 $content[] = $time.'	'.$command.' '.$cli.' > '.$log.' 2>&1 &';

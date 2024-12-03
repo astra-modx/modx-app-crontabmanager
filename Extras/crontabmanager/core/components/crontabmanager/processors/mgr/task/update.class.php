@@ -75,19 +75,16 @@ class CronTabManagerTaskUpdateProcessor extends modObjectUpdateProcessor
             return $this->modx->lexicon('access_denied');
         }
 
-        if ($this->modx->getOption('crontabmanager_handler_class') === 'CrontabManagerHandlerScheduleWork') {
-            return true;
-        }
-
         // Включение отключение крон задания
-        if (array_key_exists('cron_enable', $this->properties)) {
+        if (cronTabManagerIsAvailable()) {
             $cron_enable = $this->setCheckbox('cron_enable');
+            $Cron = $this->object->crontab();
             if ($cron_enable) {
                 $action = 'add';
-                $response = $this->object->addCron();
+                $response = $Cron->addCron();
             } else {
                 $action = 'remove';
-                $response = $this->object->removeCron();
+                $response = $Cron->removeCron();
             }
             if (!$response) {
                 return $this->modx->lexicon('crontabmanager_task_err_'.$action.'_crontab', array('task_path' => $this->object->get('path_task')));

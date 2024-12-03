@@ -123,4 +123,52 @@ class CrontabTask
         return mb_strtolower($command);
     }
 
+
+    /**
+     * Записать крон задание
+     * @return bool
+     */
+    public function addCron()
+    {
+        if ($Crontab = $this->task->loadCronTabManager()) {
+            if ($manager = $Crontab->loadManager()) {
+                return $manager->process($this->task, 'add');
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Удалить крон задание
+     * @return bool
+     */
+    public function removeCron()
+    {
+        if ($Crontab = $this->task->loadCronTabManager()) {
+            if ($manager = $Crontab->loadManager()) {
+                return $manager->process($this->task, 'remove');
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Вернет хеш задания
+     * @return bool|string
+     */
+    public function findCron()
+    {
+        if ($Crontab = $this->task->loadCronTabManager()) {
+            if ($manager = $Crontab->loadManager()) {
+                return $manager->findHashTask($this->task->get('path_task'), $this->task->get('id'));
+            }
+        }
+
+        return false;
+    }
+
+
 }

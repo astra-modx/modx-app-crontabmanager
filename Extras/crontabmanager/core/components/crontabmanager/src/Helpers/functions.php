@@ -25,12 +25,6 @@ if (!function_exists('CronTabManagerPhpExecutable')) {
     }
 }
 
-if (!function_exists('ctma_debug')) {
-    function ctma_debug($msg)
-    {
-        # echo PHP_EOL . $msg . '<br>';
-    }
-}
 
 if (!function_exists('shutdownHandlerTask')) {
     function shutdownHandlerTask(CronTabManagerTask $task)
@@ -45,14 +39,11 @@ if (!function_exists('shutdownHandlerTask')) {
             $Log = $LogAnalyzer->getLastLog();
 
             // Проверяем что у задания первая неудачная попытка
-            $сountFailedAttempts = $LogAnalyzer->getCountFailedAttempts();
-
-
-            ctma_debug('Count Failure: '.$сountFailedAttempts);
+            $countFailedAttempts = $LogAnalyzer->getCountFailedAttempts();
 
             // Проверяка неудачной попытке завершения
             // Если задание не завершилось и включена опция перезапуска
-            if ($сountFailedAttempts === 1) {
+            if ($countFailedAttempts === 1) {
                 // Только если задание не завершилось успешно ПЕРВЫЙ раз
                 if (!$task->get('restart') && $task->get('restart_after_failure')) {
                     // Проверяем что задание не завершилось успешно
@@ -82,7 +73,6 @@ if (!function_exists('shutdownHandlerTask')) {
 
                         shell_exec($command);
 
-                        ctma_debug('restart');
                         $run = false;
                     }
                 }
@@ -102,15 +92,7 @@ if (!function_exists('shutdownHandlerTask')) {
                 $isMute = \Webnitros\CronTabManager\Mute::check($LogAnalyzer, $task);
 
 
-                if ($isMute) {
-                    ctma_debug('Task Muted');
-                } else {
-                    foreach ($events as $event => $v) {
-                        if ($v) {
-                            ctma_debug('Event: '.$event);
-                        }
-                    }
-
+                if (!$isMute) {
                     $Rules = new \Webnitros\CronTabManager\Event\Rules($task, $events);
                     $results = $Rules->process();
                     $logId = $Log['id'];
@@ -168,9 +150,6 @@ if (!function_exists('shutdownHandlerTask')) {
                                     echo 'Error save notice';
                                 }
 
-
-                                ctma_debug('Создали уведомление: '.$event);
-
                                 $Notice->send();
                             }
                         }
@@ -178,5 +157,42 @@ if (!function_exists('shutdownHandlerTask')) {
                 }
             }
         }
+    }
+}
+
+if (!function_exists('cronTabManagerIsAvailable')) {
+    /**
+     * Проверка доступности crontab
+     * @return bool
+     */
+    function cronTabManagerIsAvailable()
+    {
+        // Проверяем, доступна ли функция exec
+        if (function_exists('exec') && is_callable('exec')) {
+            // Проверяем, не отключена ли функция в php.ini
+            $disabled_functions = explode(',', ini_get('disable_functions'));
+            if (!in_array('exec', $disabled_functions)) {
+                exec('crontab -l', $output, $returnVar);
+
+                return $returnVar === 0;
+            }
+        }
+
+        return false;
+    }
+}
+
+if (!function_exists('cronTabManagerCurrentUser')) {
+    /**
+     * Вернет текущего пользователя
+     * @return bool
+     */
+    function cronTabManagerCurrentUser()
+    {
+        if (function_exists('get_current_user') && is_callable('get_current_user')) {
+            return get_current_user();
+        }
+
+        return !empty($_SERVER['USER']) ? $_SERVER['USER'] : null;
     }
 }

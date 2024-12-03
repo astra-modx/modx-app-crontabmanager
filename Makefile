@@ -121,3 +121,11 @@ run-app:
 	@make package-build
 	@make package-install
 	@make user-info
+
+phpcs:
+	docker compose exec app bash -c 'vendor/bin/phpcs'
+phpcbf:
+	docker compose exec app bash -c 'vendor/bin/phpcbf'
+phpcs-fix:
+	@make phpcbf
+	@make phpcs

@@ -9,8 +9,8 @@ interface CrontabManagerHandlerInterface
     public function initialize();
 
     /**
-     * @param CronTabManagerTask $task
-     * @param string $action
+     * @param  CronTabManagerTask  $task
+     * @param  string  $action
      * @return array|string $response
      */
     public function process(CronTabManagerTask $task, $action);
@@ -23,8 +23,8 @@ interface CrontabManagerHandlerInterface
     /**
      * Вернет хеш задания по контроллеру или по id задания
      *
-     * @param null $path_task путь к контроллеру
-     * @param null $task_id id задания
+     * @param  null  $path_task  путь к контроллеру
+     * @param  null  $task_id  id задания
      * @return bool|string
      */
     public function findHashTask($path_task = null, $task_id = null);
@@ -55,7 +55,7 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
     /* @var string $path_task */
     protected $path_task = null;
 
-    public function __construct(CrontabManager &$CrontabManager, $config = array())
+    public function __construct(CrontabManager &$CrontabManager)
     {
         $this->CrontabManager = $CrontabManager;
         $this->modx = $CrontabManager->modx;
@@ -67,28 +67,30 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
     public function initialize()
     {
         if (!class_exists('CrontabManagerManual')) {
-            require $this->CrontabManager->config['corePath'] . '/lib/crontab/CrontabManagerManual.php';
+            require $this->CrontabManager->config['corePath'].'/lib/crontab/CrontabManagerManual.php';
         }
 
         //CrontabManagerManualBin
-        $class = 'CrontabManagerManual' . $this->loadClass;
+        $class = 'CrontabManagerManual'.$this->loadClass;
         if (!class_exists($class)) {
-            require $this->CrontabManager->config['corePath'] . '/lib/crontab/' . $class . '.class.php';
+            require $this->CrontabManager->config['corePath'].'/lib/crontab/'.$class.'.class.php';
         }
 
         if (!class_exists($class)) {
             $this->modx->log(modX::LOG_LEVEL_ERROR, "Error load class {$class}", '', __METHOD__, __FILE__, __LINE__);
+
             return false;
         }
         $this->crontab = new $class();
 
-        $user = !empty($_SERVER['USER']) ? $_SERVER['USER'] : 'cron';
-        $this->crontab->file_crontab_path = $this->CrontabManager->config['schedulerPath'] . '/crontabs/' . $user;
+        $user = cronTabManagerCurrentUser() ?? 'cron';
+        $this->crontab->file_crontab_path = $this->CrontabManager->config['schedulerPath'].'/crontabs/'.$user;
+
         return true;
     }
 
     /**
-     * @param CronTabManagerTask $task
+     * @param  CronTabManagerTask  $task
      * @param $action
      * @return bool
      */
@@ -96,11 +98,13 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
     {
         if (!$task instanceof CronTabManagerTask) {
             $this->modx->log(modX::LOG_LEVEL_ERROR, "CronTabManagerTask class not passed", '', __METHOD__, __FILE__, __LINE__);
+
             return false;
         }
 
         if ($action != 'add' and $action != 'remove') {
             $this->modx->log(modX::LOG_LEVEL_ERROR, "Error action with task should be add or remove", '', __METHOD__, __FILE__, __LINE__);
+
             return false;
         }
 
@@ -116,24 +120,25 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
             switch ($action) {
                 case 'add':
                     if (!$result = $this->add()) {
-                        $this->modx->log(modX::LOG_LEVEL_ERROR, "Crontab error add task:" . $this->hash(), '', __METHOD__, __FILE__, __LINE__);
+                        $this->modx->log(modX::LOG_LEVEL_ERROR, "Crontab error add task:".$this->hash(), '', __METHOD__, __FILE__, __LINE__);
                     }
                     break;
                 case 'remove':
                     if (!$result = $this->remove()) {
-                        $this->modx->log(modX::LOG_LEVEL_ERROR, "Crontab error remove empty hash:" . $this->hash(), '', __METHOD__, __FILE__, __LINE__);
+                        $this->modx->log(modX::LOG_LEVEL_ERROR, "Crontab error remove empty hash:".$this->hash(), '', __METHOD__, __FILE__, __LINE__);
                     }
                     break;
                 default:
                     break;
             }
         } catch (UnexpectedValueException $e) {
-            $this->modx->log(modX::LOG_LEVEL_ERROR, "[Crontab] " . $e->getMessage(), '', __METHOD__, __FILE__, __LINE__);
+            $this->modx->log(modX::LOG_LEVEL_ERROR, "[Crontab] ".$e->getMessage(), '', __METHOD__, __FILE__, __LINE__);
             $result = false;
         } catch (InvalidArgumentException $e) {
-            $this->modx->log(modX::LOG_LEVEL_ERROR, "[Crontab] " . $e->getMessage(), '', __METHOD__, __FILE__, __LINE__);
+            $this->modx->log(modX::LOG_LEVEL_ERROR, "[Crontab] ".$e->getMessage(), '', __METHOD__, __FILE__, __LINE__);
             $result = false;
         }
+
         return $result;
     }
 
@@ -179,7 +184,7 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
         $logPath = $this->task->getFileLogPath();
 
         // Создаем строку с заданием
-        $task_str = $php_command . " {$linkPath}/" . $this->path_task . " > {$logPath} 2>&1";
+        $task_str = $php_command." {$linkPath}/".$this->path_task." > {$logPath} 2>&1";
 
         $this->job->doJob($task_str);
         $this->crontab->add($this->job);
@@ -190,9 +195,11 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
         if ($response !== false) {
             $this->task->set('hash', $hash);
         } else {
-            $this->modx->log(modX::LOG_LEVEL_ERROR, "Не удалось получить хешь для задания" . $path_task, '', __METHOD__, __FILE__, __LINE__);
+            $this->modx->log(modX::LOG_LEVEL_ERROR, "Не удалось получить хешь для задания".$path_task, '', __METHOD__, __FILE__, __LINE__);
+
             return false;
         }
+
         return true;
     }
 
@@ -209,7 +216,7 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
         if (!empty($hash)) {
             $response = $this->crontab->deleteJob($hash);
             if (empty($response)) {
-                $this->modx->log(modX::LOG_LEVEL_ERROR, "Crontab remove empty hash:" . $hash, '', __METHOD__, __FILE__, __LINE__);
+                $this->modx->log(modX::LOG_LEVEL_ERROR, "Crontab remove empty hash:".$hash, '', __METHOD__, __FILE__, __LINE__);
             } else {
                 $result = true;
                 $this->crontab->save(false);
@@ -217,6 +224,7 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
         } else {
             $result = true;
         }
+
         return $result;
     }
 
@@ -234,6 +242,7 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
                 return $jobs;
             }
         }
+
         return false;
     }
 
@@ -250,16 +259,14 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
     /**
      * Вернет хеш задания по контроллеру или по id задания
      *
-     * @param null $path_task путь к контроллеру
-     * @param null $task_id id задания
+     * @param  null  $path_task  путь к контроллеру
+     * @param  null  $task_id  id задания
      * @return bool|string
      */
     public function findHashTask($path_task = null, $task_id = null)
     {
         if ($path_task or $task_id) {
-
             if ($jobs = $this->getList()) {
-
                 // Префикс кэша
                 $task_id_find = null;
                 if ($task_id) {
@@ -275,7 +282,6 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
                         }
 
                         if ($path_task) {
-
                             // Поиск контроллеру
                             if (strripos($oneJob, $path_task) !== false) {
                                 return substr($oneJob, -6);
@@ -285,6 +291,7 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
                 }
             }
         }
+
         return false;
     }
 
@@ -303,6 +310,7 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
                 }
             }
         }
+
         return false;
     }
 
@@ -356,7 +364,10 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
 
     protected function eiEmpt($val)
     {
-        if (is_numeric($val)) return $val;
+        if (is_numeric($val)) {
+            return $val;
+        }
+
         return empty($val) ? '*' : $val;
     }
 }

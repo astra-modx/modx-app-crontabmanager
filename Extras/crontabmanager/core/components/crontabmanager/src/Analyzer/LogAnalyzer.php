@@ -43,12 +43,10 @@ class LogAnalyzer
     public function __construct(CronTabManagerTask $task)
     {
         $this->task = $task;
-
     }
 
     public function run()
     {
-
         $this->reCountFailedAttempts();
 
         $this->failedAttemptsController();
@@ -59,7 +57,6 @@ class LogAnalyzer
 
     /**
      * Венет количество неудачных попыток
-     * @return int
      */
     public function buildLogs()
     {
@@ -114,7 +111,6 @@ class LogAnalyzer
      * - Если превышено количество попыток то отправляет уведомление администратору
      * - Если не превышено то игнорирует и ставим метку у этого лога что он игнорируется, чтобы следующие логи не учитывались
      * - вернет true если все в прядке
-     * @return bool
      */
     public function failedAttemptsController()
     {
@@ -125,18 +121,11 @@ class LogAnalyzer
             if ($max_number_attempts > 0) {
                 // Записываем количество неудачных попыток
                 // Для отслеживания когда слелать рестарт
-
                 $count = $this->getCountFailedAttempts();
-                ctma_debug('Max: ' . $max_number_attempts);
-                ctma_debug('Current: ' . $count);
-
                 if ($max_number_attempts >= $count) {
-                    ctma_debug('Превышено количество попыток');
                     $end_run = strtotime($this->task->get('end_run'));
                     $sql = "UPDATE {$this->task->xpdo->getTableName('CronTabManagerTaskLog')} SET `ignore_action` = '1' WHERE end_run = {$end_run} and completed = 0;";
                     $this->task->xpdo->exec($sql);
-                } else {
-                    ctma_debug('Количество попыток не превышено');
                 }
             }
         }
@@ -159,7 +148,6 @@ class LogAnalyzer
             'completed' => 0,
         );
         $this->countFailedAttempts = $task->xpdo->getCount('CronTabManagerTaskLog', $criteria_notifications);
-
     }
 
     public function process()
@@ -183,6 +171,7 @@ class LogAnalyzer
                 }
             }
         }
+
         return $this->types;
     }
 

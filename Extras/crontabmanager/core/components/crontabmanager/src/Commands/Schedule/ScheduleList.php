@@ -8,16 +8,10 @@
 
 namespace Webnitros\CronTabManager\Commands\Schedule;
 
-use CronTabManager;
 use CronTabManagerTask;
-use DateTime;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Cron\CronExpression;
-use Webnitros\CronTabManager\Artisan\Builder;
 use Webnitros\CronTabManager\Commands\Abstracts\AbstractCrontabCommand;
-use Webnitros\CronTabManager\Crontab;
-use Webnitros\CronTabManager\Helpers\Convert;
 
 class ScheduleList extends AbstractCrontabCommand
 {
@@ -51,17 +45,7 @@ class ScheduleList extends AbstractCrontabCommand
         // Вывод таблицы
         $this->style()->table($headers, $rows);
 
-
-        #sleep(60);
         return self::SUCCESS;
-    }
-
-    public function runTask(string $path)
-    {
-        $path = str_ireplace('.php', '', $path);
-        $path = rtrim($path, '.php');
-        $this->scheduler->php($path);
-        $this->scheduler->process();
     }
 
 }

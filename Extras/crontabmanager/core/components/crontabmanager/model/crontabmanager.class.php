@@ -82,6 +82,14 @@ class CronTabManager
                 $this->modx->log(modX::LOG_LEVEL_ERROR, "Error create dir {$linkPath}", '', __METHOD__, __FILE__, __LINE__);
             }
         }
+
+        // С крон заданиями в для класса
+        $crontabs = $this->config['schedulerPath'].'/crontabs';
+        if (!file_exists($crontabs)) {
+            if (!mkdir($crontabs, 0777, true)) {
+                $this->modx->log(modX::LOG_LEVEL_ERROR, "Error create dir {$crontabs}", '', __METHOD__, __FILE__, __LINE__);
+            }
+        }
     }
 
 
@@ -371,7 +379,7 @@ if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
      */
     public function getCronTasks($isArray = false)
     {
-        $path = $this->config['schedulerPath'].'/crontabs/'.$_SERVER['USER'];
+        $path = $this->config['schedulerPath'].'/crontabs/'.cronTabManagerCurrentUser();
         $out = (file_exists($path)) ? file_get_contents($path) : false;
         $jobs = null;
         if (!empty($out) and $isArray) {
@@ -384,8 +392,13 @@ if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
     }
 
 
+    /**
+     * Загрузка лексиконов для крон времени
+     * @return array|array[]
+     */
     public function lexiconCronTime()
     {
+        $_lang = [];
         require_once $this->config['corePath'].'lexicon/en/cron.inc.php';
 
         $times = [
@@ -420,4 +433,5 @@ if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
 
         return $times;
     }
+
 }

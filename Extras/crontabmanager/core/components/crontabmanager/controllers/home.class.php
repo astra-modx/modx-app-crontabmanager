@@ -1,13 +1,7 @@
 <?php
 
-use Webnitros\CronTabManager\Crontab;
-
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 /**
  * The home manager controller for CronTabManager.
- *
  */
 class CronTabManagerHomeManagerController extends modExtraManagerController
 {
@@ -121,7 +115,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
     {
         $BIN = CronTabManagerPhpExecutable($this->modx);
 
-        $isAvailable = Crontab::isAvailable();
+        $isAvailable = cronTabManagerIsAvailable();
         $path_scheduler = $this->CronTabManager->config['schedulerPath'];
         $path = $this->CronTabManager->config['schedulerPath'].'/artisan';
         $path_controllerh = $this->CronTabManager->loadSchedulerService()->getOption('basePath');
@@ -129,16 +123,16 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
 
         $path_controllerh = rtrim($path_controllerh, '/');
         $shcedule_cron = '*/1    *       *       *       *       '.$BIN.' '.$path.' schedule:run 2>&1';
-        $user = get_current_user();
+        $user = cronTabManagerCurrentUser();
         $props = [
             'bin' => $BIN,
             'class_crontab' => $isAvailable ? 'available' : 'not_available',
             'path_scheduler' => $path_scheduler,
             'path_artisan' => $path,
             'path_controller' => $path_controllerh,
-            'user' => get_current_user(),
+            'user' => $user,
             'schedule_cron' => $shcedule_cron,
-            'demon_crontab' => Crontab::isAvailable()
+            'demon_crontab' => $isAvailable
                 ? '<span class="crontabmanager_crontab available">'.$this->modx->lexicon('crontabmanager_crontab_available', ['user' => $user]).'</span>'
                 : '<span class="crontabmanager_crontab not_available">'.$this->modx->lexicon('crontabmanager_crontab_not_available', ['user' => $user]
                 ).'</span>',
@@ -156,7 +150,6 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
     }
 
 
-
     /**
      * @return string
      */
@@ -169,8 +162,8 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
     }
 
 
-    /**
-     * @return string
+    /**]
+     * @return array
      */
     public function getButtons()
     {
@@ -204,5 +197,4 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
     {
         parent::addCss($this->CronTabManager->config['cssUrl'].$script.'?v='.$this->version);
     }
-
 }
