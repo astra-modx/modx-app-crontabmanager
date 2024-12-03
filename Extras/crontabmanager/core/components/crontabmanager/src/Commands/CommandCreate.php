@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Webnitros\CronTabManager\Commands\Abstracts\AbstractCrontabCommand;
+use Webnitros\CronTabManager\Helpers\TemplateController;
 
 class CommandCreate extends AbstractCrontabCommand
 {
@@ -46,40 +47,18 @@ class CommandCreate extends AbstractCrontabCommand
             return Command::FAILURE;
         }
 
-        $controllerName = 'CrontabController'.ucfirst($controller);
+        $TemplateController = new TemplateController($this->modx);
 
-        // Проверка, что имя контроллера состоит только из латинских символов
-        if (!preg_match('/^CrontabController[a-zA-Z0-9]*$/', $controllerName)) {
-            $output->writeln('<error>The controller name must start with "CrontabController" and consist of Latin characters only.</error>');
-
-            return Command::FAILURE;
-        }
-
-
-        // Преобразование имени в нижний регистр для файла
-        $fileName = $controller.'.php';
-        # $fileName = strtolower($controllerName).'.php';
-
-
-        $basePath = $this->scheduler->getOption('basePath');
-        // Полный путь к файлу
-        $filePath = $basePath.$fileName;
-
-
-        if (file_exists($filePath)) {
-            $output->writeln('<error>Файл с таким именем уже существует: '.$filePath.'</error>');
-
-            return Command::FAILURE;
-        }
-        $sig = strtolower($controller);
-        $content = $this->template($sig, $controllerName);
-        $this->modx->getCacheManager()->writeFile($filePath, $content);
-        if (!file_exists($filePath)) {
-            $this->style()->error('Failed to create file '.$filePath);
+        $response = $TemplateController->process($controller);
+        if ($response !== true) {
+            $this->style()->error($response);
 
             return Command::FAILURE;
         }
 
+        $controllerName = $TemplateController->getControllerName();
+        $filePath = $TemplateController->getFilePath();
+        $sig = $TemplateController->getSig();
         $output->writeln('Create a controller with the name: '.$controllerName.' [command: php artisan '.$sig.' --arg_name=water]');
         $output->writeln('Path controller: '.$filePath);
 
@@ -87,26 +66,4 @@ class CommandCreate extends AbstractCrontabCommand
     }
 
 
-    public function template(string $sig, string $controllerName)
-    {
-        $controllerCode = <<<PHP
-<?php
-
-/**
- * New Command "php artisan $sig --arg_name=water"
- */
-class $controllerName extends modCrontabController
-{
-    protected \$signature = '$sig {--arg_name}'; // no required arguments
-    
-    public function process()
-    {
-        \$name = \$this->getArgument('arg_name', 'world');
-        \$this->info('Hello: '.\$name);
-    }
-}
-PHP;
-
-        return $controllerCode;
-    }
 }

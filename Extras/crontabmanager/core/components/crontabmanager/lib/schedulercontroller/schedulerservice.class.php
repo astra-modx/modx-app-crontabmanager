@@ -312,14 +312,14 @@ class SchedulerService
      * Генерирует карту контроллеров
      * @throws Exception
      */
-    public function generateCronLink()
+   /* public function generateCronLink()
     {
         if (!class_exists('SheldulerGeneratorLink')) {
             include_once dirname(__FILE__).'/sheldulergeneratorlink.class.php';
         }
         $SheldulerGeneratorLink = new SheldulerGeneratorLink($this->modx);
         $SheldulerGeneratorLink->process($this->getOption('basePath'), $this->getOption('linkPath'));
-    }
+    }*/
 
     /* This method returns an error response
      *

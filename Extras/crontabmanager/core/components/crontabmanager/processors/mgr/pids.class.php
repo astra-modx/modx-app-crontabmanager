@@ -12,12 +12,14 @@ class CronTabManagerPidsProcessor extends modProcessor
     {
         $out = '';
         if ($arrays = \Webnitros\CronTabManager\Pid::pids()) {
-            $path = MODX_CORE_PATH . 'scheduler/ControllersLinks/'; // путь к папке с контроллерами
+            $path = MODX_CORE_PATH.'scheduler/ControllersLinks/'; // путь к папке с контроллерами
             $list = [];
-            foreach ($arrays as $array) {
-                $process = str_ireplace($path, '', $array['process']);
-                $start = $array['start'];
-                $list[] = "<tr><td>$start</td><td>$process</td></tr>";
+            if (file_exists($path)) {
+                foreach ($arrays as $array) {
+                    $process = str_ireplace($path, '', $array['process']);
+                    $start = $array['start'];
+                    $list[] = "<tr><td>$start</td><td>$process</td></tr>";
+                }
             }
             $str = implode('', $list);
             $out = '<table>
@@ -27,7 +29,7 @@ class CronTabManagerPidsProcessor extends modProcessor
       <th>Task</th>
     </tr>
   </thead>
-  <tbody>' . $str . '
+  <tbody>'.$str.'
   </tbody>
 </table>';
         }
@@ -36,7 +38,7 @@ class CronTabManagerPidsProcessor extends modProcessor
             $out = 'No processes';
         }
         $today = date('H:i', time());
-        exit('# pids - time ' . $today . '<pre style="background-color: #eee; overflow-x: scroll; padding: 5px 15px" contenteditable="true">' . ' ' . PHP_EOL . $out . PHP_EOL . PHP_EOL . '</pre>');
+        exit('# pids - time '.$today.'<pre style="background-color: #eee; overflow-x: scroll; padding: 5px 15px" contenteditable="true">'.' '.PHP_EOL.$out.PHP_EOL.PHP_EOL.'</pre>');
     }
 }
 

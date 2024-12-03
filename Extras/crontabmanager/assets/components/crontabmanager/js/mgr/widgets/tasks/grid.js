@@ -63,7 +63,6 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             dataIndex: 'id',
             sortable: true,
             width: 40,
-            hidden: true,
         }, {
             header: _('crontabmanager_task_category_name'),
             dataIndex: 'category_name',
@@ -199,6 +198,13 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
     getTopBar: function (config) {
         return [
             {
+                tooltip: _('crontabmanager_task_create'),
+                text: '<i class="icon icon-plus"></i>&nbsp;' + _('crontabmanager_task_create'),
+                handler: this.createItem,
+                scope: this
+            },
+
+            /*{
                 text: '<i class="icon icon-cogs"></i> Действия',
                 cls: 'primary-button',
                 menu: [
@@ -208,11 +214,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                         handler: this.createItem,
                         scope: this
                     },
-                    '-'/*, {
-                        text: '<i class="icon icon-plus"></i>&nbsp;' + _('crontabmanager_task_manualstop'),
-                        handler: this.manualStopTask,
-                        scope: this
-                    }*/,
+                    '-'
                     {
                         text: '<i class="icon icon-eye"></i>&nbsp;' + _('crontabmanager_show_crontabs'),
                         handler: this.ShowCrontabs,
@@ -224,7 +226,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                         scope: this,
                     },
                 ]
-            },
+            },*/
 
             {
                 xtype: 'crontabmanager-combo-parent',
@@ -321,7 +323,9 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
         })
         w.reset()
         w.setValues({
-            active: false,
+            active: true,
+            path_task: 'Example.php',
+            create_new_controller: true,
             minutes: '*/5',
             hours: '*',
             days: '*',

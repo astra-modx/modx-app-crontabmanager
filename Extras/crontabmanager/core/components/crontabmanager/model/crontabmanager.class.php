@@ -221,13 +221,13 @@ class CronTabManager
     /**
      * Генерация ссылок на контроллеры
      */
-    public function generateCronLink()
-    {
-        $scheduler = $this->loadSchedulerService();
-        if ($scheduler instanceof SchedulerService) {
-            $scheduler->generateCronLink();
-        }
-    }
+    /* public function generateCronLink()
+     {
+         $scheduler = $this->loadSchedulerService();
+         if ($scheduler instanceof SchedulerService) {
+             $scheduler->generateCronLink();
+         }
+     }*/
 
     /**
      * Генерация ссылок на контроллеры

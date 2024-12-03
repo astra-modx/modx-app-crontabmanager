@@ -724,3 +724,7 @@ label[for=crontabmanager-grid-notifications-read]::before {
     top: 30px;
     width: 350px;
 }
+
+.crontabmanager_creat_new_controller {
+
+}

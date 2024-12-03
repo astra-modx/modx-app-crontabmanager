@@ -81,6 +81,7 @@ Ext.extend(CronTabManager.window.CreateTask, CronTabManager.window.Default, {
         ];
     },
     getFieldsTask: function (config) {
+        console.log(config);
         return [
             {xtype: 'hidden', name: 'id', id: config.id + '-id'},
 
@@ -99,7 +100,17 @@ Ext.extend(CronTabManager.window.CreateTask, CronTabManager.window.Default, {
                             anchor: '99%',
                             allowBlank: false,
                             emptyText: _('crontabmanager_task_path_task_placeholder'),
-                        }
+                        },
+
+                        {
+                            xtype: 'xcheckbox',
+                            cls: 'crontabmanager_creat_new_controller',
+                            hidden: config.record != null,
+                            boxLabel: _('crontabmanager_task_create_new_controller'),
+                            name: 'create_new_controller',
+                            id: config.id + '-create_new_controller',
+                            checked: true,
+                        },
                     ]
                 }, {
                     columnWidth: .4,

@@ -354,3 +354,5 @@ $_lang['crontabmanager_task_snippet_placeholder'] = 'сниппет для за�
 
 $_lang['crontabmanager_snippet_all'] = '---';
 $_lang['crontabmanager_task_command'] = 'Команда для запуска';
+
+$_lang['crontabmanager_task_create_new_controller'] = 'Создать новый контроллер';

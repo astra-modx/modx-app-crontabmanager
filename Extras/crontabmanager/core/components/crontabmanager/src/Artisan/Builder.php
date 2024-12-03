@@ -40,10 +40,10 @@ class Builder
     }
 
 
-    public function generateCronLink()
-    {
-        $this->scheduler->generateCronLink();
-    }
+    /*  public function generateCronLink()
+      {
+          $this->scheduler->generateCronLink();
+      }*/
 
 
     public function commands()
@@ -114,9 +114,9 @@ class Builder
 
         $command = $this->command;
 
-        if (empty($command) || $command == 'list') {
-            $this->generateCronLink();
-        }
+        /* if (empty($command) || $command == 'list') {
+             $this->generateCronLink();
+         }*/
 
         $application = $this->application();
 

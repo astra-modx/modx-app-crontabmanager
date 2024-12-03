@@ -5,32 +5,6 @@
 
             <div class="crontabmanager-wrapper-help">
                 <div class="crontabmanager-row-help">
-                    [[-
-                    <hr>
-                    <div class="crontabmanager-method-crontab [[+class_crontab]]">
-                        <h2>Crontab</h2>
-                        [[+demon_crontab]]
-                        <p>
-                            Используя этот метод, можно включать и выключать задания через панель администрирования. Задания автоматически будут запускаться на вашем
-                            сервере.
-                            <br>
-                            <a href="https://raw.githubusercontent.com/astra-modx/modx-app-crontabmanager/refs/heads/master/docs/images/task_enable.png"
-                               target="_blank">
-                                <img
-                                        width="300px"
-                                        src="https://raw.githubusercontent.com/astra-modx/modx-app-crontabmanager/refs/heads/master/docs/images/task_enable.png"
-                                        alt="Включение-выключение крон заданий"></a>
-                        </p>
-
-                        <small>Пример файла crontab -e при доступности crontab в linux для вашего пользователя</small><br>
-                        <div class="crontabmanager_help_command">
-                    <pre class="crontabmanager_help_command_pre">
-# modX component CronTabManager
-*/1	*	*	*	*	[[+bin]] [[+path_scheduler]]/ControllersLinks/demo.php > [[+path_scheduler]]/logs/task_id_1_demo.log 2>&1 # 7nppzd
-</pre>
-                        </div>
-                    </div>
-                    ]]
                     <div class="crontabmanager-method-crontab">
                         <h2>Schedule console</h2>
                         <p>Добавление крон задания в linux crontab</p>
@@ -57,7 +31,8 @@
                             </div>
 
                             <br>
-                            <small>Внимание!! Не выполняйте команду crontab -e под ROOT пользователем без явного указания USER, иначе после исполнения команды у сайта
+                            <small>Внимание!! Не выполняйте команду crontab -e под ROOT пользователем без явного указания USER, иначе после исполнения команды у
+                                сайта
                                 пропадут доступы к
                                 созданным
                                 файлам.</small>
@@ -100,6 +75,19 @@ id
                             </div>
                         </div>
 
+
+                        <p>
+                            Используя этот метод, можно включать и выключать задания через панель администрирования. Задания автоматически будут запускаться на вашем
+                            сервере.
+                            <br>
+                            <a href="https://raw.githubusercontent.com/astra-modx/modx-app-crontabmanager/refs/heads/master/docs/images/task_enable.png"
+                               target="_blank">
+                                <img
+                                        width="300px"
+                                        src="https://raw.githubusercontent.com/astra-modx/modx-app-crontabmanager/refs/heads/master/docs/images/task_enable.png"
+                                        alt="Включение-выключение крон заданий"></a>
+                        </p>
+
                     </div>
                     <hr>
                     <div class="crontabmanager-method-crontab">
@@ -119,21 +107,6 @@ stdout_logfile=/dev/stdout
                         <p>Задание делает паузу в одну минуту, после окончания запуска всех команд в текущее время</p>
                     </div>
 
-                    [[-
-                    <div class="crontabmanager-method-crontab">
-                        <h2>Crontab File</h2>
-                        <p>Вместо добавления в crontab заданий, они добавляются в один файл с кронами, который можно использователь для подключения в ручную</p>
-
-                        <small>Пример файла: <b>[[+path_scheduler]]/crontabs/[[+user]]</b></small><br>
-                        <div class="crontabmanager_help_command">
-                    <pre class="crontabmanager_help_command_pre">
-# modX component CronTabManager
-*/1	*	*	*	*	[[+bin]] [[+path_scheduler]]/ControllersLinks/demo.php > [[+path_scheduler]]/logs/task_id_1_demo.log 2>&1 # 7nppzd
-</pre>
-                        </div>
-
-                    </div>
-                    ]]
                 </div>
                 <div class="crontabmanager-row-help crontabmanager-row-help-check">
                     <h2>Проверка доступности</h2>
@@ -150,7 +123,6 @@ stdout_logfile=/dev/stdout
                     Ваш консольный пользователя: <b>[[+user]]</b>
                 </div>
             </div>
-
 
 
         </div>
