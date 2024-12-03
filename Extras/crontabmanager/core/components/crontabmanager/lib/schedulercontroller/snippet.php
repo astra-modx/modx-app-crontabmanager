@@ -32,13 +32,14 @@ class CrontabControllerSnippet extends modCrontabController
 
 
             if (!empty($out)) {
-                $last = end($out);
+                $last = substr($output, -1);
                 if (!empty($out)) {
                     foreach ($out as $item) {
                         $this->print_msg($item);
                     }
                 }
-                if ($last == 1) {
+
+                if ($last == 1 || $last == "1" || $last == "true") {
                     $this->print_msg('OK');
                 } else {
                     $this->print_msg('[Error] snippet return: '.$last);

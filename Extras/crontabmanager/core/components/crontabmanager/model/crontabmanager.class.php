@@ -46,6 +46,7 @@ class CronTabManager
 
 
             'schedulerPath' => $this->modx->getOption('crontabmanager_scheduler_path', $config, ''),
+            'schedulerControllersPath' => $this->modx->getOption('crontabmanager_scheduler_path', $config, '').'/Controllers',
             'snippet_run' => 'snippet.php',
             'logPath' => $this->modx->getOption('crontabmanager_log_path', $config, ''),
             'lockPath' => $this->modx->getOption('crontabmanager_lock_path', $config, ''),
