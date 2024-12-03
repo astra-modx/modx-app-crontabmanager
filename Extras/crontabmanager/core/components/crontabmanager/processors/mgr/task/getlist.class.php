@@ -131,6 +131,7 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         }
         $array['is_blocked'] = $is_blocked;
 
+        $array['snippet_name'] = '';
         if ($Snippet = $object->getOne('Snippet')) {
             $array['snippet_name'] = $Snippet->get('name');
         }
