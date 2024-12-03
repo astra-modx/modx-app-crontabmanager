@@ -82,7 +82,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
 
 
                     if (row.data.snippet) {
-                        value = '<a target="_blank" href="/manager/?a=element/snippet/update&id=' + row.data.snippet + '">' + row.data.snippet_name + '</a>'
+                        value = '<a title="' + _('crontabmanager_task_snippet') + '" target="_blank" href="/manager/?a=element/snippet/update&id=' + row.data.snippet + '">' + row.data.snippet_name + '</a>'
                     }
                     if (row.data.mute) {
                         if (row.data.mute_success) {

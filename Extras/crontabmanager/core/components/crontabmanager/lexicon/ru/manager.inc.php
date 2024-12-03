@@ -347,6 +347,7 @@ $_lang['crontabmanager_task_executed'] = 'Выполняется';
 
 $_lang['crontabmanager_window_regex_minute'] = 'Введите правильное cron-выражение для минут';
 
+$_lang['crontabmanager_task_snippet'] = 'Сниппет';
 $_lang['crontabmanager_task_snippet_label'] = 'Сниппет для запуска (опционально)';
 $_lang['crontabmanager_task_snippet_desc'] = 'Можно выбрать сниппет для автоматического запуска';
 $_lang['crontabmanager_task_snippet_placeholder'] = 'сниппет для запуска (option)';
