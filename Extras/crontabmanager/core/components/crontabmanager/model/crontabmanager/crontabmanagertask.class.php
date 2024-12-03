@@ -328,7 +328,7 @@ class CronTabManagerTask extends xPDOSimpleObject
         $path = array_pop($paths);
         $name = substr($path, 0, -4);
 
-        return "{$logPath}/task_id_{$id}_{$name}.log";
+        return mb_strtolower("{$logPath}/task_id_{$id}_{$name}.log");
     }
 
     /**
@@ -515,14 +515,6 @@ class CronTabManagerTask extends xPDOSimpleObject
     }
 
 
-    public function isEnableCron()
-    {
-        if (!cronTabManagerIsAvailable()) {
-            return true;
-        }
-
-        return !empty($this->crontab()->findCron());
-    }
 
     public function muteSuccess()
     {

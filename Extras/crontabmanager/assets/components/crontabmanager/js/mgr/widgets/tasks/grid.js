@@ -53,7 +53,7 @@ CronTabManager.grid.Tasks = function (config) {
 Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
 
     getFields: function () {
-        return ['id', 'description', 'pid', 'command', 'mute', 'mute_success', 'mute_time', 'controller_exists', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
+        return ['id', 'description', 'pid', 'command', 'mute', 'snippet_name', 'mute_success', 'snippet', 'mute_time', 'controller_exists', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
     },
 
     getColumns: function () {
@@ -79,6 +79,11 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                 sortable: true,
                 width: 200,
                 renderer: function (value, e, row) {
+
+
+                    if (row.data.snippet) {
+                        value = '<a target="_blank" href="/manager/?a=element/snippet/update&id=' + row.data.snippet + '">' + row.data.snippet_name + '</a>'
+                    }
                     if (row.data.mute) {
                         if (row.data.mute_success) {
                             value += '<br><small title="Уведомления для этого задания загрулушены. До первого успешного завершения">mute:success</small>'
@@ -87,6 +92,8 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                             value += '<br><small title="Уведомления для этого задания загрулушены, до даты">mute:time ' + row.data.mute_time + '</small>'
                         }
                     }
+
+
                     return value
                 }
             }, {
@@ -97,7 +104,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             }, {
                 header: _('crontabmanager_task_time'),
                 dataIndex: 'time',
-                sortable: true,
+                sortable: false,
                 width: 70,
                 renderer: function (value, e, row) {
                     return String.format('<span class="crontabmanager_time_cron" title="{0}">{0}</span><span class="crontabmanager_next_run">{1}</span>', value, row.data.next_run_human)

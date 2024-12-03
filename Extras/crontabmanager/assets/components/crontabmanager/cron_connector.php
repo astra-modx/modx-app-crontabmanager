@@ -66,17 +66,17 @@ $Artisan->shellTask($Task, $connector_args_value);
 sleep(1);
 // Получаем путь к файлу
 $filePath = $Task->getFileLogPath();
+
 echo "Task run<br>";
+if (file_exists($filePath)) {
 // Открываем файл для чтения
-if ($file = fopen($filePath, 'r')) {
-    // Читаем файл построчно
-    while ($line = fgets($file)) {
-        echo $line.'<br>'; // Выводим строку с добавлением новой строки
+    if ($file = fopen($filePath, 'r')) {
+        // Читаем файл построчно
+        while ($line = fgets($file)) {
+            echo $line.'<br>'; // Выводим строку с добавлением новой строки
+        }
+
+        // Закрываем файл
+        fclose($file);
     }
-
-    // Закрываем файл
-    fclose($file);
-} else {
-    echo "Задание запущено";
 }
-
