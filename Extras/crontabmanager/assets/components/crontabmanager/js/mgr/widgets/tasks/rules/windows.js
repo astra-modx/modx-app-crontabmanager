@@ -80,7 +80,6 @@ Ext.extend(CronTabManager.window.CreateRule, CronTabManager.window.Default, {
                                 checked: false,
                                 listeners: {
                                     check: function (checkbox, checked) {
-                                        console.log('Checkbox state changed: ' + checked)
                                         // Ваш код для обработки изменения состояния чекбокса
 
                                         var categoriesField = Ext.getCmp(config.id + '-categories')
@@ -90,7 +89,6 @@ Ext.extend(CronTabManager.window.CreateRule, CronTabManager.window.Default, {
 
                                     },
                                     afterrender: function (checkbox, checked) {
-                                        console.log('Checkbox is initialized')
                                         // Ваш код для обработки инициализации чекбокса
                                         var categoriesField = Ext.getCmp(config.id + '-categories')
                                         if (categoriesField) {

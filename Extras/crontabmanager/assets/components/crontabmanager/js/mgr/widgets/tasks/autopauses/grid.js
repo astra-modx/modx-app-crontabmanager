@@ -75,7 +75,6 @@ Ext.extend(CronTabManager.grid.AutoPause, CronTabManager.grid.Default, {
         })
         w.reset()
 
-        console.log(this.config.record.object.id)
         w.setValues({active: true, task_id: this.config.record.object.id})
         w.setValues({log_storage_time: CronTabManager.config.log_storage_time})
         w.show(e.target)

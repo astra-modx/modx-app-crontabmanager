@@ -10,6 +10,7 @@ namespace Webnitros\CronTabManager;
 
 
 use CronTabManager;
+use CronTabManagerTask;
 
 class ArtisanCall
 {
@@ -79,6 +80,22 @@ class ArtisanCall
         $args = $matches[0];
 
         return $args;
+    }
+
+    public function shellTask(CronTabManagerTask $task, $arg = null, bool $async = true)
+    {
+        $ControllerPath = $this->cronTabManager->option('schedulerPath');
+        $Artisan = $this->cronTabManager->artisan();
+        $Crontab = $task->crontab();
+        $command = $Crontab->command();
+
+        if (!empty($arg)) {
+            $arg = trim($arg);
+            $command .= ' '.$arg;
+        }
+
+        $cli = $ControllerPath.'/artisan '.$command;
+        $Artisan->shell($cli, $task->getFileLogPath(), $async);
     }
 
     public function shell(string $controller, $logFile = null, bool $async = true)

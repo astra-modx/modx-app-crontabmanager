@@ -57,11 +57,26 @@ $Artisan = $CronTabManager->artisan();
 
 $command = $Artisan->parseCommand($Task->crontab()->command());
 
-$arg = substr($Task->crontab()->command(), strlen($command));
-$args = $Artisan->parseArgs($arg);
-if (!empty($connector_args_value)) {
-    $args = array_merge($args, $Artisan->parseArgs($connector_args_value));
-}
+#$arg = substr($Task->crontab()->command(), strlen($command));
+#$args = $Artisan->parseArgs($arg);
+#if (!empty($connector_args_value)) {
+#    $args = array_merge($args, $Artisan->parseArgs($connector_args_value));
+#}
+$Artisan->shellTask($Task, $connector_args_value);
+sleep(1);
+// Получаем путь к файлу
+$filePath = $Task->getFileLogPath();
+echo "Task run<br>";
+// Открываем файл для чтения
+if ($file = fopen($filePath, 'r')) {
+    // Читаем файл построчно
+    while ($line = fgets($file)) {
+        echo $line.'<br>'; // Выводим строку с добавлением новой строки
+    }
 
-$Artisan->callCommand($Task->crontab()->command(), $args);
+    // Закрываем файл
+    fclose($file);
+} else {
+    echo "Задание запущено";
+}
 

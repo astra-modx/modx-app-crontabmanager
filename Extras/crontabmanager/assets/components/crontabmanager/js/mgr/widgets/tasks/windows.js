@@ -81,7 +81,6 @@ Ext.extend(CronTabManager.window.CreateTask, CronTabManager.window.Default, {
         ];
     },
     getFieldsTask: function (config) {
-        console.log(config);
         return [
             {xtype: 'hidden', name: 'id', id: config.id + '-id'},
 

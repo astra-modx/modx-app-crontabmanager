@@ -20,7 +20,7 @@ class Run extends AbstractCrontabCommand
 
     public function handle(InputInterface $input, OutputInterface $output): int
     {
-        $ControllerPath = $this->manager()->option('schedulerPath');
+        # $ControllerPath = $this->manager()->option('schedulerPath');
         $Artisan = $this->manager()->artisan();
         $rows = array();
         /* @var CronTabManagerTask $object */
@@ -34,9 +34,7 @@ class Run extends AbstractCrontabCommand
                 $status = 'pending';
                 if ($Crontab->isDue()) {
                     $status = 'running';
-                    $command = $Crontab->command();
-                    $cli = $ControllerPath.'/artisan '.$command;
-                    $Artisan->shell($cli, $object->getFileLogPath(), false);
+                    $Artisan->shellTask($object);
                 }
 
                 $rows[] = [

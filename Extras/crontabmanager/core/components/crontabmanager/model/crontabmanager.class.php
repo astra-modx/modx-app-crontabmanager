@@ -507,4 +507,5 @@ if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
     {
         return new AddSchedule($this);
     }
+
 }
