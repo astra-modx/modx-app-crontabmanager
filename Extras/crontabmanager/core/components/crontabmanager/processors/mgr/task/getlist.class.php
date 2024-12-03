@@ -132,7 +132,7 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         $array['is_blocked'] = $is_blocked;
 
         $CronisAvailable = cronTabManagerIsAvailable();
-        $array['cron_enable'] = $object->isEnableCron();
+        //$array['cron_enable'] = $object->isEnableCron();
 
 
         // sendSubscrib

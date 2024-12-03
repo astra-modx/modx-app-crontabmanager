@@ -126,7 +126,10 @@ class SchedulerService
                             // Для аргументов
                             $this->createInput($input);
                         }
+
                         $taskPath = $this->taskPath();
+
+
                         if ($command && !$this->modx->getCount('CronTabManagerTask', ['path_task' => $taskPath])) {
                             // For command run
                             $controller->process();
@@ -144,7 +147,7 @@ class SchedulerService
                                 $this->defaultModeDevelop = $task->get('mode_develop');
 
                                 // Добавить указатель что запуск в режиме dev
-                                if ($this->getArgument('d')) {
+                                if ($this->getArgument('d') !== null) {
                                     $task->set('mode_develop', true);
                                 }
 

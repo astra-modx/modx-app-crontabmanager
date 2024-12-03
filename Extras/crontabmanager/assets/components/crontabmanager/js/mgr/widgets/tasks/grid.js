@@ -53,7 +53,7 @@ CronTabManager.grid.Tasks = function (config) {
 Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
 
     getFields: function () {
-        return ['id', 'description', 'pid', 'command', 'mute', 'cron_enable', 'mute_success', 'mute_time', 'controller_exists', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
+        return ['id', 'description', 'pid', 'command', 'mute', 'mute_success', 'mute_time', 'controller_exists', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
     },
 
     getColumns: function () {
@@ -88,11 +88,6 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                             value += '<br><small title="Уведомления для этого задания загрулушены, до даты">mute:time ' + row.data.mute_time + '</small>'
                         }
                     }
-
-                    if (!row.data.cron_enable) {
-                        value += '<br><small style="color: darkred">Для автозапуска, нажмите иконку + "Добавить в cron"</small>'
-                    }
-
                     return value
                 }
             }, {

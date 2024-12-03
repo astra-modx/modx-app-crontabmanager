@@ -11,8 +11,8 @@ class CrontabControllerSnippet extends modCrontabController
     public function process()
     {
         $snippet = $this->getArgument('snippet');
-        $properties = [];
 
+        $properties = [];
         if (empty($snippet)) {
             if ($Snippet = $this->snippet()) {
                 $snippet = $Snippet->get('name');
@@ -45,6 +45,7 @@ class CrontabControllerSnippet extends modCrontabController
                     exit();
                 }
             }
+            $this->print_msg('Завершилось');
         }
     }
 }
