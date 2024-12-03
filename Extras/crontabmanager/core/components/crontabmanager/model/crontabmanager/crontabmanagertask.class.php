@@ -321,7 +321,7 @@ class CronTabManagerTask extends xPDOSimpleObject
      */
     public function getFileLogPath()
     {
-        $logPath = $this->getOption('crontabmanager_log_path');
+        $logPath = $this->loadCronTabManager()->option('log_path');
         $id = $this->get('id');
         $path_task = $this->get('path_task');
         $paths = explode('/', $path_task);

@@ -5,9 +5,6 @@ require(dirname(__FILE__, 1).'/bootstrap.php');
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
 
 class AppManagerPackage
 {

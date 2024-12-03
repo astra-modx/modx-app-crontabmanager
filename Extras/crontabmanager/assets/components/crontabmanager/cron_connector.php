@@ -6,8 +6,6 @@ use Symfony\Component\Console\Input\InputDefinition;
 
 define('MODX_CRONTAB_MODE', true);
 define('MODX_CRONTAB_MAX_TIME', 33);
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
 $task = preg_replace('/[^a-zA-Z0-9\-\._]/', '/', $_REQUEST['path_task']);
 $scheduler_path = preg_replace('/[^a-zA-Z0-9\-\.:_]/', DIRECTORY_SEPARATOR, $_REQUEST['scheduler_path']);

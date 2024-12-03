@@ -276,8 +276,8 @@ class CrontabManagerHandler implements CrontabManagerHandlerInterface
         if ($path_task or $task_id) {
             if ($jobs = $this->getList()) {
                 // Префикс кэша
-                $task_id_find = null;
-                if ($task_id) {
+                $task_id_find = $task_id;
+                if (!$task_id_find) {
                     $task_id_find = $this->task->getFileLogPath();
                 }
                 foreach ($jobs as $oneJob) {
