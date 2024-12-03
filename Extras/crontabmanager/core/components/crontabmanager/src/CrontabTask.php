@@ -124,14 +124,15 @@ class CrontabTask
             $command = 'php core/scheduler/artisan '.$command;
         }
         if ($Snippet = $this->task->getOne('Snippet')) {
-            $command .= ' --snippet=" '.$Snippet->get('name').'"';
+            $name = trim($Snippet->get('name'));
+            $command .= ' --snippet="'.$name.'"';
         }
 
         return $command;
     }
 
 
-    public function manager()
+    /*public function manager()
     {
         if ($Crontab = $this->task->loadCronTabManager()) {
             if ($manager = $Crontab->loadManager()) {
@@ -140,45 +141,45 @@ class CrontabTask
         }
 
         return null;
-    }
+    }*/
 
     /**
      * Записать крон задание
      * @return bool
      */
-    public function addCron()
+   /* public function addCron()
     {
         if ($manager = $this->manager()) {
             return $manager->process($this->task, 'add');
         }
 
         return false;
-    }
+    }*/
 
 
     /**
      * Удалить крон задание
      * @return bool
      */
-    public function removeCron()
+   /* public function removeCron()
     {
         if ($manager = $this->manager()) {
             return $manager->process($this->task, 'remove');
         }
 
         return false;
-    }
+    }*/
 
     /**
      * Вернет хеш задания
      * @return bool|string
      */
-    public function findCron()
+    /*public function findCron()
     {
         if ($manager = $this->manager()) {
             return $manager->findHashTask($this->task->get('path_task'), $this->task->get('id'));
         }
 
         return false;
-    }
+    }*/
 }

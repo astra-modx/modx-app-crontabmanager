@@ -18,8 +18,7 @@ use Webnitros\CronTabManager\Exceptions\RestException;
 
 class Rest
 {
-    /* @var CronTabManager $CronTabManager */
-    protected $CronTabManager;
+    protected CronTabManager $CronTabManager;
 
     /* @var int $_status_code */
     protected $_status_code = 200;
@@ -43,7 +42,7 @@ class Rest
 
     public function lexicon($key, $data = [])
     {
-        return $this->CronTabManager->modx->lexicon('crontabmanager.' . $key, $data);
+        return $this->CronTabManager->modx->lexicon('crontabmanager.'.$key, $data);
     }
 
     public function protected($value = true)
@@ -111,6 +110,7 @@ class Rest
                 }
             }
         }
+
         return true;
     }
 
@@ -121,6 +121,7 @@ class Rest
         if ($SettingClinetId != $client_id) {
             return 'Указан не верный client_id';
         }
+
         return true;
     }
 
@@ -151,7 +152,7 @@ class Rest
                 case 'log':
                 case 'notifications':
                 case 'notice':
-                    $method = '_' . $action;
+                    $method = '_'.$action;
                     if (method_exists($this, $method)) {
                         $run = $method;
                     }
@@ -211,6 +212,7 @@ class Rest
         if (is_numeric($val)) {
             return $val;
         }
+
         return empty($val) ? '*' : $val;
     }
 
@@ -229,7 +231,7 @@ class Rest
             $this->eiEmpt($item['months']),
             $this->eiEmpt($item['weeks']),
         );
-        $item['link_path'] = $php_command . ' ' . $linkPath . '/' . $object->get('path_task');
+        $item['link_path'] = $php_command.' '.$linkPath.'/'.$object->get('path_task');
         $item['lock'] = $object->isLockFile();
         $item['is_blocked_time'] = $object->isBlockUpTask();
         $item['time'] = implode(' ', $time);
@@ -265,9 +267,7 @@ class Rest
             if (!file_exists($scheduler_path)) {
                 $this->failure('Контроллер не найден');
             } else {
-                $scheduler = $this->CronTabManager->loadSchedulerService();
-                $scheduler->php(str_ireplace('.php', '', $task));
-                $scheduler->process();
+                $this->CronTabManager->artisan()->callCommand($task);
             }
         }
     }
@@ -283,6 +283,7 @@ class Rest
         if ($Task = $this->modx->getObject('CronTabManagerTask', $task_id)) {
             return $Task;
         }
+
         return null;
     }
 
@@ -298,7 +299,7 @@ class Rest
                 $content = $this->readLogFileFormat($tmp);
                 $this->success('', array(
                     'path_task' => $Task->get('path_task'),
-                    'content' => $content
+                    'content' => $content,
                 ));
             }
         }
@@ -313,6 +314,7 @@ class Rest
         $content = nl2br($content);
         $content = str_ireplace('✘', '❌', $content);
         $content = str_ireplace('✔', '✅', $content);
+
         #$content = '<pre>' . $content . '</pre>';
         return $content;
     }
@@ -355,8 +357,6 @@ class Rest
     }
 
 
-
-
     protected function _check()
     {
         $this->success();
@@ -365,7 +365,7 @@ class Rest
     protected function _site()
     {
         $this->success('', [
-            'site_name' => $this->CronTabManager->modx->getOption('site_name')
+            'site_name' => $this->CronTabManager->modx->getOption('site_name'),
         ]);
     }
 }

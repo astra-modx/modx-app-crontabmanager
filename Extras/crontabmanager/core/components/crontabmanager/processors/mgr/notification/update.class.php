@@ -71,7 +71,7 @@ class CronTabManagerNotificationUpdateProcessor extends modObjectUpdateProcessor
             return $this->modx->lexicon('access_denied');
         }
 
-        $active = $this->setCheckbox('active');
+        /*$active = $this->setCheckbox('active');
         if ($active) {
             $action = 'add';
             $response = $this->object->addCron();
@@ -81,7 +81,7 @@ class CronTabManagerNotificationUpdateProcessor extends modObjectUpdateProcessor
         }
         if (!$response) {
             return $this->modx->lexicon('crontabmanager_task_err_' . $action . '_crontab', array('task_path' => $this->object->get('path_task')));
-        }
+        }*/
         return true;
     }
 }

@@ -618,7 +618,8 @@ label[for=crontabmanager-grid-notifications-read]::before {
 
 .crontabmanager_crontab {
     color: #5cb85c;
-    padding: 2px 4px;
+    font-size: 13px;
+    padding: 4px 8px;
     border-radius: 4px;
     border: 1px solid #5cb85c;
 }
@@ -682,7 +683,7 @@ label[for=crontabmanager-grid-notifications-read]::before {
 }
 
 .crontabmanager_time_crontab .x-fieldset-body {
-    padding: 0px 0px;
+    padding: 0 0;
 }
 
 .crontabmanager_time_crontab .x-form-item.x-tab-item {
@@ -705,4 +706,21 @@ label[for=crontabmanager-grid-notifications-read]::before {
 
 .crontabmanager_readonly {
     opacity: 0.5;
+}
+
+.crontabmanager-wrapper-help {
+    width: 90%;
+    position: relative;
+}
+
+.crontabmanager-row-help {
+    width: 50%;
+    display: inline-block;
+}
+
+.crontabmanager-row-help-check {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    width: 350px;
 }

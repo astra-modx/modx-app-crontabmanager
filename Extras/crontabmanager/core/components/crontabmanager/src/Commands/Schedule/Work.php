@@ -21,8 +21,7 @@ class Work extends Run
         parent::handle($input, $output);
         sleep(60);
 
-        $this->handle($input, $output);
-
+        #$this->handle($input, $output);
         return self::SUCCESS;
     }
 }

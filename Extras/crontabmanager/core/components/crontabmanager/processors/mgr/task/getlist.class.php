@@ -113,7 +113,7 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         $array['next_run'] = $Crontab->getNextRunDateFormat();
 
 
-        $array['command'] = $Crontab->command(null , true);
+        $array['command'] = $Crontab->command(null, true);
         $array['pid'] = $object->pid();
 
 
@@ -187,7 +187,7 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         }
 
 
-        if ($CronisAvailable) {
+        /*if ($CronisAvailable) {
             if (!$array['cron_enable']) {
                 $array['actions'][] = array(
                     'cls' => '',
@@ -207,7 +207,7 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
                     'menu' => true,
                 );
             }
-        }
+        }*/
         // readLog
         $array['actions'][] = array(
             'cls' => '',

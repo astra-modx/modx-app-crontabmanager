@@ -308,8 +308,8 @@ $_lang['crontabmanager_task_rule_tasks'] = 'Задания';
 
 $_lang['crontabmanager_task_restart_after_failure'] = 'Перезапускать задание после неудачного завершения';
 $_lang['crontabmanager_task_restart_after_failure_desc'] = 'Если установлено, то задание будет перезапущено после неудачного завершения. При этом, если задание не завершается успешно, то оно уведомления не будет отправлено. Только при втором неудачном завершении будет отправлено уведомление.';
-$_lang['crontabmanager_crontab_available'] = 'linux <b>crontab</b> доступе для вашего пользователя <b>[[+user]]</b>.';
-$_lang['crontabmanager_crontab_not_available'] = 'linux <b>crontab</b> недоступен для вашего пользователя <b>[[+user]]</b>.';
+$_lang['crontabmanager_crontab_available'] = 'Linux <b>Crontab</b> доступе.';
+$_lang['crontabmanager_crontab_not_available'] = 'Linux <b>Crontab</b> недоступен для вашего пользователя <b>[[+user]]</b>';
 
 $_lang['crontabmanager_next_run_human'] = 'Следующий запуск через: [[+minutes]] минут';
 $_lang['crontabmanager_next_run_human_hours'] = ' и [[+hours]] час.';

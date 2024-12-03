@@ -9,13 +9,11 @@
 namespace Webnitros\CronTabManager\Artisan;
 
 
-use ReflectionClass;
 use SchedulerService;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Webnitros\CronTabManager\Commands\TaskRun;
-use Webnitros\CronTabManager\Helpers\Convert;
 use Webnitros\CronTabManager\Task;
 
 
@@ -146,7 +144,14 @@ class Builder
             if (strpos($argument, '--') === 0) {
                 // Убираем "--" и разделяем на ключ и значение
                 [$key, $value] = explode('=', substr($argument, 2), 2);
-                $options[$key] = $value;
+
+
+                preg_match('/"(.*?)"/', $value, $matches);
+                if (!empty($matches[1])) {
+                    $value = $matches[1];
+                }
+
+                $options[$key] = is_null($value) ? '' : $value;
             }
         }
 

@@ -75,7 +75,7 @@ class CronTabManagerTaskUpdateProcessor extends modObjectUpdateProcessor
             return $this->modx->lexicon('access_denied');
         }
 
-        // Включение отключение крон задания
+        /*// Включение отключение крон задания
         if (cronTabManagerIsAvailable()) {
             $cron_enable = $this->setCheckbox('cron_enable');
             $Cron = $this->object->crontab();
@@ -89,7 +89,7 @@ class CronTabManagerTaskUpdateProcessor extends modObjectUpdateProcessor
             if (!$response) {
                 return $this->modx->lexicon('crontabmanager_task_err_'.$action.'_crontab', array('task_path' => $this->object->get('path_task')));
             }
-        }
+        }*/
 
         return true;
     }

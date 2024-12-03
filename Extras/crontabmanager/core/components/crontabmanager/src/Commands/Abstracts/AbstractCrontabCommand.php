@@ -33,9 +33,14 @@ class AbstractCrontabCommand extends Command
         $modX->lexicon->load('crontabmanager:manager');
     }
 
+    public function manager()
+    {
+        return $this->CronTabManager;
+    }
+
     protected function configure()
     {
-        $this->addArgument('argument', InputArgument::OPTIONAL, 'The argument description');
+      #  $this->addArgument('argument', InputArgument::OPTIONAL, 'The argument description');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

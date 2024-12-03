@@ -1,5 +1,9 @@
 <?php
 
+
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 /**
  * The home manager controller for CronTabManager.
  */
@@ -115,7 +119,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
     {
         $BIN = CronTabManagerPhpExecutable($this->modx);
 
-        $isAvailable = cronTabManagerIsAvailable();
+
         $path_scheduler = $this->CronTabManager->config['schedulerPath'];
         $path = $this->CronTabManager->config['schedulerPath'].'/artisan';
         $path_controllerh = $this->CronTabManager->loadSchedulerService()->getOption('basePath');
@@ -127,6 +131,8 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
 
         $this->CronTabManager->checkSnippetFile();
 
+
+        $isAvailable = cronTabManagerIsAvailable();
         $props = [
             'bin' => $BIN,
             'snippet_run' => $this->CronTabManager->option('snippet_run'),
@@ -136,10 +142,10 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
             'path_controller' => $path_controllerh,
             'user' => $user,
             'schedule_cron' => $shcedule_cron,
+            'demon_crontab_available' => $isAvailable,
             'demon_crontab' => $isAvailable
-                ? '<span class="crontabmanager_crontab available">'.$this->modx->lexicon('crontabmanager_crontab_available', ['user' => $user]).'</span>'
-                : '<span class="crontabmanager_crontab not_available">'.$this->modx->lexicon('crontabmanager_crontab_not_available', ['user' => $user]
-                ).'</span>',
+                ? $this->modx->lexicon('crontabmanager_crontab_available', ['user' => $user])
+                : $this->modx->lexicon('crontabmanager_crontab_not_available', ['user' => $user]),
         ];
 
 

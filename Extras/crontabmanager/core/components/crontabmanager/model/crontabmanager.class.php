@@ -2,6 +2,9 @@
 
 include_once dirname(dirname(__FILE__)).'/vendor/autoload.php';
 
+use Webnitros\CronTabManager\AddSchedule;
+use Webnitros\CronTabManager\ArtisanCall;
+
 class CronTabManager
 {
     /** @var modX $modx */
@@ -93,6 +96,11 @@ class CronTabManager
         }
     }
 
+
+    public function scheduler($config = array())
+    {
+        return $this->loadSchedulerService($config);
+    }
 
     /**
      * Загрузка планировщика заданий
@@ -481,5 +489,21 @@ if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
                 }
             }
         }
+    }
+
+    protected ?ArtisanCall $artisan = null;
+
+    public function artisan()
+    {
+        if (is_null($this->artisan)) {
+            $this->artisan = new ArtisanCall($this);
+        }
+
+        return $this->artisan;
+    }
+
+    public function addSchedule()
+    {
+        return new AddSchedule($this);
     }
 }

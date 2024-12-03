@@ -20,6 +20,7 @@ class Run extends AbstractCrontabCommand
 
     public function handle(InputInterface $input, OutputInterface $output): int
     {
+        $Artisan = $this->manager()->artisan();
         $rows = array();
         /* @var CronTabManagerTask $object */
         $q = $this->modx->newQuery('CronTabManagerTask');
@@ -28,21 +29,13 @@ class Run extends AbstractCrontabCommand
         ));
         if ($objectList = $this->modx->getCollection('CronTabManagerTask', $q)) {
             foreach ($objectList as $object) {
-                $path = $object->path_task;
                 $Crontab = $object->crontab();
                 $status = 'pending';
                 if ($Crontab->isDue()) {
                     $status = 'running';
-                    $description = $object->description;
-
-                    $comment = !empty($description) ? mb_strimwidth($description, 0, 50, "...") : '';
-                    if (!empty($comment)) {
-                        $this->comment($comment);
-                    }
                     $cli = $object->getPath();
                     if (file_exists($cli)) {
-                        $log = $object->getFileLogPath();
-                        shell_exec('php '.$cli.' > '.$log.' 2>&1 &');
+                        $Artisan->shell($cli, $object->getFileLogPath());
                     }
                 }
 

@@ -123,7 +123,8 @@ class SchedulerService
 
 
                         if ($input instanceof \Symfony\Component\Console\Input\InputInterface) {
-                            $controller->createInput($input);
+                            // Для аргументов
+                            $this->createInput($input);
                         }
                         $taskPath = $this->taskPath();
                         if ($command && !$this->modx->getCount('CronTabManagerTask', ['path_task' => $taskPath])) {
@@ -143,7 +144,7 @@ class SchedulerService
                                 $this->defaultModeDevelop = $task->get('mode_develop');
 
                                 // Добавить указатель что запуск в режиме dev
-                                if ($this->getArg('develop')) {
+                                if ($this->getArgument('d')) {
                                     $task->set('mode_develop', true);
                                 }
 
@@ -154,11 +155,44 @@ class SchedulerService
                         throw new Exception('Static methods not supported in Controllers', 500);
                     }
                 } catch (ReflectionException $e) {
-                    $this->errors = $e->getMessage();
                     $this->modx->log(modX::LOG_LEVEL_ERROR, '[Crontab] '.$e->getMessage(), '', __METHOD__, __FILE__, __LINE__);
                 }
             }
         }
+    }
+
+
+    public function createInput(\Symfony\Component\Console\Input\InputInterface $input)
+    {
+        $this->input = $input;
+
+        return $this;
+    }
+
+    public ?\Symfony\Component\Console\Input\InputInterface $input = null;
+
+    public function input()
+    {
+        if ($this->input === null) {
+            $this->input = new \Symfony\Component\Console\Input\ArgvInput();
+        }
+
+        return $this->input;
+    }
+
+
+    public function getArgument(string $name, $default = null)
+    {
+        if ($this->input()->hasArgument($name)) {
+            return $this->input()->getArgument($name);
+        }
+
+        return $default;
+    }
+
+    public function hasArgument(string $name)
+    {
+        return $this->input()->hasArgument($name);
     }
 
 
@@ -563,52 +597,6 @@ class SchedulerService
         $this->enabledException = true;
     }
 
-    /* @var  array|null $_args */
-    protected $_args = null;
-
-    /**
-     * Велючаем выброс
-     */
-    public function setArgs($args)
-    {
-        if (!empty($args)) {
-            $config = [
-                'develop' => 'd',
-            ];
-            $CLiArgs = new \CliArgs\CliArgs($config);
-            $tmp = $CLiArgs->getArgs();
-            $args = array_slice($args, 1);
-            $data = [];
-            foreach ($args as $arg) {
-                list($key, $value) = explode('=', $arg);
-                $data[$key] = $value;
-            }
-
-            if (array_key_exists('d', $tmp)) {
-                $data['develop'] = true;
-            }
-            $this->_args = $data;
-        }
-    }
-
-    public function getArgs()
-    {
-        return $this->_args;
-    }
-
-
-    /**
-     * @param $key
-     * @return string|null
-     */
-    public function getArg($key)
-    {
-        if (!empty($this->_args[$key])) {
-            return $this->_args[$key];
-        }
-
-        return null;
-    }
 
     public function version()
     {

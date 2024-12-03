@@ -667,23 +667,9 @@ abstract class modCrontabController
         $this->testsPath = $pathName;
     }
 
-
-    public function createInput(\Symfony\Component\Console\Input\InputInterface $input)
-    {
-        $this->input = $input;
-
-        return $this;
-    }
-
-    public ?\Symfony\Component\Console\Input\InputInterface $input = null;
-
     public function input()
     {
-        if ($this->input === null) {
-            $this->input = new \Symfony\Component\Console\Input\ArgvInput();
-        }
-
-        return $this->input;
+        return $this->service->input();
     }
 
 

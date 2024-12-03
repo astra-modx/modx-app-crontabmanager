@@ -34,13 +34,8 @@ class TaskRun extends AbstractCrontabCommand
         }
 
         $name = str_ireplace(':', '/', $name);
-        if ($input->hasArgument('d')) {
-            $this->scheduler->setArgs([
-                'develop' => true,
-            ]);
-        }
-
         $this->scheduler->php($name)->process(null, true, $input);
+
         return 1;
     }
 }

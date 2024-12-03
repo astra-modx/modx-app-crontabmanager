@@ -20,7 +20,7 @@ CronTabManager.grid.Tasks = function (config) {
             return ''
         },
         renderer: function (v, p, record) {
-            return record.data.description != '' && record.data.description != null ? '<div class="x-grid3-row-expander">&#160;</div>' : '&#160;'
+            return record.data.description !== '' && record.data.description != null ? '<div class="x-grid3-row-expander">&#160;</div>' : '&#160;'
         }
     })
 
@@ -52,11 +52,11 @@ CronTabManager.grid.Tasks = function (config) {
 }
 Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
 
-    getFields: function (config) {
+    getFields: function () {
         return ['id', 'description', 'pid', 'command', 'mute', 'cron_enable', 'mute_success', 'mute_time', 'controller_exists', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
     },
 
-    getColumns: function (config) {
+    getColumns: function () {
 
         return [this.exp, {
             header: _('crontabmanager_task_id'),
@@ -493,7 +493,6 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             this.win.destroy()
         }
         this.elementLog = false
-
         this.win = new Ext.Window({
             id: this.config.id + 'runtask'
             , title: this.menu.record.path_task
@@ -501,7 +500,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             , height: 450
             , layout: 'fit'
             , autoLoad: {
-                url: CronTabManager.config['connector_cron_url'] + '?path_task=' + this.menu.record.path_task + '&scheduler_path=' + CronTabManager.config.schedulerPath + '&connector_base_path_url=' + CronTabManager.config.schedulerPath + '&connector_args=' + connector_args,
+                url: CronTabManager.config['connector_cron_url'] + '?task_id=' + this.menu.record.id + '&scheduler_path=' + CronTabManager.config.schedulerPath + '&connector_base_path_url=' + CronTabManager.config.schedulerPath + '&connector_args=' + connector_args,
                 scripts: true
             }
         })
