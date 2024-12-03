@@ -77,7 +77,8 @@ id
 
 
                         <p>
-                            Используя этот метод, можно включать и выключать задания через панель администрирования. Задания автоматически будут запускаться на вашем
+                            Используя этот метод, можно включать и выключать задания через панель администрирования. Задания автоматически будут запускаться на
+                            вашем
                             сервере.
                             <br>
                             <a href="https://raw.githubusercontent.com/astra-modx/modx-app-crontabmanager/refs/heads/master/docs/images/task_enable.png"
@@ -116,14 +117,28 @@ stdout_logfile=/dev/stdout
                     <div style="margin-top: 10px"><em>Крон задания автоматически запускают</em></div>
                     `:else=`
                     <span class="crontabmanager_crontab not_available">[[+demon_crontab]]</span>
-                    <div style="margin-top: 10px"><em>Используйте инструкцию приведенную ниже для автоматического запуска заданий</em></div>
+                    <div style="margin-top: 10px"><em>Используйте инструкцию "Schedule console" для автоматического запуска команды "php artisan
+                            schedule:run"</em></div>
                     `]]
 
                     <hr>
                     Ваш консольный пользователя: <b>[[+user]]</b>
+                    <hr>
+
+
+                    [[+demon_crontab_available:is=`1`:then=`
+                    <div>
+                        <span class="x-btn x-btn-small x-btn-icon-small-left primary-button x-btn-noicon" onclick="addScheduleCronTab()">
+                            <button type="button" class=" x-btn-text">
+                                    <i class=" icon icon-play"></i> Добавить "schedule:run" в сrontab
+                            </button>
+                        </span>
+                    </div>
+                    `:else=`
+                    `]]
+
                 </div>
             </div>
-
 
         </div>
     </div>

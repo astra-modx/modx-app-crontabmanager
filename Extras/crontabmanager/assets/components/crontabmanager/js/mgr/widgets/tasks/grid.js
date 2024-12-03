@@ -211,7 +211,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                 scope: this
             },
 
-            /*{
+            {
                 text: '<i class="icon icon-cogs"></i> Действия',
                 cls: 'primary-button',
                 menu: [
@@ -221,7 +221,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                         handler: this.createItem,
                         scope: this
                     },
-                    '-'
+                    '-',
                     {
                         text: '<i class="icon icon-eye"></i>&nbsp;' + _('crontabmanager_show_crontabs'),
                         handler: this.ShowCrontabs,
@@ -233,7 +233,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                         scope: this,
                     },
                 ]
-            },*/
+            },
 
             {
                 xtype: 'crontabmanager-combo-parent',

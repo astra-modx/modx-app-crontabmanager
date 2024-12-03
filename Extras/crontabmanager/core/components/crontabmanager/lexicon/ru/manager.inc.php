@@ -357,3 +357,7 @@ $_lang['crontabmanager_snippet_all'] = '---';
 $_lang['crontabmanager_task_command'] = 'Команда для запуска';
 
 $_lang['crontabmanager_task_create_new_controller'] = 'Создать новый контроллер';
+
+
+$_lang['crontabmanager_add_addschedule_success'] = 'Задание добавлено';
+$_lang['crontabmanager_add_addschedule_failed'] = 'Задание не добавлено';

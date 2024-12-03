@@ -37,6 +37,7 @@ CronTabManager.form.UpdateSetting = function (config) {
                 targetDiv.style.display = '';  // Это удалит inline стиль display: none
             }
 
+
         }, 300)
     })
 }

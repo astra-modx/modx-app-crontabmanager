@@ -23,6 +23,25 @@ CronTabManager.panel.Home = function (config) {
                 border: true,
                 hideMode: 'offsets',
                 items: [
+
+                    {
+                        title: _('crontabmanager_help'),
+                        id: 'crontabmanager_help',
+                        layout: 'anchor',
+                        deferredRender: true,
+                        items: [
+                            {
+                                html: '<p>' + _('crontabmanager_help_intro') + '</p>'
+                                , border: false
+                                , bodyCssClass: 'panel-desc'
+                                , bodyStyle: 'margin-bottom: 10px'
+                            }
+                            , {
+                                xtype: 'crontabmanager-form-setting-update'
+                            }
+                        ]
+                    },
+
                     {
                         title: _('crontabmanager_tasks'),
                         layout: 'anchor',
@@ -66,23 +85,6 @@ CronTabManager.panel.Home = function (config) {
                         }]
                     },
 
-                    {
-                        title: _('crontabmanager_help'),
-                        id: 'crontabmanager_help',
-                        layout: 'anchor',
-                        deferredRender: true,
-                        items: [
-                            {
-                                html: '<p>' + _('crontabmanager_help_intro') + '</p>'
-                                , border: false
-                                , bodyCssClass: 'panel-desc'
-                                , bodyStyle: 'margin-bottom: 10px'
-                            }
-                            , {
-                                xtype: 'crontabmanager-form-setting-update'
-                            }
-                        ]
-                    },
 
                 ]
             }]
@@ -158,5 +160,60 @@ Ext.onReady(function () {
 
         Ext.reg('crontabmanager-buttons-help', CronTabManager.buttons.help)
         MODx.add('crontabmanager-buttons-help')
+
+
     }
 })
+
+
+function addScheduleCronTab() {
+
+    MODx.Ajax.request({
+        url: CronTabManager.config.connectorUrl,
+        params: {
+            action: 'mgr/setting/addschedule',
+        },
+        listeners: {
+            success: {
+                fn: function (r) {
+                    MODx.msg.status({
+                        title: _('success')
+                        , message: _('crontabmanager_add_addschedule_success')
+                    })
+                }, scope: this
+            },
+            failure: {
+                fn: function (r) {
+
+                }, scope: this
+            }
+        }
+    })
+
+}
+
+function addArtisanBasePath() {
+
+    MODx.Ajax.request({
+        url: CronTabManager.config.connectorUrl,
+        params: {
+            action: 'mgr/setting/addartisan',
+        },
+        listeners: {
+            success: {
+                fn: function (r) {
+                    MODx.msg.status({
+                        title: _('success')
+                        , message: _('crontabmanager_add_addschedule_success')
+                    })
+                }, scope: this
+            },
+            failure: {
+                fn: function (r) {
+
+                }, scope: this
+            }
+        }
+    })
+
+}
