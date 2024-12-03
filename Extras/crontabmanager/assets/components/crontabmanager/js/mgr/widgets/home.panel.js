@@ -192,7 +192,7 @@ function addScheduleCronTab() {
 
 }
 
-function addArtisanBasePath() {
+/*function addArtisanBasePath() {
 
     MODx.Ajax.request({
         url: CronTabManager.config.connectorUrl,
@@ -216,4 +216,4 @@ function addArtisanBasePath() {
         }
     })
 
-}
+}*/
