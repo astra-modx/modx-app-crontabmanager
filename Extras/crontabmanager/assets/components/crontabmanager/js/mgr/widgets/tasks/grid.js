@@ -10,9 +10,6 @@ CronTabManager.grid.Tasks = function (config) {
         expandOnDblClick: false,
         tpl: new Ext.Template('<p class="desc">{description} <br>{message}</p>'),
         getRowClass: function (rec) {
-            // controller_exists
-            console.log(rec.data);
-
             if (!rec.data.active || !rec.data.controller_exists) {
                 return 'crontabmanager-row-disabled'
             }
@@ -56,7 +53,7 @@ CronTabManager.grid.Tasks = function (config) {
 Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
 
     getFields: function (config) {
-        return ['id', 'description', 'pid', 'mute', 'cron_enable', 'mute_success', 'mute_time', 'controller_exists', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
+        return ['id', 'description', 'pid', 'command', 'mute', 'cron_enable', 'mute_success', 'mute_time', 'controller_exists', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
     },
 
     getColumns: function (config) {
@@ -65,137 +62,143 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             header: _('crontabmanager_task_id'),
             dataIndex: 'id',
             sortable: true,
-            width: 40
+            width: 40,
+            hidden: true,
         }, {
             header: _('crontabmanager_task_category_name'),
             dataIndex: 'category_name',
             sortable: true,
+            hidden: true,
             width: 70,
             renderer: function (value, e, row) {
                 return value ? value : '---'
             }
-        }, {
-            header: _('crontabmanager_task_path_task'),
-            dataIndex: 'path_task',
-            sortable: true,
-            width: 200,
-            renderer: function (value, e, row) {
+        },
+            {
+                header: _('crontabmanager_task_path_task'),
+                dataIndex: 'path_task',
+                sortable: true,
+                width: 200,
+                renderer: function (value, e, row) {
+                    if (row.data.mute) {
+                        if (row.data.mute_success) {
+                            value += '<br><small title="Уведомления для этого задания загрулушены. До первого успешного завершения">mute:success</small>'
+                        } else {
 
-
-                if (row.data.mute) {
-                    if (row.data.mute_success) {
-                        value += '<br><small title="Уведомления для этого задания загрулушены. До первого успешного завершения">mute:success</small>'
-                    } else {
-
-                        value += '<br><small title="Уведомления для этого задания загрулушены, до даты">mute:time ' + row.data.mute_time + '</small>'
+                            value += '<br><small title="Уведомления для этого задания загрулушены, до даты">mute:time ' + row.data.mute_time + '</small>'
+                        }
                     }
-                }
 
-                if (!row.data.cron_enable) {
-                    value += '<br><small style="color: darkred">Для автозапуска, нажмите иконку + "Добавить в cron"</small>'
-                }
+                    if (!row.data.cron_enable) {
+                        value += '<br><small style="color: darkred">Для автозапуска, нажмите иконку + "Добавить в cron"</small>'
+                    }
 
-                return value
-            }
-        }, {
-            header: _('crontabmanager_task_time'),
-            dataIndex: 'time',
-            sortable: true,
-            width: 70,
-            renderer: function (value, e, row) {
-                return String.format('<span class="crontabmanager_time_cron" title="{0}">{0}</span><span class="crontabmanager_next_run">{1}</span>', value, row.data.next_run_human)
-            }
-        }, {
-            header: _('crontabmanager_task_createdon'),
-            dataIndex: 'createdon',
-            sortable: true,
-            width: 70,
-            renderer: CronTabManager.utils.formatDate,
-            hidden: true
-        }, {
-            header: _('crontabmanager_task_next_run'),
-            dataIndex: 'next_run',
-            sortable: false,
-            width: 70,
-            renderer: CronTabManager.utils.formatDate,
-            hidden: true
-        }, {
-            header: _('crontabmanager_task_updatedon'),
-            dataIndex: 'updatedon',
-            sortable: true,
-            width: 70,
-            renderer: CronTabManager.utils.formatDate,
-            hidden: true
-        }, {
-            header: _('crontabmanager_task_last_run'),
-            dataIndex: 'last_run',
-            sortable: true,
-            width: 70,
-            renderer: CronTabManager.utils.formatDate,
-        }, {
-            header: _('crontabmanager_task_end_run'),
-            dataIndex: 'end_run',
-            sortable: true,
-            width: 70,
-            renderer: CronTabManager.utils.formatDate,
-        }, {
-            header: _('crontabmanager_task_completed'),
-            dataIndex: 'completed',
-            sortable: true,
-            width: 70,
-            //renderer: CronTabManager.utils.renderBoolean,
-            renderer: function (value, e, row) {
-                return value
-                    ? String.format('<span class="crontabmanager_task_success" title="{0}"></span>', 'Успешно завершено')
-                    : String.format('<span class="crontabmanager_task_insuccess" title="{0}"></span>', 'Не завершено')
-            }
-        }, {
-            header: _('crontabmanager_task_pid'),
-            dataIndex: 'pid',
-            sortable: false,
-            width: 70,
-            renderer: function (value, e, row) {
-                return String.format('<span class="crontabmanager_task_pid_{0}" title="{0}">{0}</span>', value)
-            }
-        }, {
-            header: _('crontabmanager_task_add_output_email'),
-            dataIndex: 'add_output_email',
-            sortable: true,
-            width: 70,
-            renderer: CronTabManager.utils.renderBoolean,
-        }, {
-            header: _('crontabmanager_task_max_number_attempts'),
-            dataIndex: 'max_number_attempts',
-            sortable: true,
-            width: 60,
-            hidden: true
-        }, {
-            header: _('crontabmanager_task_active'),
-            dataIndex: 'active',
-            renderer: CronTabManager.utils.renderBoolean,
-            sortable: true,
-            width: 60,
-        }, {
-            header: _('crontabmanager_task_is_blocked'),
-            dataIndex: 'is_blocked',
-            renderer: CronTabManager.utils.renderBoolean,
-            sortable: false,
-            width: 60,
-        }, {
-            header: _('crontabmanager_task_mode_develop'),
-            dataIndex: 'mode_develop',
-            renderer: CronTabManager.utils.renderBoolean,
-            sortable: true,
-            width: 60,
-            hidden: true
-        }, {
-            header: _('crontabmanager_grid_actions'),
-            dataIndex: 'actions',
-            renderer: CronTabManager.utils.renderActions,
-            sortable: false,
-            width: 100,
-            id: 'actions'
-        }]
+                    return value
+                }
+            }, {
+                header: _('crontabmanager_task_command'),
+                dataIndex: 'command',
+                sortable: false,
+                width: 100
+            }, {
+                header: _('crontabmanager_task_time'),
+                dataIndex: 'time',
+                sortable: true,
+                width: 70,
+                renderer: function (value, e, row) {
+                    return String.format('<span class="crontabmanager_time_cron" title="{0}">{0}</span><span class="crontabmanager_next_run">{1}</span>', value, row.data.next_run_human)
+                }
+            }, {
+                header: _('crontabmanager_task_createdon'),
+                dataIndex: 'createdon',
+                sortable: true,
+                width: 70,
+                renderer: CronTabManager.utils.formatDate,
+                hidden: true
+            }, {
+                header: _('crontabmanager_task_next_run'),
+                dataIndex: 'next_run',
+                sortable: false,
+                width: 70,
+                renderer: CronTabManager.utils.formatDate,
+                hidden: true
+            }, {
+                header: _('crontabmanager_task_updatedon'),
+                dataIndex: 'updatedon',
+                sortable: true,
+                width: 70,
+                renderer: CronTabManager.utils.formatDate,
+                hidden: true
+            }, {
+                header: _('crontabmanager_task_last_run'),
+                dataIndex: 'last_run',
+                sortable: true,
+                width: 70,
+                renderer: CronTabManager.utils.formatDate,
+            }, {
+                header: _('crontabmanager_task_end_run'),
+                dataIndex: 'end_run',
+                sortable: true,
+                width: 70,
+                renderer: CronTabManager.utils.formatDate,
+            }, {
+                header: _('crontabmanager_task_completed'),
+                dataIndex: 'completed',
+                sortable: true,
+                width: 70,
+                //renderer: CronTabManager.utils.renderBoolean,
+                renderer: function (value, e, row) {
+                    return value
+                        ? String.format('<span class="crontabmanager_task_success" title="{0}"></span>', 'Успешно завершено')
+                        : String.format('<span class="crontabmanager_task_insuccess" title="{0}"></span>', 'Не завершено')
+                }
+            }, {
+                header: _('crontabmanager_task_pid'),
+                dataIndex: 'pid',
+                sortable: false,
+                width: 70,
+                renderer: function (value, e, row) {
+                    return String.format('<span class="crontabmanager_task_pid_{0}" title="{0}">{0}</span>', value)
+                }
+            }, {
+                header: _('crontabmanager_task_add_output_email'),
+                dataIndex: 'add_output_email',
+                sortable: true,
+                width: 70,
+                renderer: CronTabManager.utils.renderBoolean,
+            }, {
+                header: _('crontabmanager_task_max_number_attempts'),
+                dataIndex: 'max_number_attempts',
+                sortable: true,
+                width: 60,
+                hidden: true
+            }, {
+                header: _('crontabmanager_task_active'),
+                dataIndex: 'active',
+                renderer: CronTabManager.utils.renderBoolean,
+                sortable: true,
+                width: 60,
+            }, {
+                header: _('crontabmanager_task_is_blocked'),
+                dataIndex: 'is_blocked',
+                renderer: CronTabManager.utils.renderBoolean,
+                sortable: false,
+                width: 60,
+            }, {
+                header: _('crontabmanager_task_mode_develop'),
+                dataIndex: 'mode_develop',
+                renderer: CronTabManager.utils.renderBoolean,
+                sortable: true,
+                width: 60,
+                hidden: true
+            }, {
+                header: _('crontabmanager_grid_actions'),
+                dataIndex: 'actions',
+                renderer: CronTabManager.utils.renderActions,
+                sortable: false,
+                width: 100,
+                id: 'actions'
+            }]
     },
 
     getTopBar: function (config) {

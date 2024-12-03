@@ -26,7 +26,6 @@ CronTabManager.form.UpdateSetting = function (config) {
 
     this.on('afterrender', function () {
         setTimeout(function () {
-            var $this = this
             var sourceDiv = document.getElementById('crontabmanager-panel-home-div-help');
             var targetDiv = document.getElementById('crontabmanager_help');
 
@@ -57,7 +56,6 @@ Ext.extend(CronTabManager.form.UpdateSetting, MODx.FormPanel, {
                         id: config.id + '-transport_desc',
                         //html: atob(CronTabManager.config.html),
                     },
-
 
                 ]
             },

@@ -4,6 +4,7 @@
         <div id="contactus" style="width: 100%">
             Ваш консольный пользователя: <b>[[+user]]</b>
 
+            <hr>
             <div class="crontabmanager-method-crontab [[+class_crontab]]">
                 <h2>Crontab</h2>
                 [[+demon_crontab]]
@@ -28,6 +29,7 @@
                 </div>
             </div>
 
+            <hr>
             <div class="crontabmanager-method-crontab">
                 <h2>Schedule console</h2>
                 <p>Добавление задания в крон для запуска через schedule console</p>
@@ -98,7 +100,7 @@ id
                 </div>
 
             </div>
-
+            <hr>
             <div class="crontabmanager-method-crontab">
                 <h2>Schedule Work console</h2>
                 <p>Для подключения через supervesor (php artisan schedule:work)</p>
@@ -117,7 +119,7 @@ stdout_logfile=/dev/stdout
             </div>
 
 
-            <div class="crontabmanager-method-crontab">
+         [[-   <div class="crontabmanager-method-crontab">
                 <h2>Crontab File</h2>
                 <p>Вместо добавления в crontab заданий, они добавляются в один файл с кронами, который можно использователь для подключения в ручную</p>
 
@@ -129,7 +131,7 @@ stdout_logfile=/dev/stdout
 </pre>
                 </div>
 
-            </div>
+            </div>]]
 
         </div>
     </div>

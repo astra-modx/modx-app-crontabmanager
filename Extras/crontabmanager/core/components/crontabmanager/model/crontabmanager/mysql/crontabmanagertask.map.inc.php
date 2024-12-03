@@ -4,15 +4,16 @@ $xpdo_meta_map['CronTabManagerTask']= array (
   'version' => '1.1',
   'table' => 'ctma_task',
   'extends' => 'xPDOSimpleObject',
-  'tableMeta' =>
+  'tableMeta' => 
   array (
     'engine' => 'InnoDB',
   ),
-  'fields' =>
+  'fields' => 
   array (
     'createdon' => 0,
     'updatedon' => 0,
     'parent' => 0,
+    'snippet' => 0,
     'path_task' => '',
     'blockupdon' => 0,
     'last_run' => 0,
@@ -25,8 +26,8 @@ $xpdo_meta_map['CronTabManagerTask']= array (
     'days' => '',
     'months' => '',
     'weeks' => '',
-    'message' => null,
-    'description' => null,
+    'message' => NULL,
+    'description' => NULL,
     'notification_emails' => '',
     'max_number_attempts' => 0,
     'notification_enable' => 1,
@@ -39,9 +40,9 @@ $xpdo_meta_map['CronTabManagerTask']= array (
     'mute_success' => 0,
     'mute_time' => 0,
   ),
-  'fieldMeta' =>
+  'fieldMeta' => 
   array (
-    'createdon' =>
+    'createdon' => 
     array (
       'dbtype' => 'int',
       'precision' => '20',
@@ -49,7 +50,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => 0,
     ),
-    'updatedon' =>
+    'updatedon' => 
     array (
       'dbtype' => 'int',
       'precision' => '20',
@@ -57,7 +58,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => 0,
     ),
-    'parent' =>
+    'parent' => 
     array (
       'dbtype' => 'int',
       'precision' => '10',
@@ -65,7 +66,15 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => true,
       'default' => 0,
     ),
-    'path_task' =>
+    'snippet' => 
+    array (
+      'dbtype' => 'int',
+      'precision' => '10',
+      'phptype' => 'integer',
+      'null' => true,
+      'default' => 0,
+    ),
+    'path_task' => 
     array (
       'dbtype' => 'varchar',
       'precision' => '256',
@@ -73,7 +82,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => '',
     ),
-    'blockupdon' =>
+    'blockupdon' => 
     array (
       'dbtype' => 'int',
       'precision' => '20',
@@ -81,7 +90,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => 0,
     ),
-    'last_run' =>
+    'last_run' => 
     array (
       'dbtype' => 'int',
       'precision' => '20',
@@ -89,7 +98,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => 0,
     ),
-    'end_run' =>
+    'end_run' => 
     array (
       'dbtype' => 'int',
       'precision' => '20',
@@ -97,7 +106,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => 0,
     ),
-    'completed' =>
+    'completed' => 
     array (
       'dbtype' => 'tinyint',
       'precision' => '1',
@@ -105,7 +114,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => true,
       'default' => 0,
     ),
-    'add_output_email' =>
+    'add_output_email' => 
     array (
       'dbtype' => 'tinyint',
       'precision' => '1',
@@ -113,7 +122,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => true,
       'default' => 0,
     ),
-    'hash' =>
+    'hash' => 
     array (
       'dbtype' => 'varchar',
       'precision' => '10',
@@ -121,7 +130,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => '',
     ),
-    'minutes' =>
+    'minutes' => 
     array (
       'dbtype' => 'varchar',
       'precision' => '10',
@@ -129,7 +138,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => '',
     ),
-    'hours' =>
+    'hours' => 
     array (
       'dbtype' => 'varchar',
       'precision' => '10',
@@ -137,7 +146,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => '',
     ),
-    'days' =>
+    'days' => 
     array (
       'dbtype' => 'varchar',
       'precision' => '10',
@@ -145,7 +154,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => '',
     ),
-    'months' =>
+    'months' => 
     array (
       'dbtype' => 'varchar',
       'precision' => '10',
@@ -153,7 +162,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => '',
     ),
-    'weeks' =>
+    'weeks' => 
     array (
       'dbtype' => 'varchar',
       'precision' => '10',
@@ -161,19 +170,19 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => '',
     ),
-    'message' =>
+    'message' => 
     array (
       'dbtype' => 'text',
       'phptype' => 'string',
       'null' => true,
     ),
-    'description' =>
+    'description' => 
     array (
       'dbtype' => 'text',
       'phptype' => 'string',
       'null' => true,
     ),
-    'notification_emails' =>
+    'notification_emails' => 
     array (
       'dbtype' => 'varchar',
       'precision' => '500',
@@ -181,7 +190,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => false,
       'default' => '',
     ),
-    'max_number_attempts' =>
+    'max_number_attempts' => 
     array (
       'dbtype' => 'int',
       'precision' => '10',
@@ -189,7 +198,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => true,
       'default' => 0,
     ),
-    'notification_enable' =>
+    'notification_enable' => 
     array (
       'dbtype' => 'tinyint',
       'precision' => '1',
@@ -197,7 +206,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => true,
       'default' => 1,
     ),
-    'mode_develop' =>
+    'mode_develop' => 
     array (
       'dbtype' => 'tinyint',
       'precision' => '1',
@@ -205,7 +214,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => true,
       'default' => 0,
     ),
-    'restart_after_failure' =>
+    'restart_after_failure' => 
     array (
       'dbtype' => 'tinyint',
       'precision' => '1',
@@ -213,7 +222,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => true,
       'default' => 0,
     ),
-    'restart' =>
+    'restart' => 
     array (
       'dbtype' => 'tinyint',
       'precision' => '1',
@@ -221,7 +230,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => true,
       'default' => 0,
     ),
-    'log_storage_time' =>
+    'log_storage_time' => 
     array (
       'dbtype' => 'int',
       'precision' => '10',
@@ -229,7 +238,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => true,
       'default' => 0,
     ),
-    'active' =>
+    'active' => 
     array (
       'dbtype' => 'tinyint',
       'precision' => '1',
@@ -237,7 +246,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => true,
       'default' => 1,
     ),
-    'mute' =>
+    'mute' => 
     array (
       'dbtype' => 'tinyint',
       'precision' => '1',
@@ -245,7 +254,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => true,
       'default' => 0,
     ),
-    'mute_success' =>
+    'mute_success' => 
     array (
       'dbtype' => 'tinyint',
       'precision' => '1',
@@ -253,7 +262,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'null' => true,
       'default' => 0,
     ),
-    'mute_time' =>
+    'mute_time' => 
     array (
       'dbtype' => 'int',
       'precision' => '20',
@@ -262,17 +271,17 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'default' => 0,
     ),
   ),
-  'indexes' =>
+  'indexes' => 
   array (
-    'createdon' =>
+    'createdon' => 
     array (
       'alias' => 'createdon',
       'primary' => false,
       'unique' => false,
       'type' => 'BTREE',
-      'columns' =>
+      'columns' => 
       array (
-        'createdon' =>
+        'createdon' => 
         array (
           'length' => '',
           'collation' => 'A',
@@ -280,15 +289,15 @@ $xpdo_meta_map['CronTabManagerTask']= array (
         ),
       ),
     ),
-    'path_task' =>
+    'path_task' => 
     array (
       'alias' => 'path_task',
       'primary' => false,
       'unique' => false,
       'type' => 'BTREE',
-      'columns' =>
+      'columns' => 
       array (
-        'path_task' =>
+        'path_task' => 
         array (
           'length' => '',
           'collation' => 'A',
@@ -296,15 +305,15 @@ $xpdo_meta_map['CronTabManagerTask']= array (
         ),
       ),
     ),
-    'active' =>
+    'active' => 
     array (
       'alias' => 'active',
       'primary' => false,
       'unique' => false,
       'type' => 'BTREE',
-      'columns' =>
+      'columns' => 
       array (
-        'active' =>
+        'active' => 
         array (
           'length' => '',
           'collation' => 'A',
@@ -312,15 +321,15 @@ $xpdo_meta_map['CronTabManagerTask']= array (
         ),
       ),
     ),
-    'restart' =>
+    'restart' => 
     array (
       'alias' => 'restart',
       'primary' => false,
       'unique' => false,
       'type' => 'BTREE',
-      'columns' =>
+      'columns' => 
       array (
-        'restart' =>
+        'restart' => 
         array (
           'length' => '',
           'collation' => 'A',
@@ -329,9 +338,9 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       ),
     ),
   ),
-  'composites' =>
+  'composites' => 
   array (
-    'Logs' =>
+    'Logs' => 
     array (
       'class' => 'CronTabManagerTaskLog',
       'local' => 'id',
@@ -339,7 +348,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'cardinality' => 'many',
       'owner' => 'local',
     ),
-    'Notifications' =>
+    'Notifications' => 
     array (
       'class' => 'CronTabManagerNotification',
       'local' => 'id',
@@ -347,7 +356,7 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'cardinality' => 'many',
       'owner' => 'local',
     ),
-    'Rules' =>
+    'Rules' => 
     array (
       'class' => 'CronTabManagerRuleMemberTask',
       'local' => 'id',
@@ -356,9 +365,17 @@ $xpdo_meta_map['CronTabManagerTask']= array (
       'owner' => 'local',
     ),
   ),
-  'aggregates' =>
+  'aggregates' => 
   array (
-    'Category' =>
+    'Snippet' => 
+    array (
+      'class' => 'modSnippet',
+      'local' => 'snippet',
+      'foreign' => 'id',
+      'cardinality' => 'one',
+      'owner' => 'foreign',
+    ),
+    'Category' => 
     array (
       'class' => 'CronTabManagerCategory',
       'local' => 'parent',

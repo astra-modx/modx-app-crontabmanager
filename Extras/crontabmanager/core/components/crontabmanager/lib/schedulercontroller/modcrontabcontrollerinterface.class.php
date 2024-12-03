@@ -700,4 +700,20 @@ abstract class modCrontabController
     {
         return $this->input()->hasArgument($name);
     }
+
+
+    /**
+     * @return modSnippet|null
+     * @throws Exception
+     */
+    public function snippet()
+    {
+        if ($this->service->getTask()) {
+            if ($Snippet = $this->service->getTask()->getOne('Snippet')) {
+                return $Snippet;
+            }
+        }
+
+        return null;
+    }
 }

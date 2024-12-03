@@ -333,7 +333,7 @@ CronTabManager.combo.condition = function (config) {
 
     Ext.applyIf(config, {
         emptyText: _('bxsender_mailsender_transport')
-        , hiddenName: field+'_condition'
+        , hiddenName: field + '_condition'
         , store: new Ext.data.ArrayStore({
             id: 1
             , fields: ['condition', 'display']
@@ -368,10 +368,47 @@ CronTabManager.combo.condition = function (config) {
 
     this.on('render', function () {
         //this.getEl().setFormValue('*/5')
-       /* this.getEl().addKeyListener(Ext.EventObject.ENTER, function () {
-            this._triggerSearch()
-        }, this)*/
+        /* this.getEl().addKeyListener(Ext.EventObject.ENTER, function () {
+             this._triggerSearch()
+         }, this)*/
     })
 }
 Ext.extend(CronTabManager.combo.condition, MODx.combo.ComboBox)
 Ext.reg('crontabmanager-combo-condition', CronTabManager.combo.condition)
+
+
+CronTabManager.combo.Snippet = function (config) {
+    config = config || {}
+
+    // description
+    Ext.applyIf(config, {
+        name: config.name || 'status'
+        , fieldLabel: _('crontabmanager_task_snippet_empty')
+        , emptyText: _('crontabmanager_task_snippet_empty')
+        , hiddenName: config.name || 'snippet'
+        , displayField: 'name'
+        , valueField: 'id'
+        , anchor: '99%'
+        , fields: ['name', 'id', 'description']
+        , pageSize: 5
+        , url: CronTabManager.config.connector_url
+        , typeAhead: true
+        , editable: true
+        , allowBlank: true
+        , tpl: new Ext.XTemplate(
+            '<tpl for="."><div class="x-combo-list-item">',
+            '{name}  {description}</span>',
+            '</div></tpl>', {
+                compiled: true
+            })
+        , baseParams: {
+            action: 'mgr/misc/snippet/getlist'
+            , combo: 1
+            , addall: 1
+            , id: config.value
+        }
+    })
+    CronTabManager.combo.Snippet.superclass.constructor.call(this, config)
+}
+Ext.extend(CronTabManager.combo.Snippet, MODx.combo.ComboBox)
+Ext.reg('crontabmanager-combo-snippets', CronTabManager.combo.Snippet)

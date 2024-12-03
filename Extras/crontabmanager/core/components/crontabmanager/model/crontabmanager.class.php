@@ -43,6 +43,7 @@ class CronTabManager
 
 
             'schedulerPath' => $this->modx->getOption('crontabmanager_scheduler_path', $config, ''),
+            'snippet_run' => 'snippet.php',
             'logPath' => $this->modx->getOption('crontabmanager_log_path', $config, ''),
             'lockPath' => $this->modx->getOption('crontabmanager_lock_path', $config, ''),
             'linkPath' => $this->modx->getOption('crontabmanager_link_path', $config, ''),
@@ -435,6 +436,9 @@ if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
 
     public function option($key, $options = null, $default = null, $skipEmpty = false)
     {
+        if (array_key_exists($key, $this->config)) {
+            return $this->config[$key];
+        }
         $key = 'crontabmanager_'.$key;
 
         return $this->modx->getOption($key, $options, $default, $skipEmpty);
@@ -457,5 +461,25 @@ if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
         $chunk->setCacheable(false);
 
         return $chunk->process($data, $tpl);
+    }
+
+    /**
+     * Проверяет наличие контроллера для запуска сниппета
+     * @return void
+     * @throws Exception
+     */
+    public function checkSnippetFile()
+    {
+        $name = $this->option('snippet_run');
+        $schedulerPath = $this->option('schedulerPath').'/Controllers/';
+        $target = $schedulerPath.$name;
+        if (!file_exists($target)) {
+            $source = $this->option('corePath').'lib/schedulercontroller/snippet.php';
+            if (file_exists($source)) {
+                if (!copy($source, $target)) {
+                    throw new \Exception("Can't copy {$source} to {$target}");
+                }
+            }
+        }
     }
 }

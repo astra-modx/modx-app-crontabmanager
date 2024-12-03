@@ -124,8 +124,12 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
         $path_controllerh = rtrim($path_controllerh, '/');
         $shcedule_cron = '*/1    *       *       *       *       '.$BIN.' '.$path.' schedule:run 2>&1';
         $user = cronTabManagerCurrentUser();
+
+        $this->CronTabManager->checkSnippetFile();
+
         $props = [
             'bin' => $BIN,
+            'snippet_run' => $this->CronTabManager->option('snippet_run'),
             'class_crontab' => $isAvailable ? 'available' : 'not_available',
             'path_scheduler' => $path_scheduler,
             'path_artisan' => $path,
@@ -134,7 +138,8 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
             'schedule_cron' => $shcedule_cron,
             'demon_crontab' => $isAvailable
                 ? '<span class="crontabmanager_crontab available">'.$this->modx->lexicon('crontabmanager_crontab_available', ['user' => $user]).'</span>'
-                : '<span class="crontabmanager_crontab not_available">'.$this->modx->lexicon('crontabmanager_crontab_not_available', ['user' => $user]).'</span>',
+                : '<span class="crontabmanager_crontab not_available">'.$this->modx->lexicon('crontabmanager_crontab_not_available', ['user' => $user]
+                ).'</span>',
         ];
 
 

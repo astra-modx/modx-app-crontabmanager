@@ -106,7 +106,7 @@ class CrontabTask
         return $next_run_human;
     }
 
-    public function command(string $path = null)
+    public function command(string $path = null, bool $full = false)
     {
         $path = $path ?? $this->task->get('path_task');
 
@@ -119,7 +119,15 @@ class CrontabTask
         $replacement = "";
         $command = preg_replace($pattern, $replacement, $command);
 
-        return mb_strtolower($command);
+        $command = mb_strtolower($command);
+        if ($full) {
+            $command = 'php core/scheduler/artisan '.$command;
+        }
+        if ($Snippet = $this->task->getOne('Snippet')) {
+            $command .= ' --snippet=" '.$Snippet->get('name').'"';
+        }
+
+        return $command;
     }
 
 
