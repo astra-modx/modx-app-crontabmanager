@@ -146,15 +146,15 @@ stdout_logfile=/dev/stdout
                     <h3>Команды</h3>
                     <div>
                         <div>
-                            Список заданий
+                            Список заданий<br>
                             <div class="crontabmanager_help_command">
-                                <pre class="crontabmanager_help_command_pre">php [[+path_artisan]] schedule:list</pre>
+                                <pre class="crontabmanager_help_command_pre" style="max-width: 400px;">php [[+path_artisan]] schedule:list</pre>
                             </div>
                         </div>
                         <div>
-                            Запустить заданий в ручную
+                            Запустить заданий в ручную <br>
                             <div class="crontabmanager_help_command">
-                                <pre class="crontabmanager_help_command_pre">php [[+path_artisan]] schedule:run</pre>
+                                <pre class="crontabmanager_help_command_pre" style="max-width: 400px;">php [[+path_artisan]] schedule:run</pre>
                             </div>
                         </div>
                     </div>

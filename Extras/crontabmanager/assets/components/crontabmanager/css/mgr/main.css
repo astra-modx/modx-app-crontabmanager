@@ -736,7 +736,7 @@ label[for=crontabmanager-grid-notifications-read]::before {
 }
 
 .crontabmanager-row-help {
-    flex: 0 0 70%; /* Первый блок занимает 70% */
+    flex: 0 0 65%; /* Первый блок занимает 70% */
 }
 
 .crontabmanager-row-help-check {

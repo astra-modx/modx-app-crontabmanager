@@ -65,9 +65,23 @@ class Pid
             return null;
         }
 
+        if ($info = $this->_pid($pid)) {
+            if (!empty($info['stat'])) {
+                return $info;
+            }
+        }
+        if ($info = $this->_pid2($pid)) {
+            return $info;
+        }
+
+        return null;
+    }
+
+
+    private function _pid2(int $pid)
+    {
         $command = 'ps -o pid,comm,stat | grep '.$pid;
         $output = shell_exec($command);
-
         // Разбиваем вывод по строкам
         if (!empty($output)) {
             $lines = explode("\n", trim($output));
@@ -93,6 +107,44 @@ class Pid
         return null;
     }
 
+    private function _pid(int $pid)
+    {
+        $processes = null;
+        $command = "ps aux | grep {$pid} | grep -v grep";
+        $output = shell_exec($command);
+        if (!empty($output)) {
+            $arrays = explode(PHP_EOL, $output);
+            $arrays = array_filter($arrays);
+
+            if (is_array($arrays) && count($arrays) > 0) {
+                foreach ($arrays as $array) {
+                    list($user, $pid, $cpu, $mem, $vsz, $rss, $tty, $stat, $start, $time, $command, $process) = preg_split('/\s+/', $array);
+                    $processes[] = [
+                        'user' => $user, // имя пользователя, от имени которого запущен процесс
+                        'pid' => $pid, // идентификатор процесса (PID)
+                        'cpu' => $cpu, // процент использования CPU процессом
+                        'mem' => $mem, // процент использования памяти процессом
+                        'vsz' => $vsz, // виртуальный размер процесса в килобайтах (KiB)
+                        'rss' => $rss, // размер сегмента данных процесса в килобайтах (KiB)
+                        'tty' => $tty, // управляющий терминал процесса
+                        'stat' => $stat, // состояние процесса (например, R - выполняется, S - ожидает ввода-вывода, Z - зомби-процесс и т.д.)
+                        'start' => $start, // время запуска процесса
+                        'time' => $time, // общее время использования процессом CPU в минутах и секундах
+                        'command' => $command, // имя команды или исполняемого файла процесса
+                        'process' => $process, // полный вывод строки процесса, содержащей все перечисленные выше атрибуты
+                    ];
+                }
+
+                if (!empty($processes)) {
+                    return @$processes[0];
+                }
+            }
+        }
+
+        return null;
+    }
+
+
     /**
      * состояние процесса. Например, R - выполняется, S - ожидает ввода-вывода, Z - зомби-процесс и т.д.
      * @return string
@@ -105,9 +157,12 @@ class Pid
         if ($info = $this->get()) {
             switch ($info['stat']) {
                 case 'R':
+                case 'R+':
                 case 'S':
+                case 'S+':
                     return 'running';
                 case 'Z':
+                case 'Z+':
                     return 'zombie';
                 default:
                     break;
