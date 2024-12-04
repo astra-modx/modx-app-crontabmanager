@@ -10,6 +10,9 @@ class CronTabManagerTask extends xPDOSimpleObject
     /* @var CronTabManager $CronTabManager */
     protected $CronTabManager = null;
 
+    protected ?\Webnitros\CronTabManager\Task\Pid $_pid = null;
+    protected ?\Webnitros\CronTabManager\Task\Status $_status = null;
+
     /* @var string|null $old_path_task - записывается старый путь если произошли изменения */
     public $old_path_task = null;
     protected ?CrontabTask $crontab = null;
@@ -245,44 +248,6 @@ class CronTabManagerTask extends xPDOSimpleObject
         return strtotime($this->get('blockupdon')) > time();
     }
 
-
-    protected $linkFile = null;
-
-    /**
-     * Вернет путь на директорию и имя файла для создания блокировки
-     * @return string
-     */
-    public function getLockFile()
-    {
-        if (is_null($this->linkFile)) {
-            $path_task = $this->get('path_task');
-            $lockPath = $this->getOption('crontabmanager_lock_path').'/';
-            $path_task = str_ireplace('.php', '', $path_task);
-            $this->linkFile = $lockPath.implode('_', explode('/', $path_task)).'.txt';
-        }
-
-        return $this->linkFile;
-    }
-
-
-    /**
-     * Создание файла блокирующиего запуска других скриптов
-     */
-    public function addLock()
-    {
-        if ($lockFile = $this->getLockFile()) {
-            $time = date('Y-m-d H:i:s', time());
-            $fp = fopen($lockFile, 'w+');
-            fwrite($fp, $time);
-            fclose($fp);
-
-            if (!file_exists($lockFile)) {
-                $this->xpdo->log(xPDO::LOG_LEVEL_ERROR, "[".__CLASS__."][".__LINE__."] ".__FUNCTION__.": could not create lock file :".$this->lockFile);
-            }
-        }
-    }
-
-
     /**
      * Вернет текст из лог файла
      * @return string|boolean
@@ -352,30 +317,7 @@ class CronTabManagerTask extends xPDOSimpleObject
      */
     public function isLock()
     {
-        $file = $this->getLockFile();
-        if (file_exists($file)) {
-            $minutes = $this->getOption('crontabmanager_blocking_time_minutes', null, 60);
-            #$current = strtotime(date('Y-m-d H:i:s', time()) . ' - ' . $minutes . ' minutes');
-            $current = strtotime(date('Y-m-d H:i:s', strtotime('-'.$minutes.' minutes', time())));
-
-            $handle = @fopen($file, "r");
-            if ($handle) {
-                while (($buffer = fgets($handle, 4096)) !== false) {
-                    $time = strtotime($buffer);
-                    if ($current <= $time) {
-                        return true;
-                    }
-
-                    return false;
-                }
-                if (!feof($handle)) {
-                    $result = true;
-                }
-                fclose($handle);
-            }
-        }
-
-        return false;
+        return $this->pid()->isLock();
     }
 
 
@@ -384,29 +326,7 @@ class CronTabManagerTask extends xPDOSimpleObject
      */
     public function unLock()
     {
-        if ($file = $this->getLockFile()) {
-            if (file_exists($file)) {
-                unlink($file);
-            }
-        }
-    }
-
-
-    /**
-     * Проверка существования файла блокировки
-     * @return bool
-     */
-    public function isLockFile()
-    {
-        if ($file = $this->getLockFile()) {
-            if (file_exists($file)) {
-                return true;
-            }
-
-            return false;
-        }
-
-        return true;
+        return $this->pid()->kill();
     }
 
 
@@ -442,10 +362,6 @@ class CronTabManagerTask extends xPDOSimpleObject
                 $task->setSaveLog(1);
                 $task->set('last_run', time());
                 $task->set('completed', false); // Сбрасываем метку завершенности
-
-                // Автоматически включаем блокировку файла
-                $task->addLock();
-
                 break;
             case 'end':
                 $task->setSaveLog(1);
@@ -453,9 +369,6 @@ class CronTabManagerTask extends xPDOSimpleObject
                 $task->set('completed', true); // Устанавливаем метку завершенности
                 $task->set('exec_time', $exec_time);
                 $task->set('memory_usage', $memory_usage);
-
-                // Снятие блокировки
-                $task->unLock();
                 break;
             default:
                 break;
@@ -488,10 +401,22 @@ class CronTabManagerTask extends xPDOSimpleObject
 
     public function pid()
     {
-        $path = $this->getPath();
+        if ($this->_pid === null) {
+            $this->_pid = new \Webnitros\CronTabManager\Task\Pid($this);
+        }
 
-        return \Webnitros\CronTabManager\Pid::status($path);
+        return $this->_pid;
     }
+
+    public function status()
+    {
+        if ($this->_status === null) {
+            $this->_status = new \Webnitros\CronTabManager\Task\Status($this);
+        }
+
+        return $this->_status;
+    }
+
 
     /**
      * Путь для запуска в ручную
@@ -504,16 +429,15 @@ class CronTabManagerTask extends xPDOSimpleObject
 
     public function controllerPath()
     {
-        $this->loadCronTabManager()->loadSchedulerService()->getOption('basePath');
+        $this->loadCronTabManager()->scheduler()->getOption('basePath');
 
-        return $this->loadCronTabManager()->loadSchedulerService()->getOption('basePath').$this->get('path_task');
+        return $this->loadCronTabManager()->scheduler()->getOption('basePath').$this->get('path_task');
     }
 
     public function controllerExists()
     {
         return file_exists($this->controllerPath());
     }
-
 
 
     public function muteSuccess()

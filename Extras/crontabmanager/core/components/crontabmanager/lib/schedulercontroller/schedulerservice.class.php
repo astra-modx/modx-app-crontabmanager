@@ -8,23 +8,17 @@ class SchedulerService
     /* @var CronTabManager $CronTabManager */
     public $CronTabManager;
 
-
     /* @var string $action */
-    /* @var string $task */
-    /* @var string $lockFile */
     public $action;
+    /* @var string $task */
     public $task;
-    public $lockFile;
     protected $enabledException = false;
     public $recordsCount = 0;
     public $recordsLimit = 0;
     public $recordsOffset = 0;
     public $ForcedStop = false;
 
-    /* @var null|int $item - одна запись при массов */
-    public $item = null;
 
-    public $scheduler = null;
     /* @var array $config */
     public $config;
 
@@ -44,7 +38,6 @@ class SchedulerService
 
     /* @var boolean|null $mode */
     public $mode = null;
-
 
     /**
      * @param  CronTabManager  $CronTabManager
@@ -82,84 +75,105 @@ class SchedulerService
         return $this->isCommand;
     }
 
-    public $isBrowser = false;
+    private $_browser = false;
 
     public function isBrowser()
     {
-        return $this->isBrowser;
+        return $this->_browser;
+    }
+
+    public function browser(bool $browser = true)
+    {
+        $this->_browser = $browser;
+
+        return $this;
     }
 
     /**
      * Process the response and format in the proper response format.
      */
-    public function process($unLock = null, bool $command = false, $input = null, $browser = false)
+    public function process(string $name, bool $command = false, $input = null)
     {
         $this->isCommand = $command;
-        $this->isBrowser = $browser;
+        $this->CronTabManagerTask = null;
         $this->setMode();
-        if ($this->scheduler) {
-            if ($controllerName = $this->getController()) {
-                if (null == $controllerName) {
-                    throw new Exception('Method not allowed', 405);
+        if ($controllerName = $this->getController($name)) {
+            if (null == $controllerName) {
+                throw new Exception('Method not allowed', 405);
+            }
+
+            /** @var modCrontabController $controller */
+            try {
+                $controller = new ReflectionClass($controllerName);
+                if (!$controller->isInstantiable()) {
+                    throw new Exception('Bad Request', 400);
                 }
 
-                /** @var modCrontabController $controller */
                 try {
-                    $controller = new ReflectionClass($controllerName);
-                    if (!$controller->isInstantiable()) {
-                        throw new Exception('Bad Request', 400);
-                    }
-
-                    try {
-                        /** @var ReflectionMethod $method */
-                        $method = $controller->getMethod('run');
-                    } catch (ReflectionException $e) {
-                        throw new Exception('Unsupported HTTP method process', 405);
-                    }
-
-                    if (!$method->isStatic()) {
-                        $controller = $controller->newInstance($this->modx, $this->config);
-                        $controller->service = $this;
-
-
-                        if ($input instanceof \Symfony\Component\Console\Input\InputInterface) {
-                            // Для аргументов
-                            $this->createInput($input);
-                        }
-
-                        $taskPath = $this->taskPath();
-
-
-                        if ($command && !$this->modx->getCount('CronTabManagerTask', ['path_task' => $taskPath])) {
-                            // For command run
-                            $controller->process();
-                        } else {
-                            // Only for task run
-                            if ($task = $this->getTask()) {
-                                // Записываем путь перед стартом
-                                if (is_null($this->manualStopExecutionPath)) {
-                                    $this->manualStopExecutionPath = $task->getFileManualStopPath($this->config['basePath']);
-                                    if (file_exists($this->manualStopExecutionPath)) {
-                                        unlink($this->manualStopExecutionPath);
-                                    }
-                                }
-
-                                $this->defaultModeDevelop = $task->get('mode_develop');
-
-                                // Добавить указатель что запуск в режиме dev
-                                if ($this->getArgument('d') !== null) {
-                                    $task->set('mode_develop', true);
-                                }
-
-                                $this->runProcess($task, $method, $unLock, $controller);
-                            }
-                        }
-                    } else {
-                        throw new Exception('Static methods not supported in Controllers', 500);
-                    }
+                    /** @var ReflectionMethod $method */
+                    $method = $controller->getMethod('run');
                 } catch (ReflectionException $e) {
-                    $this->modx->log(modX::LOG_LEVEL_ERROR, '[Crontab] '.$e->getMessage(), '', __METHOD__, __FILE__, __LINE__);
+                    throw new Exception('Unsupported HTTP method process', 405);
                 }
+
+                if (!$method->isStatic()) {
+                    $controller = $controller->newInstance($this->modx, $this->config);
+                    $controller->service = $this;
+
+
+                    if ($input instanceof \Symfony\Component\Console\Input\InputInterface) {
+                        // Для аргументов
+                        $this->createInput($input);
+                    }
+
+                    $taskPath = $name.'.php';
+
+                    $criteria = ['path_task' => $taskPath];
+                    if ($taskPath === 'snippet.php') {
+                        $snippet = $input->getArgument('snippet');
+
+                        /* @var modSnippet $object */
+                        if ($Snippet = $this->modx->getObject('modSnippet', ['name' => $snippet])) {
+                            $snippet_id = $Snippet->get('id');
+                            $criteria['snippet'] = $snippet_id;
+                        }
+                    }
+
+
+                    if ($command && !$this->modx->getCount('CronTabManagerTask', $criteria)) {
+                        // For command run
+                        $controller->process();
+                    } else {
+                        // Only for task run
+                        if ($task = $this->getTask($criteria)) {
+                            // Записываем путь перед стартом
+                            if (is_null($this->manualStopExecutionPath)) {
+                                $this->manualStopExecutionPath = $task->getFileManualStopPath($this->config['basePath']);
+                                if (file_exists($this->manualStopExecutionPath)) {
+                                    unlink($this->manualStopExecutionPath);
+                                }
+                            }
+
+                            $this->defaultModeDevelop = $task->get('mode_develop');
+
+                            // Добавить указатель что запуск в режиме dev
+                            if ($this->getArgument('d') !== null) {
+                                $task->set('mode_develop', true);
+                            }
+
+                            // Добавить указатель что запуск в режиме dev
+                            if ($this->getArgument('dev-browser') !== null) {
+                                $this->browser();
+                            }
+
+                            $this->runProcess($task, $method, $controller);
+                        }
+                    }
+                } else {
+                    throw new Exception('Static methods not supported in Controllers', 500);
+                }
+            } catch (ReflectionException $e) {
+                $this->modx->log(modX::LOG_LEVEL_ERROR, '[Crontab] '.$e->getMessage(), '', __METHOD__, __FILE__, __LINE__);
             }
         }
     }
@@ -204,16 +218,16 @@ class SchedulerService
      * @return CronTabManagerTask|object|null
      * @throws Exception
      */
-    public function getTask()
+    public function getTask($criteria = null)
     {
-        $this->task = $this->scheduler.'.php';
-        $criteria = array(
-            'path_task' => $this->task,
-        );
+        if (!is_null($this->CronTabManagerTask)) {
+            return $this->CronTabManagerTask;
+        }
+
 
         /* @var CronTabManagerTask $CronTabManagerTask */
         if (!$this->CronTabManagerTask = $this->modx->getObject('CronTabManagerTask', $criteria)) {
-            $this->response('Error get task: '.$this->task);
+            $this->response('Error get task: '.print_r($criteria, 1));
         }
 
         // Проверка срока хранения логов, чтобы не забивать логами всю базу автоматически требуется отчищать логи
@@ -234,16 +248,9 @@ class SchedulerService
         return $this->CronTabManagerTask;
     }
 
-    /**
-     * Исполнение контраллера с фиксацией времени
-     * @param  ReflectionMethod  $method
-     * @param  CronTabManagerTask  $task
-     * @param $unLock  - Снятие блокировки
-     * @param  modCrontabController  $controller
-     */
-    public function runProcess(CronTabManagerTask $task, ReflectionMethod $method, $unLock, modCrontabController $controller)
+
+    public function isLook(CronTabManagerTask $task)
     {
-        // 1. Проверка блокировок
         if (!$task->isModeDevelop()) {
             if (!$task->get('active')) {
                 $this->response('job deactivated id:'.$task->get('id'));
@@ -253,11 +260,6 @@ class SchedulerService
                 $this->response('task blocked until: '.$task->get('blockupdon'));
             }
 
-            // Если установлено снятие блокировки
-            if ($unLock) {
-                $task->unLock();
-            }
-
 
             // Проверям время блокировки файла
             if (!$task->isLock()) {
@@ -265,20 +267,27 @@ class SchedulerService
             }
 
             // Проверка существование файла
-            if ($task->isLockFile()) {
-                $this->response('Исполнение скрипта не завершено ждите окончания');
+            if ($task->isLock()) {
+                $this->response($this->modx->lexicon('crontabmanager_task_execution_not_complete'));
             }
         }
+    }
 
+    /**
+     * Исполнение контраллера с фиксацией времени
+     * @param  ReflectionMethod  $method
+     * @param  CronTabManagerTask  $task
+     * @param  modCrontabController  $controller
+     */
+    public function runProcess(CronTabManagerTask $task, ReflectionMethod $method, modCrontabController $controller)
+    {
         if ($this->isSetCompletionTime) {
             $task->set('mode_develop', $this->defaultModeDevelop);
             $task->start();
         }
 
-
         // 2.1 Запуск контроллера
         $response = $method->invoke($controller);
-
 
         // 3. Остановка задания
         if ($this->isSetCompletionTime) {
@@ -292,12 +301,6 @@ class SchedulerService
         $this->response($this->GetUsage());
     }
 
-
-    public function itemLog($id)
-    {
-        $this->item = $id;
-    }
-
     public function response($data = '')
     {
         if ($this->isEnabledException()) {
@@ -308,18 +311,6 @@ class SchedulerService
         }
     }
 
-    /**
-     * Генерирует карту контроллеров
-     * @throws Exception
-     */
-   /* public function generateCronLink()
-    {
-        if (!class_exists('SheldulerGeneratorLink')) {
-            include_once dirname(__FILE__).'/sheldulergeneratorlink.class.php';
-        }
-        $SheldulerGeneratorLink = new SheldulerGeneratorLink($this->modx);
-        $SheldulerGeneratorLink->process($this->getOption('basePath'), $this->getOption('linkPath'));
-    }*/
 
     /* This method returns an error response
      *
@@ -362,20 +353,6 @@ class SchedulerService
         $this->response($response);
     }
 
-    /**
-     * Ссылка на следующие результаты
-     */
-    public function nextResults()
-    {
-        $request = array();
-        if ($this->mode) {
-            $request['mode'] = 1;
-        }
-        $request['offset'] = $this->recordsCount;
-        $query = http_build_query($request);
-
-        return $this->modx->getOption('site_url').'scheduler/'.$this->scheduler.'?'.$query;
-    }
 
     /**
      * Вермен логировние времени
@@ -459,10 +436,8 @@ class SchedulerService
      *
      * @return string
      */
-    protected function getController()
+    protected function getController(string $expectedFile)
     {
-        $expectedFile = $this->scheduler;
-
         $basePath = $this->getOption('basePath');
         $controllerClassPrefix = $this->getOption('controllerClassPrefix', 'modController');
         $controllerClassSeparator = $this->getOption('controllerClassSeparator', '_');
@@ -520,29 +495,6 @@ class SchedulerService
         }
 
         return $files;
-    }
-
-    /**
-     * @param  string  $controller
-     * @return $this
-     */
-    public function php(string $controller)
-    {
-        $this->scheduler = $controller;
-
-        return $this;
-    }
-
-    public function taskPath()
-    {
-        return $this->scheduler.'.php';
-    }
-
-    public function getPath()
-    {
-        if (isset($_REQUEST['_scheduler'])) {
-            $this->scheduler = $_REQUEST['_scheduler'];
-        }
     }
 
 

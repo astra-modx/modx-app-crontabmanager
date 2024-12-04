@@ -45,6 +45,8 @@ $_lang['crontabmanager_task_last_run'] = 'Последний запуск';
 $_lang['crontabmanager_task_end_run'] = 'Завершен';
 $_lang['crontabmanager_task_status'] = 'Статус';
 $_lang['crontabmanager_task_pid'] = 'PID';
+$_lang['crontabmanager_task_pid_status'] = 'PID статус';
+$_lang['crontabmanager_task_status'] = 'Статус';
 $_lang['crontabmanager_task_time'] = 'Время запуска';
 $_lang['crontabmanager_task_start_task'] = 'Запустить задание';
 $_lang['crontabmanager_task_minutes'] = 'Минута';
@@ -361,3 +363,25 @@ $_lang['crontabmanager_task_create_new_controller'] = 'Создать новый
 
 $_lang['crontabmanager_add_addschedule_success'] = 'Задание добавлено';
 $_lang['crontabmanager_add_addschedule_failed'] = 'Задание не добавлено';
+
+
+$_lang['crontabmanager_check_crontab_avalable_error'] = 'Linux CronTab недоступен (вы не можете управлять кроном да же через ssh crontab -e, это ограничения сервера)';
+
+$_lang['crontabmanager_schedule_confirm_add_title'] = 'Добавить задание в crontab';
+$_lang['crontabmanager_schedule_confirm_add_text'] = 'Вы уверенны что хотите добавить задание? После добавления все задачи в расписании будут автоматически запускаться';
+
+$_lang['crontabmanager_schedule_confirm_remove_title'] = 'Удаление задания из crontab';
+$_lang['crontabmanager_schedule_confirm_remove_text'] = 'Вы уверенны что хотите удалить задание? Это приведет к отключение автоматического запуска';
+$_lang['crontabmanager_schedule_confirm_add_success'] = 'Задание добавлено';
+$_lang['crontabmanager_schedule_confirm_remove_success'] = 'Задание удалено';
+
+
+$_lang['crontabmanager_task_execution_not_complete'] = 'Исполнение скрипта не завершено ждите окончания';
+$_lang['crontabmanager_task_pid_kill_error'] = 'Процесс с PID [[+pid]] не найден или уже завершён.';
+$_lang['crontabmanager_task_pid_kill_action'] = 'Убить процесс PID';
+
+$_lang['crontabmanager_task_pid_kill_confirm'] = 'Вы уверены что хотите убить процесс PID?';
+$_lang['crontabmanager_task_pid_kill_success'] = 'Процесс успешно уничтожен';
+
+
+

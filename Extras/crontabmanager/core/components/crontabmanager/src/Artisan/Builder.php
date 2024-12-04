@@ -93,6 +93,7 @@ class Builder
         }
 
         $Command->addArgument('d', InputArgument::OPTIONAL, 'Mode development');
+        $Command->addArgument('dev-browser', InputArgument::OPTIONAL, 'Style for browser');
         foreach ($args as $arg) {
             preg_match('/\{--(.*?)\}/', $arg, $matches);
             if (!empty($matches)) {

@@ -219,7 +219,6 @@ class Rest
 
     protected function taskHandler(CronTabManagerTask $object)
     {
-        $linkPath = $this->CronTabManager->config['linkPath'];
         $php_command = $this->CronTabManager->config['php_command'];
         $item = $object->toArray();
         $item['createdon'] = date('Y-m-d H:i:s', $item['createdon']);
@@ -231,8 +230,6 @@ class Rest
             $this->eiEmpt($item['months']),
             $this->eiEmpt($item['weeks']),
         );
-        $item['link_path'] = $php_command.' '.$linkPath.'/'.$object->get('path_task');
-        $item['lock'] = $object->isLockFile();
         $item['is_blocked_time'] = $object->isBlockUpTask();
         $item['time'] = implode(' ', $time);
         $item['mode_develop'] = $object->get('mode_develop');
@@ -324,9 +321,7 @@ class Rest
         if (!$Task = $this->getTask()) {
             $this->failure('Задание не найден');
         } else {
-            if ($Task->isLockFile()) {
-                $Task->unLock();
-            }
+            $Task->unLock();
             $this->success();
         }
     }

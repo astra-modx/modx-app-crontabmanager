@@ -53,26 +53,28 @@ CronTabManager.grid.Tasks = function (config) {
 Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
 
     getFields: function () {
-        return ['id', 'description', 'pid', 'command', 'mute', 'snippet_name', 'mute_success', 'snippet', 'mute_time', 'controller_exists', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'is_blocked', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
+        return ['id', 'description', 'command', 'mute', 'pid_status', 'pid', 'snippet_name', 'mute_success', 'snippet', 'mute_time', 'controller_exists', 'path_task_cli', 'message', 'next_run', 'next_run_human', 'createdon', 'completed', 'updatedon', 'add_output_email', 'mode_develop', 'status', 'is_blocked_time', 'max_number_attempts', 'parent', 'time', 'path_task', 'last_run', 'category_name', 'end_run', 'active', 'actions']
     },
 
     getColumns: function () {
 
-        return [this.exp, {
-            header: _('crontabmanager_task_id'),
-            dataIndex: 'id',
-            sortable: true,
-            width: 40,
-        }, {
-            header: _('crontabmanager_task_category_name'),
-            dataIndex: 'category_name',
-            sortable: true,
-            hidden: true,
-            width: 70,
-            renderer: function (value, e, row) {
-                return value ? value : '---'
-            }
-        },
+        return [
+            this.exp,
+            {
+                header: _('crontabmanager_task_id'),
+                dataIndex: 'id',
+                sortable: true,
+                width: 40,
+            }, {
+                header: _('crontabmanager_task_category_name'),
+                dataIndex: 'category_name',
+                sortable: true,
+                hidden: true,
+                width: 70,
+                renderer: function (value, e, row) {
+                    return value ? value : '---'
+                }
+            },
             {
                 header: _('crontabmanager_task_path_task'),
                 dataIndex: 'path_task',
@@ -134,11 +136,13 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                 header: _('crontabmanager_task_last_run'),
                 dataIndex: 'last_run',
                 sortable: true,
+                hidden: true,
                 width: 70,
                 renderer: CronTabManager.utils.formatDate,
             }, {
                 header: _('crontabmanager_task_end_run'),
                 dataIndex: 'end_run',
+                hidden: true,
                 sortable: true,
                 width: 70,
                 renderer: CronTabManager.utils.formatDate,
@@ -146,6 +150,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                 header: _('crontabmanager_task_completed'),
                 dataIndex: 'completed',
                 sortable: true,
+                hidden: true,
                 width: 70,
                 //renderer: CronTabManager.utils.renderBoolean,
                 renderer: function (value, e, row) {
@@ -154,18 +159,45 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                         : String.format('<span class="crontabmanager_task_insuccess" title="{0}"></span>', 'Не завершено')
                 }
             }, {
-                header: _('crontabmanager_task_pid'),
-                dataIndex: 'pid',
+                header: _('crontabmanager_task_pid_status'),
+                dataIndex: 'pid_status',
                 sortable: false,
+                hidden: true,
                 width: 70,
                 renderer: function (value, e, row) {
                     return String.format('<span class="crontabmanager_task_pid_{0}" title="{0}">{0}</span>', value)
                 }
             }, {
+                header: _('crontabmanager_task_status'),
+                dataIndex: 'status',
+                sortable: false,
+                width: 70,
+                renderer: function (value, e, row) {
+
+                    var completed = '';
+
+                    var cls = value
+                    if (value === 'completed' && !row.data.completed) {
+                        completed = ' - с ошибкой';
+                        cls = 'completed_error'
+                    }
+
+                    return String.format('<span class="crontabmanager_task_pid_{2}" title="{0}">{0} {1}</span>', value, completed, cls)
+                }
+            },
+            {
+                header: _('crontabmanager_task_pid'),
+                dataIndex: 'pid',
+                sortable: true,
+                width: 60,
+                hidden: true
+            },
+            {
                 header: _('crontabmanager_task_add_output_email'),
                 dataIndex: 'add_output_email',
                 sortable: true,
                 width: 70,
+                hidden: true,
                 renderer: CronTabManager.utils.renderBoolean,
             }, {
                 header: _('crontabmanager_task_max_number_attempts'),
@@ -178,12 +210,6 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
                 dataIndex: 'active',
                 renderer: CronTabManager.utils.renderBoolean,
                 sortable: true,
-                width: 60,
-            }, {
-                header: _('crontabmanager_task_is_blocked'),
-                dataIndex: 'is_blocked',
-                renderer: CronTabManager.utils.renderBoolean,
-                sortable: false,
                 width: 60,
             }, {
                 header: _('crontabmanager_task_mode_develop'),
@@ -395,9 +421,7 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
     disableItem: function (grid, row, e) {
         this.processors.multiple('disable')
     },
-    unlockTask: function (act, btn, e) {
-        this.processors.confirm('unlock', 'task_unlock')
-    },
+
     unblockupTask: function (act, btn, e) {
         this.processors.confirm('unblockup', 'task_unblockup', {multiple: false})
     },
@@ -440,6 +464,10 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
     },
     removeCron: function (act, btn, e) {
         this.processors.confirm('removecron', 'task_remove_cron', {multiple: false})
+    },
+
+    killPid: function (act, btn, e) {
+        this.processors.confirm('pid/kill', 'task_pid_kill', {multiple: false})
     },
 
     win: null,
@@ -511,6 +539,9 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             }
         })
         this.win.show()
+        setTimeout(() => {
+            this.refresh();
+        }, 300)
 
     },
 
@@ -637,3 +668,4 @@ function readLogFileBody() {
     var Tasks = Ext.getCmp('crontabmanager-grid-tasks')
     Tasks.readLogFile()
 }
+

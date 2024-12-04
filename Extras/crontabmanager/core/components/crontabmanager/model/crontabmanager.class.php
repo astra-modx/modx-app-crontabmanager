@@ -18,6 +18,7 @@ class CronTabManager
 
     /** @var modError|null $error = */
     public $error = null;
+    private ?SchedulerService $scheduler = null;
 
 
     /**
@@ -49,8 +50,6 @@ class CronTabManager
             'schedulerControllersPath' => $this->modx->getOption('crontabmanager_scheduler_path', $config, '').'/Controllers',
             'snippet_run' => 'snippet.php',
             'logPath' => $this->modx->getOption('crontabmanager_log_path', $config, ''),
-            'lockPath' => $this->modx->getOption('crontabmanager_lock_path', $config, ''),
-            'linkPath' => $this->modx->getOption('crontabmanager_link_path', $config, ''),
             'log_storage_time' => $this->modx->getOption('crontabmanager_log_storage_time', $config, ''),
             'php_command' => CronTabManagerPhpExecutable($modx),
 
@@ -67,24 +66,10 @@ class CronTabManager
     public function createDirs()
     {
         // Создадим папку где будет храниться блокировка
-        $lockPath = $this->config['lockPath'];
-        if (!file_exists($lockPath)) {
-            if (!mkdir($lockPath, 0777, true)) {
-                $this->modx->log(modX::LOG_LEVEL_ERROR, "Error create dir {$lockPath}", '', __METHOD__, __FILE__, __LINE__);
-            }
-        }
-        // Создадим папку где будет храниться блокировка
         $logPath = $this->config['logPath'];
         if (!file_exists($logPath)) {
             if (!mkdir($logPath, 0777, true)) {
                 $this->modx->log(modX::LOG_LEVEL_ERROR, "Error create dir {$logPath}", '', __METHOD__, __FILE__, __LINE__);
-            }
-        }
-        // Создадим папку где будет храниться блокировка
-        $linkPath = $this->config['linkPath'];
-        if (!file_exists($linkPath)) {
-            if (!mkdir($linkPath, 0777, true)) {
-                $this->modx->log(modX::LOG_LEVEL_ERROR, "Error create dir {$linkPath}", '', __METHOD__, __FILE__, __LINE__);
             }
         }
 
@@ -98,17 +83,21 @@ class CronTabManager
     }
 
 
-    public function scheduler($config = array())
+    public function loadSchedulerService($config = array())
     {
-        return $this->loadSchedulerService($config);
+        return $this->scheduler($config);
     }
 
     /**
      * Загрузка планировщика заданий
      * @return SchedulerService
      */
-    public function loadSchedulerService($config = array())
+    public function scheduler($config = array())
     {
+        if (!is_null($this->scheduler)) {
+            return $this->scheduler;
+        }
+
         $this->modx->setLogLevel(modX::LOG_LEVEL_ERROR);
         $date_time = $this->modx->getOption('date_timezone', null, 'Europe/Moscow');
         if (empty($date_time)) {
@@ -143,7 +132,7 @@ class CronTabManager
             include $this->config['scheduler'].'modcrontabcontrollerinterface.class.php';
         }
 
-        $scheduler = new SchedulerService(
+        $this->scheduler = new SchedulerService(
             $this,
             array_merge($config, array(
                 'basePath' => $this->config['schedulerPath'].'/Controllers/',
@@ -152,82 +141,9 @@ class CronTabManager
             ))
         );
 
-        return $scheduler;
+        return $this->scheduler;
     }
 
-
-    /* @var CrontabManagerHandler $ctm */
-    protected $ctm = null;
-
-    /**
-     * Class loading for job management
-     * @return bool|null|CrontabManagerHandler
-     */
-    public function loadManager()
-    {
-        if (is_null($this->ctm)) {
-            // Default classes
-            if (!class_exists('CrontabManagerHandler')) {
-                require_once dirname(__FILE__).'/crontabmanagerhandler.class.php';
-            }
-
-            // Custom ctm class
-            $ctm_class = $this->modx->getOption('crontabmanager_handler_class', null, 'CrontabManagerHandler');
-            if ($ctm_class != 'CrontabManagerHandler') {
-                $this->loadCustomClasses('crontab');
-            }
-            if (!class_exists($ctm_class)) {
-                $ctm_class = 'CrontabManagerHandler';
-            }
-
-            $this->ctm = new $ctm_class($this, $this->config);
-            if (!($this->ctm instanceof CrontabManagerHandlerInterface) || $this->ctm->initialize() !== true) {
-                $this->modx->log(
-                    modX::LOG_LEVEL_ERROR,
-                    'Could not initialize CrontabManager ctm handler class: "'.$ctm_class.'"'
-                );
-
-                return false;
-            }
-        }
-
-        return $this->ctm;
-    }
-
-
-
-
-#loadCrontabManagerManual
-
-
-    /**
-     * Method loads custom classes from specified directory
-     *
-     * @return void
-     * @var string $dir Directory for load classes
-     *
-     */
-    public function loadCustomClasses($dir)
-    {
-        $files = scandir($this->config['customPath'].$dir);
-        foreach ($files as $file) {
-            if (preg_match('/.*?\.class\.php$/i', $file)) {
-                include_once($this->config['customPath'].$dir.'/'.$file);
-            }
-        }
-    }
-
-
-    /**
-     * Генерация ссылок на контроллеры
-     */
-    /* public function generateCronLink()
-     {
-         $scheduler = $this->loadSchedulerService();
-         if ($scheduler instanceof SchedulerService) {
-             $scheduler->generateCronLink();
-         }
-     }*/
 
     /**
      * Генерация ссылок на контроллеры
@@ -263,11 +179,11 @@ $modx->getRequest();
 
 /* @var CronTabManager $CronTabManager */
 $CronTabManager = $modx->getService("crontabmanager", "CronTabManager", MODX_CORE_PATH . "components/crontabmanager/model/");
-$scheduler = $CronTabManager->loadSchedulerService();
-if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
-    $scheduler->getPath();
-    $scheduler->process();
-}';
+$scheduler = $CronTabManager->scheduler();
+#if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
+#    $scheduler->getPath();
+#    $scheduler->process();
+#}';
     }
 
 
@@ -329,10 +245,8 @@ if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
     public function success($message = '', $data = array(), $placeholders = array())
     {
         $response = array(
-            'success' => true
-        ,
-            'message' => $this->modx->lexicon($message, $placeholders)
-        ,
+            'success' => true,
+            'message' => $this->modx->lexicon($message, $placeholders),
             'data' => $data,
         );
 
@@ -378,26 +292,6 @@ if (!defined("MODX_CRONTAB_MODE") OR !MODX_CRONTAB_MODE) {
         return $response == false
             ? $this->error('Не удалось отправить ежедневную рассылку на email '.print_r($emails, 1).'. '.$this->modx->mail->mailer->ErrorInfo)
             : $this->success('Успешно отправлена');
-    }
-
-
-    /**
-     * Вернет список заданий в случае если они были сохранены в файл в место crontab
-     * @param  bool  $isArray
-     * @return array|bool|null|string
-     */
-    public function getCronTasks($isArray = false)
-    {
-        $path = $this->config['schedulerPath'].'/crontabs/'.cronTabManagerCurrentUser();
-        $out = (file_exists($path)) ? file_get_contents($path) : false;
-        $jobs = null;
-        if (!empty($out) and $isArray) {
-            $jobs = explode("\n", $out);
-        } else {
-            $jobs = $out;
-        }
-
-        return $jobs;
     }
 
 

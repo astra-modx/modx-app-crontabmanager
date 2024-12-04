@@ -28,6 +28,7 @@
         <field key="restart_after_failure" dbtype="tinyint" precision="1" phptype="boolean" null="true" default="0"/>
         <field key="restart" dbtype="tinyint" precision="1" phptype="boolean" null="true" default="0"/>
         <field key="log_storage_time" dbtype="int" precision="10" phptype="integer" null="true" default="0"/>
+        <field key="pid" dbtype="int" precision="10" phptype="integer" null="true" default="0"/>
 
         <field key="active" dbtype="tinyint" precision="1" phptype="boolean" null="true" default="1"/>
         <field key="mute" dbtype="tinyint" precision="1" phptype="boolean" null="true" default="0"/>

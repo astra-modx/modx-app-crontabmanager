@@ -103,7 +103,6 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
         $config = $this->CronTabManager->config;
         $config['time_cron'] = $this->CronTabManager->lexiconCronTime();
 
-
         $this->addHtml(
             '<script type="text/javascript">
         CronTabManager.config = '.json_encode($config).';
@@ -122,7 +121,7 @@ class CronTabManagerHomeManagerController extends modExtraManagerController
 
         $path_scheduler = $this->CronTabManager->config['schedulerPath'];
         $path = $this->CronTabManager->config['schedulerPath'].'/artisan';
-        $path_controllerh = $this->CronTabManager->loadSchedulerService()->getOption('basePath');
+        $path_controllerh = $this->CronTabManager->scheduler()->getOption('basePath');
 
 
         $path_controllerh = rtrim($path_controllerh, '/');

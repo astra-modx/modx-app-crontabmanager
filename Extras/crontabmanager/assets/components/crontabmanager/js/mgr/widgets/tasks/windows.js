@@ -376,3 +376,46 @@ CronTabManager.window.UpdateTask = function (config) {
 }
 Ext.extend(CronTabManager.window.UpdateTask, CronTabManager.window.CreateTask)
 Ext.reg('crontabmanager-task-window-update', CronTabManager.window.UpdateTask)
+
+
+/**
+ * muteTimeItem
+ */
+
+CronTabManager.window.MuteTime = function (config) {
+    config = config || {}
+    config.url = CronTabManager.config.connector_url
+
+    Ext.applyIf(config, {
+        title: _('crontabmanager_task_window_mute_time'),
+        width: 600,
+        cls: 'crontabmanager_windows',
+        baseParams: {
+            action: 'mgr/task/mutetime',
+        },
+        fields: [
+            {xtype: 'hidden', name: 'id', id: config.id + '-id'},
+            {
+                xtype: 'xdatetime',
+                fieldLabel: _('crontabmanager_task_mute_time_date'),
+                name: 'mute_time',
+                id: config.id + '-mute_time',
+                anchor: '99%',
+                allowBlank: false,
+                dateWidth: 153,
+                timeWidth: 153,
+                timeFormat: 'H:i',
+                dateFormat: 'd.m.Y',
+                minDate: new Date().toLocaleDateString(),
+                minValue: new Date().toLocaleDateString()
+            },
+            {
+                html: _('crontabmanager_task_mute_time_date_desc'),
+                cls: 'desc-under',
+            },
+        ],
+    })
+    CronTabManager.window.MuteTime.superclass.constructor.call(this, config)
+}
+Ext.extend(CronTabManager.window.MuteTime, CronTabManager.window.Default)
+Ext.reg('crontabmanager-task-window-mute-time', CronTabManager.window.MuteTime)

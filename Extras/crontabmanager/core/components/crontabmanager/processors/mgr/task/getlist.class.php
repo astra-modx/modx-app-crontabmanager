@@ -62,8 +62,11 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
                 'message:LIKE' => '%'.$query.'%',
                 'OR:description:LIKE' => '%'.$query.'%',
                 'OR:path_task:LIKE' => '%'.$query.'%',
+                'OR:Snippet.name:LIKE' => '%'.$query.'%',
             ));
         }
+
+        $c->leftJoin('modSnippet', 'Snippet', 'Snippet.id = CronTabManagerTask.snippet');
 
         $query = $this->getProperty('parent');
         if (!empty($query)) {
@@ -114,22 +117,16 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
 
 
         $array['command'] = $Crontab->command(null, true);
-        $array['pid'] = $object->pid();
 
+        $array['status'] = $object->status()->get();
+        $array['pid'] = $object->pid()->id();
+        $array['pid_status'] = $object->pid()->status();
 
         $array['controller_exists'] = $object->controllerExists();
         $array['path_task_cli'] = $object->getPathCli();
 
-        $array['lock'] = $object->isLockFile();
         $array['is_blocked_time'] = $object->isBlockUpTask();
         $array['time'] = $Crontab->time();
-
-
-        $is_blocked = false;
-        if ($array['lock'] or $array['is_blocked_time']) {
-            $is_blocked = true;
-        }
-        $array['is_blocked'] = $is_blocked;
 
         $array['snippet_name'] = '';
         if ($Snippet = $object->getOne('Snippet')) {
@@ -289,6 +286,18 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
                 'icon' => 'icon icon-trash-o',
                 'title' => $this->modx->lexicon('crontabmanager_task_removeLog'),
                 'action' => 'removeLog',
+                'button' => false,
+                'menu' => true,
+            );
+        }
+
+        if ($array['pid_status'] != 'completed') {
+            $array['actions'][] = '-';
+            $array['actions'][] = array(
+                'cls' => '',
+                'icon' => 'icon icon-trash-o action-red',
+                'title' => $this->modx->lexicon('crontabmanager_task_pid_kill_action'),
+                'action' => 'killPid',
                 'button' => false,
                 'menu' => true,
             );

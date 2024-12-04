@@ -40,9 +40,10 @@ class CrontabControllerSnippet extends modCrontabController
                 }
 
                 if ($last == 1 || $last == "1" || $last == "true") {
-                    $this->print_msg('OK');
+                    $this->success('OK');
                 } else {
-                    $this->print_msg('[Error] snippet return: '.$last);
+                    $this->error('[Error] snippet return: '.$last);
+                    $this->error('To succeed, the snippet must return: return 1; or true');
                     exit();
                 }
             }

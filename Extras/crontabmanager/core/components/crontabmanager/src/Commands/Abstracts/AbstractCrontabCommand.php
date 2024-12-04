@@ -29,7 +29,7 @@ class AbstractCrontabCommand extends Command
     {
         $this->modx = $modX;
         $this->CronTabManager = $modX->getService('crontabmanager', 'CronTabManager', MODX_CORE_PATH.'components/crontabmanager/model/');
-        $this->scheduler = $this->CronTabManager->loadSchedulerService();
+        $this->scheduler = $this->CronTabManager->scheduler();
         $modX->lexicon->load('crontabmanager:manager');
     }
 
@@ -40,7 +40,7 @@ class AbstractCrontabCommand extends Command
 
     protected function configure()
     {
-      #  $this->addArgument('argument', InputArgument::OPTIONAL, 'The argument description');
+        #  $this->addArgument('argument', InputArgument::OPTIONAL, 'The argument description');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)

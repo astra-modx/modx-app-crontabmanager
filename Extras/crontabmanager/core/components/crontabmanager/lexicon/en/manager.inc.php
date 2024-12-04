@@ -41,6 +41,8 @@ $_lang['crontabmanager_task_last_run'] = 'Last Run';
 $_lang['crontabmanager_task_end_run'] = 'Finished';
 $_lang['crontabmanager_task_status'] = 'Status';
 $_lang['crontabmanager_task_pid'] = 'PID';
+$_lang['crontabmanager_task_pid_status'] = 'PID статус';
+$_lang['crontabmanager_task_status'] = 'Status';
 $_lang['crontabmanager_task_time'] = 'Run Time';
 $_lang['crontabmanager_task_start_task'] = 'Start Task';
 $_lang['crontabmanager_task_minutes'] = 'Minutes';
@@ -310,3 +312,6 @@ $_lang['crontabmanager_task_add_cron_confirm'] = 'Are you sure you want to add t
 $_lang['crontabmanager_task_remove_cron_confirm'] = 'Are you sure you want to remove this task from crontabs?';
 
 // Mute
+$_lang['crontabmanager_check_crontab_avalable_error'] = 'Linux CronTab is not available (you can\'t manage cron even via ssh crontab -e, this is a server limitation)';
+
+$_lang['crontabmanager_task_execution_not_complete'] = 'Script execution is not complete, please wait for it to finish';

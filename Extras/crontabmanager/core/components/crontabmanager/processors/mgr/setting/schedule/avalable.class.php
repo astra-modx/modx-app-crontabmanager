@@ -5,6 +5,7 @@
  */
 class CronTabManagerAddScheduleProcessor extends modProcessor
 {
+
     /**
      * @return array|string
      */
@@ -12,9 +13,16 @@ class CronTabManagerAddScheduleProcessor extends modProcessor
     {
         /* @var CronTabManager $CronTabManager */
         $CronTabManager = $this->modx->getService('crontabmanager', 'CronTabManager', MODX_CORE_PATH.'components/crontabmanager/model/');
-        $response = $CronTabManager->artisan()->copyBasePath();
-        if ($response !== true) {
-            return $this->failure($response);
+
+        $this->modx->lexicon->load('crontabmanager:manager');
+        if (cronTabManagerIsAvailable()) {
+            $Schedule = $CronTabManager->addSchedule();
+            $response = $Schedule->add();
+            if ($response !== true) {
+                return $this->failure($response);
+            }
+        } else {
+            return $this->failure($this->modx->lexicon('crontabmanager_check_crontab_avalable_error'));
         }
 
         return $this->success();

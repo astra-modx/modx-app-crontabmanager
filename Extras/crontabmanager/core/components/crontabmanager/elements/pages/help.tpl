@@ -120,23 +120,57 @@ stdout_logfile=/dev/stdout
                     <div style="margin-top: 10px"><em>Используйте инструкцию "Schedule console" для автоматического запуска команды "php artisan
                             schedule:run"</em></div>
                     `]]
-
-                    <hr>
                     Ваш консольный пользователя: <b>[[+user]]</b>
-                    <hr>
 
-
-                    [[+demon_crontab_available:is=`1`:then=`
-                    <div>
-                        <span class="x-btn x-btn-small x-btn-icon-small-left primary-button x-btn-noicon" onclick="addScheduleCronTab()">
-                            <button type="button" class=" x-btn-text">
-                                    <i class=" icon icon-play"></i> Добавить "schedule:run" в сrontab
-                            </button>
-                        </span>
+                    <div id="schedule_service" style="display: none">
+                        <hr>
+                        <div id="schedule_service_status"></div>
+                        <div id="schedule_service_button_add" style="display: none">
+                            <span class="x-btn x-btn-small x-btn-icon-small-left primary-button x-btn-noicon" onclick="scheduleCronTabAjax('add')">
+                                <button type="button" class=" x-btn-text">
+                                        <i class=" icon icon-play"></i> Добавить "schedule:run" в сrontab
+                                </button>
+                            </span>
+                        </div>
+                        <div id="schedule_service_button_remove" style="display: none">
+                            <span style="background-image: -webkit-linear-gradient(#f11616, #f11616);     background-color: red;"
+                                  class="x-btn x-btn-small x-btn-icon-small-left primary-button x-btn-noicon" onclick="scheduleCronTabAjax('remove')">
+                                <button type="button" class=" x-btn-text">
+                                        <i class=" icon icon-play"></i> Удалить "schedule:run" из сrontab
+                                </button>
+                            </span>
+                        </div>
                     </div>
-                    `:else=`
-                    `]]
 
+                    <hr>
+                    <h3>Команды</h3>
+                    <div>
+                        <div>
+                            Список заданий
+                            <div class="crontabmanager_help_command">
+                                <pre class="crontabmanager_help_command_pre">php [[+path_artisan]] schedule:list</pre>
+                            </div>
+                        </div>
+                        <div>
+                            Запустить заданий в ручную
+                            <div class="crontabmanager_help_command">
+                                <pre class="crontabmanager_help_command_pre">php [[+path_artisan]] schedule:run</pre>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <hr>
+                    <h3>Опции</h3>
+                    <div>
+                        Переместить artisan в текущую директорию
+                        <div class="crontabmanager_help_command">
+                            <pre class="crontabmanager_help_command_pre">cp [[+path_artisan]].example artisan</pre>
+                        </div>
+                        <em>
+                            можно будет запускать ```php artisan schedule:run```
+                        </em>
+                    </div>
                 </div>
             </div>
 

@@ -27,6 +27,7 @@ if (!$modx->hasPermission('crontabmanager_task_run')) {
     exit($modx->lexicon('access_denied'));
 }
 
+
 /* @var CronTabManagerTask $scheduler */
 /* @var CronTabManagerTask $Task */
 if (!$Task = $modx->getObject('CronTabManagerTask', $TaskId)) {
@@ -54,6 +55,7 @@ echo '<input type="text" placeholder="'.$connector_args.'" class="crontabmanager
 echo '<hr>';
 
 $Artisan = $CronTabManager->artisan();
+$Scheduler = $CronTabManager->scheduler();
 
 $command = $Artisan->parseCommand($Task->crontab()->command());
 
@@ -62,6 +64,8 @@ $command = $Artisan->parseCommand($Task->crontab()->command());
 #if (!empty($connector_args_value)) {
 #    $args = array_merge($args, $Artisan->parseArgs($connector_args_value));
 #}
+
+$connector_args_value .= ' --dev-browser=1';
 $Artisan->shellTask($Task, $connector_args_value);
 sleep(1);
 // Получаем путь к файлу

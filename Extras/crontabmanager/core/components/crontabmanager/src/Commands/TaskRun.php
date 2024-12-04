@@ -34,7 +34,8 @@ class TaskRun extends AbstractCrontabCommand
         }
 
         $name = str_ireplace(':', '/', $name);
-        $this->scheduler->php($name)->process(null, true, $input);
+
+        $this->scheduler->process($name, true, $input);
 
         return 1;
     }

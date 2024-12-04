@@ -8,16 +8,8 @@ return [
         'value' => '{core_path}scheduler',
         'area' => 'crontabmanager_path',
     ],
-    'link_path' => [
-        'xtype' => 'textfield',
-        'value' => '{core_path}scheduler/ControllersLinks',
-        'area' => 'crontabmanager_path',
-    ],
-    'lock_path' => [
-        'xtype' => 'textfield',
-        'value' => '{core_path}scheduler/lock',
-        'area' => 'crontabmanager_path',
-    ],
+
+
     'log_path' => [
         'xtype' => 'textfield',
         'value' => '{core_path}scheduler/logs',
@@ -57,12 +49,6 @@ return [
         'area' => 'crontabmanager_main',
     ],
 
-
-    'handler_class' => [
-        'xtype' => 'textfield',
-        'value' => '',
-        'area' => 'crontabmanager_main',
-    ],
 
     // blocking
 

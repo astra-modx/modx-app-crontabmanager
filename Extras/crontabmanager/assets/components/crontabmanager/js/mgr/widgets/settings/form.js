@@ -2,9 +2,8 @@ CronTabManager.form.UpdateSetting = function (config) {
     config = config || {}
     this.ident = config.ident || 'setting' + Ext.id()
     config.id = this.ident
-    config.record = {
-        transport: "system"
-    }
+
+
     Ext.applyIf(config, {
         cls: 'container form-with-labels main-wrapper crontabmanager_buttons_settings'
         , labelAlign: 'left'
@@ -25,7 +24,7 @@ CronTabManager.form.UpdateSetting = function (config) {
 
 
     this.on('afterrender', function () {
-        setTimeout(function () {
+        setTimeout(() => { // Используем стрелочную функцию
             var sourceDiv = document.getElementById('crontabmanager-panel-home-div-help');
             var targetDiv = document.getElementById('crontabmanager_help');
 
@@ -35,11 +34,13 @@ CronTabManager.form.UpdateSetting = function (config) {
                 // Копируем содержимое из sourceDiv в targetDiv
                 targetDiv.innerHTML = sourceDiv.innerHTML;
                 targetDiv.style.display = '';  // Это удалит inline стиль display: none
+
+                sourceDiv.remove()
             }
 
-
-        }, 300)
-    })
+            this.checkAvailabilityCrontab(); // `this` сохранён
+        }, 300);
+    });
 }
 Ext.extend(CronTabManager.form.UpdateSetting, MODx.FormPanel, {
 
@@ -63,6 +64,82 @@ Ext.extend(CronTabManager.form.UpdateSetting, MODx.FormPanel, {
         ]
     },
 
+    checkAvailabilityCrontab: function () {
+
+        checkAvailabilityCrontab()
+    }
+
 
 })
 Ext.reg('crontabmanager-form-setting-update', CronTabManager.form.UpdateSetting)
+
+
+function scheduleCronTabAjax(action) {
+
+    MODx.msg.confirm({
+        title: _('crontabmanager_schedule_confirm_' + action + '_title')
+        , text: _('crontabmanager_schedule_confirm_' + action + '_text')
+        , url: CronTabManager.config.connectorUrl
+        , params: {
+            action: 'mgr/setting/schedule/' + action,
+        }
+        , listeners: {
+            success: {
+                fn: function (r) {
+                    checkAvailabilityCrontab()
+                    MODx.msg.status({
+                        title: _('success')
+                        , message: _('crontabmanager_schedule_confirm_' + action + '_success')
+                    })
+
+                }, scope: this
+            }
+        }
+    });
+
+}
+
+
+function checkAvailabilityCrontab() {
+
+    MODx.Ajax.request({
+        url: CronTabManager.config.connectorUrl,
+        params: {
+            action: 'mgr/setting/schedule/check',
+        },
+        listeners: {
+            success: {
+                fn: function (r) {
+
+                    if (r.object.available) {
+
+                        var element = document.getElementById('schedule_service');
+                        element.style.display = 'block';
+
+                        var status = document.getElementById('schedule_service_status');
+                        status.classList.remove('success');
+                        status.classList.remove('error');
+                        status.classList.add('crontabmanager-status');
+                        status.classList.add(r.object.find ? 'success' : 'error');
+                        status.innerHTML = r.object.status;
+
+                        /// Add
+                        document.getElementById('schedule_service_button_add')
+                            .style.display = r.object.find ? 'none' : 'block';
+
+                        /// Remove
+                        document.getElementById('schedule_service_button_remove')
+                            .style.display = !r.object.find ? 'none' : 'block';
+                    }
+
+                }, scope: this
+            },
+            failure: {
+                fn: function (r) {
+
+                }, scope: this
+            }
+        }
+    })
+}
+

@@ -8,9 +8,7 @@ $_lang['area_crontabmanager_rest'] = 'REST for the application';
 $_lang['setting_crontabmanager_scheduler_path'] = 'Main directory with classes';
 $_lang['setting_crontabmanager_scheduler_path_desc'] = 'This is where all classes are stored';
 
-$_lang['setting_crontabmanager_handler_class'] = 'Handler for saved tasks';
-$_lang['setting_crontabmanager_handler_class_desc'] = 'By default, CrontabManagerHandler saves tasks in crontab (if the user has the necessary rights). 
-CrontabManagerHandlerFile saves tasks to a file (which allows viewing the task list).';
+
 
 $_lang['setting_crontabmanager_link_path'] = 'Directory for controller links';
 $_lang['setting_crontabmanager_link_path_desc'] = 'Directory for storing controller links';

@@ -84,6 +84,10 @@ class ArtisanCall
 
     public function shellTask(CronTabManagerTask $task, $arg = null, bool $async = true)
     {
+        // Проверка блокировки задания
+        $this->cronTabManager->scheduler()->isLook($task);
+
+
         $ControllerPath = $this->cronTabManager->option('schedulerPath');
         $Artisan = $this->cronTabManager->artisan();
         $Crontab = $task->crontab();
@@ -95,7 +99,11 @@ class ArtisanCall
         }
 
         $cli = $ControllerPath.'/artisan '.$command;
-        $Artisan->shell($cli, $task->getFileLogPath(), $async);
+        $pid = $Artisan->shell($cli, $task->getFileLogPath(), $async);
+
+
+        $table = $task->xpdo->getTableName('CronTabManagerTask');
+        $task->xpdo->exec("UPDATE {$table} SET pid = '{$pid}'  WHERE id = '{$task->id}'");
     }
 
     public function shell(string $controller, $logFile = null, bool $async = true)
@@ -106,7 +114,14 @@ class ArtisanCall
         if ($async) {
             $command .= ' &';
         }
-        shell_exec($command);
+
+        $command .= ' echo $!';
+
+        $pid = shell_exec($command);
+        $pid = trim($pid);
+        $pid = (int)$pid;
+
+        return $pid;
     }
 
 }
