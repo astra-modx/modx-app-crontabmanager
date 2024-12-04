@@ -80,20 +80,24 @@ class Pid
 
     private function _pid2(int $pid)
     {
+        $current_pid = $pid;
         $command = 'ps -o pid,comm,stat | grep '.$pid;
         $output = shell_exec($command);
+
         // Разбиваем вывод по строкам
         if (!empty($output)) {
             $lines = explode("\n", trim($output));
-
             if (!empty($lines)) {
-                $line = $lines[0];
-                {
+                foreach ($lines as $line) {
                     // Разбиваем строку на компоненты по пробелам
                     $fields = preg_split('/\s+/', $line);
 
                     // Если строка содержит 3 поля (PID, COMMAND, STAT), то добавляем их в массив
                     if (count($fields) === 3) {
+                        if ($fields[0] != $current_pid) {
+                            continue;
+                        }
+
                         return [
                             'pid' => $fields[0],
                             'comm' => $fields[1],
@@ -109,6 +113,7 @@ class Pid
 
     private function _pid(int $pid)
     {
+        $current_pid = $pid;
         $processes = null;
         $command = "ps aux | grep {$pid} | grep -v grep";
         $output = shell_exec($command);
@@ -119,6 +124,9 @@ class Pid
             if (is_array($arrays) && count($arrays) > 0) {
                 foreach ($arrays as $array) {
                     list($user, $pid, $cpu, $mem, $vsz, $rss, $tty, $stat, $start, $time, $command, $process) = preg_split('/\s+/', $array);
+                    if ($current_pid != $pid) {
+                        continue;
+                    }
                     $processes[] = [
                         'user' => $user, // имя пользователя, от имени которого запущен процесс
                         'pid' => $pid, // идентификатор процесса (PID)
