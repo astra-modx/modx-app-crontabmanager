@@ -48,11 +48,14 @@ $connector_args = $modx->lexicon('crontabmanager_cron_connector_args');
 
 
 $connector_args_value = !empty($_GET['connector_args']) ? $_GET['connector_args'] : '';
+echo '<div id="crontabmanager-button-panel">';
 echo '<button class="crontabmanager-btn crontabmanager-btn-default icon icon-play" onclick="runTaskWindow()" title="'.$windows.'"> <small > '.$windows_btn.'</small></button>';
 echo '<button class="crontabmanager-btn crontabmanager-btn-default icon icon-unlock" onclick="unlockTask()" title="'.$unlock.'"> <small> '.$unlock_btn.'</small></button>';
 echo '<button class="crontabmanager-btn crontabmanager-btn-default icon icon-eye" onclick="readLogFileBody()" title="'.$read_log.'"> <small> '.$read_log_btn.'</small></button>';
 echo '<input type="text" placeholder="'.$connector_args.'" class="crontabmanager-cron-args x-form-text x-form-field " id="crontabmanager_connector_args" name="connector_args" value="'.$connector_args_value.'">';
-echo '<hr>';
+echo '</div>';
+$lex = $modx->lexicon('crontabmanager_cron_connector_scroll_button');
+echo '<div class="crontabmanager-scroll-button"><span class="x-btn x-btn-small x-btn-icon-small" title="'.$lex.'"><button onclick="disableAutoScroll()" id="disableAutoScroll" type="button" class=" x-btn-text">Disable Auto Scroll</button></span></div>';
 
 $Artisan = $CronTabManager->artisan();
 $Scheduler = $CronTabManager->scheduler();
@@ -71,7 +74,7 @@ sleep(1);
 // Получаем путь к файлу
 $filePath = $Task->getFileLogPath();
 
-echo "Task run<br>";
+echo "Task run: {$Task->get('id')} path_task {$Task->get('path_task')}<br>";
 if (file_exists($filePath)) {
 // Открываем файл для чтения
     if ($file = fopen($filePath, 'r')) {

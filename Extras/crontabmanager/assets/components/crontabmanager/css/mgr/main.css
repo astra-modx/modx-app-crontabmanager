@@ -588,6 +588,7 @@ label[for=crontabmanager-grid-notifications-read]::before {
 .crontabmanager_task_pid_zombie {
     color: darkred;
 }
+
 .crontabmanager_task_pid_error {
     color: darkred;
 }
@@ -595,9 +596,11 @@ label[for=crontabmanager-grid-notifications-read]::before {
 .crontabmanager_task_pid_completed {
     color: #5cb85c;
 }
+
 .crontabmanager_task_pid_did_not_start {
     color: #929b92;
 }
+
 .crontabmanager_task_pid_completed_error {
     color: #ee5e53;
 }
@@ -767,4 +770,44 @@ label[for=crontabmanager-grid-notifications-read]::before {
 .crontabmanager-status.error {
     color: darkred;
     border: 1px solid darkred;
+}
+
+
+.crontabmanager-scroll-button {
+    position: absolute;
+    bottom: 14px;
+    right: 19px;
+    opacity: 0.5;
+}
+
+.crontabmanager-scroll-button button{
+    font-size: 11px;
+    padding: 3px 5px;
+}
+.crontabmanager-scroll-button span{
+    padding: 5px 8px;
+}
+
+.crontabmanager-scroll-button:hover {
+    opacity: 0.9;
+}
+
+#crontabmanager-button-panel {
+    position: fixed;
+    top: 35px;
+    background-color: #fff;
+    height: 42px;
+    padding: 10px 13px;
+    border-bottom: 1px solid #ccc;
+    left: 0;
+    right: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#crontabmanager-grid-tasksruntask .x-window-body {
+    padding-top: 70px;
+}
+
+.crontabmanager_area_reading {
+    padding-bottom: 10px;
 }

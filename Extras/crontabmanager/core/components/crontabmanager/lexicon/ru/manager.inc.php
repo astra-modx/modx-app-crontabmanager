@@ -382,6 +382,7 @@ $_lang['crontabmanager_task_pid_kill_action'] = 'Убить процесс PID';
 
 $_lang['crontabmanager_task_pid_kill_confirm'] = 'Вы уверены что хотите убить процесс PID?';
 $_lang['crontabmanager_task_pid_kill_success'] = 'Процесс успешно уничтожен';
+$_lang['crontabmanager_cron_connector_scroll_button'] = 'Отключить автопрокрутку скрола';
 
 
 

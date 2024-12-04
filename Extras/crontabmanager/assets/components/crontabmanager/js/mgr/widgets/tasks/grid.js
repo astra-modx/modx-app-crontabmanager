@@ -515,8 +515,80 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
         })
 
     },
+
+
+    logLastLine: 1,
+    intervalId: null,
+    isUserAtBottom: true,
+    reloadFileLog: function (taskId) {
+        MODx.Ajax.request({
+            url: this.config.url
+            , params: {
+                action: 'mgr/task/readlog',
+                id: taskId,
+                return: true,
+                startLine: this.logLastLine
+            }
+            , listeners: {
+                'success': {
+                    fn: function (r) {
+
+
+                        this.logLastLine = r.object.lastLine
+                        var content = r.object.content
+                        var state = r.object.state
+
+
+                        var $win = this.win
+
+                        var wrapper = document.getElementById('crontabmanager_area_reading')
+                        if (!wrapper) {
+                            wrapper = document.createElement('div')
+                            wrapper.setAttribute('id', 'crontabmanager_area_reading')
+                            $win.body.dom.appendChild(wrapper)
+                        }
+
+                        const paragraph = document.createElement('div'); // Создаём новый элемент <p>
+                        paragraph.innerHTML = content; // Добавляем текст в элемент
+                        wrapper.appendChild(paragraph); // Добавляем элемент в wrapper
+
+                        if (this.isUserAtBottom) {
+                            this.scrollToBottom();
+                        }
+                        // x-window-body
+                        if (state === 'stop') {
+                            clearInterval(this.intervalId);
+                        }
+                    }, scope: this
+                }
+            }
+        });
+    },
+
+
+    // Функция для прокрутки в конец
+    scrollToBottom: function () {
+        // Находим элемент с классом 'x-window-body'
+        const xWindowBody = document.getElementsByClassName('x-window-body')[0];
+        if (xWindowBody) {
+            // Находим дочерний элемент с id 'crontabmanager_area_reading'
+            const readingArea = xWindowBody.querySelector('#crontabmanager_area_reading');
+            if (readingArea) {
+                // Прокручиваем дочерний элемент в самый низ
+                xWindowBody.scrollTop = readingArea.scrollHeight;
+            }
+        }
+    },
+
+
+    setLogFile: function (content) {
+        var area = document.getElementById('crontabmanager_area_reading')
+        area.innerHTML = '<hr> <pre id="ccrontabmanager-grid-tasksreadlog-content">' + content + '</pre>'
+    },
+
     runTaskWindow: function () {
 
+        this.logLastLine = 1;
         var connector_args = ''
         var $inputArgs = document.getElementById('crontabmanager_connector_args')
         if ($inputArgs) {
@@ -536,12 +608,23 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
             , autoLoad: {
                 url: CronTabManager.config['connector_cron_url'] + '?task_id=' + this.menu.record.id + '&scheduler_path=' + CronTabManager.config.schedulerPath + '&connector_base_path_url=' + CronTabManager.config.schedulerPath + '&connector_args=' + connector_args,
                 scripts: true
+            },
+            listeners: {
+                hide: function () {
+                    clearInterval(this.intervalId);
+                },
+                show: function () {
+                    setTimeout(() => {
+                        this.refresh();
+                    }, 300)
+
+                    this.intervalId = setInterval(() => {
+                        this.reloadFileLog(this.menu.record.id);
+                    }, 1000)
+                }, scope: this
             }
         })
         this.win.show()
-        setTimeout(() => {
-            this.refresh();
-        }, 300)
 
     },
 
@@ -624,10 +707,6 @@ Ext.extend(CronTabManager.grid.Tasks, CronTabManager.grid.Default, {
 
     },
 
-    setLogFile: function (content) {
-        var area = document.getElementById('crontabmanager_area_reading')
-        area.innerHTML = '<hr>' + content
-    },
 
     copyPathTask: function (btn, e, row) {
         if (typeof (row) != 'undefined') {
@@ -667,5 +746,11 @@ function unlockTask() {
 function readLogFileBody() {
     var Tasks = Ext.getCmp('crontabmanager-grid-tasks')
     Tasks.readLogFile()
+}
+
+function disableAutoScroll() {
+    var Tasks = Ext.getCmp('crontabmanager-grid-tasks')
+    Tasks.isUserAtBottom = !Tasks.isUserAtBottom;
+    document.getElementById('disableAutoScroll').textContent = !Tasks.isUserAtBottom ? 'Enable Auto Scroll' : 'Disable Auto Scroll'
 }
 
