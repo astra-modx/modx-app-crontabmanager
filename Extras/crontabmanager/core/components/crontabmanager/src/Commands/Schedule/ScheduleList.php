@@ -29,17 +29,26 @@ class ScheduleList extends AbstractCrontabCommand
                 $Crontab = $object->crontab();
                 $rows[] = [
                     'command' => $Crontab->command(),
-                    'active' => $object->active ? 'Yes' : 'No',
+                    'status' => $object->pid()->status(),
                     'crontab' => $Crontab->time(),
                     'nextRun' => $Crontab->getNextRunDateFormat(),
                     'nextRunHuman' => $Crontab->nextRunHuman(),
-                    'comment' => !empty($description) ? mb_strimwidth($description, 0, 25, "...") : '---',
+                    'active' => $object->active ? 'Yes' : 'No',
+                    #'comment' => !empty($description) ? mb_strimwidth($description, 0, 25, "...") : '---',
                 ];
             }
         }
 
         // Данные таблицы
-        $headers = ['Command', 'Active', 'Crontab', 'Next run', 'Diff', 'Comment'];
+        $headers = [
+            'Command',
+            'Status',
+            'Crontab',
+            'Next run',
+            'Diff',
+            'Active',
+            //    , 'Comment'
+        ];
 
 
         // Вывод таблицы

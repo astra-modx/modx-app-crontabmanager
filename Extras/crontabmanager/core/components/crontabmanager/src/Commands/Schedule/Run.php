@@ -32,9 +32,14 @@ class Run extends AbstractCrontabCommand
             foreach ($objectList as $object) {
                 $Crontab = $object->crontab();
                 $status = 'pending';
-                if ($Crontab->isDue()) {
+
+                if ($object->isLock()) {
                     $status = 'running';
-                    $Artisan->shellTask($object);
+                } else {
+                    if ($Crontab->isDue()) {
+                        $status = 'running';
+                        $Artisan->shellTask($object, '--no-interaction=1');
+                    }
                 }
 
                 $rows[] = [

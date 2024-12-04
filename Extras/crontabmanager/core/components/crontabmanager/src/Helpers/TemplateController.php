@@ -70,6 +70,7 @@ class TemplateController
         }
 
         $sig = strtolower($controller);
+        $sig = str_ireplace('/', ':', $sig);
         $content = $this->template($sig, $controllerName);
         $this->cronTabManager->modx->getCacheManager()->writeFile($filePath, $content);
         if (!file_exists($filePath)) {

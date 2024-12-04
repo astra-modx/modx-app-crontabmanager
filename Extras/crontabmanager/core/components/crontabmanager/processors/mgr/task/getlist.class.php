@@ -185,27 +185,6 @@ class CronTabManagerTaskGetListProcessor extends modObjectGetListProcessor
         }
 
 
-        /*if ($CronisAvailable) {
-            if (!$array['cron_enable']) {
-                $array['actions'][] = array(
-                    'cls' => '',
-                    'icon' => 'icon icon-plus action-red',
-                    'title' => $this->modx->lexicon('crontabmanager_task_cron_add'),
-                    'action' => 'addCron',
-                    'button' => true,
-                    'menu' => true,
-                );
-            } else {
-                $array['actions'][] = array(
-                    'cls' => '',
-                    'icon' => 'icon icon-minus action-green ',
-                    'title' => $this->modx->lexicon('crontabmanager_task_cron_remove'),
-                    'action' => 'removeCron',
-                    'button' => false,
-                    'menu' => true,
-                );
-            }
-        }*/
         // readLog
         $array['actions'][] = array(
             'cls' => '',

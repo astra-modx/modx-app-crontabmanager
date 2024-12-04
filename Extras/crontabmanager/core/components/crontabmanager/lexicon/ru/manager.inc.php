@@ -173,7 +173,7 @@ $_lang['crontabmanager_task_logs_remove'] = 'Удалить логи';
 $_lang['crontabmanager_cron_connector_run_task_windows'] = 'Запустить задание';
 $_lang['crontabmanager_cron_connector_run_task_windows_btn'] = 'Перезапустить';
 $_lang['crontabmanager_cron_connector_unlock'] = 'Разблокировать задание';
-$_lang['crontabmanager_cron_connector_unlock_btn'] = 'Разблокировать';
+$_lang['crontabmanager_cron_connector_unlock_btn'] = 'Убить процесс PID';
 $_lang['crontabmanager_cron_connector_read_log'] = 'Читать лог файл';
 $_lang['crontabmanager_cron_connector_read_log_btn'] = 'Читать лог файл';
 $_lang['crontabmanager_cron_connector_args'] = 'Аргументы в виде user=1 resource=2';
@@ -313,13 +313,13 @@ $_lang['crontabmanager_task_restart_after_failure_desc'] = 'Если устан�
 $_lang['crontabmanager_crontab_available'] = 'Linux <b>Crontab</b> доступе.';
 $_lang['crontabmanager_crontab_not_available'] = 'Linux <b>Crontab</b> недоступен';
 
-$_lang['crontabmanager_next_run_human'] = 'Следующий запуск через: [[+minutes]] минут';
-$_lang['crontabmanager_next_run_human_hours'] = ' и [[+hours]] час.';
-
-$_lang['crontabmanager_next_run_human_seconds'] = 'Следующий запуск через [[+seconds]] сек.';
-$_lang['crontabmanager_next_run_human_minutes'] = 'Следующий запуск через [[+minutes]] мин.';
-$_lang['crontabmanager_next_run_human_hours'] = ' Следующий запуск через [[+hours]] час.';
-$_lang['crontabmanager_next_run_human_days'] = 'Следующий запуск через [[+days]] дн.';
+#$_lang['crontabmanager_next_run_human'] = 'Следующий запуск через: [[+minutes]] минут';
+#$_lang['crontabmanager_next_run_human_hours'] = ' и [[+hours]] час.';
+#
+#$_lang['crontabmanager_next_run_human_seconds'] = 'Следующий запуск через [[+seconds]] сек.';
+#$_lang['crontabmanager_next_run_human_minutes'] = 'Следующий запуск через [[+minutes]] мин.';
+#$_lang['crontabmanager_next_run_human_hours'] = ' Следующий запуск через [[+hours]] час.';
+#$_lang['crontabmanager_next_run_human_days'] = 'Следующий запуск через [[+days]] дн.';
 
 $_lang['crontabmanager_button_help'] = 'Документация CrontabManager';
 
@@ -376,7 +376,7 @@ $_lang['crontabmanager_schedule_confirm_add_success'] = 'Задание доба
 $_lang['crontabmanager_schedule_confirm_remove_success'] = 'Задание удалено';
 
 
-$_lang['crontabmanager_task_execution_not_complete'] = 'Исполнение скрипта не завершено ждите окончания';
+$_lang['crontabmanager_task_execution_not_complete'] = 'Исполнение скрипта не завершено ждите окончания. Убейте процесс PID и повторите попытку. Или используйте аргумент --d';
 $_lang['crontabmanager_task_pid_kill_error'] = 'Процесс с PID [[+pid]] не найден или уже завершён.';
 $_lang['crontabmanager_task_pid_kill_action'] = 'Убить процесс PID';
 

@@ -300,10 +300,10 @@ $_lang['crontabmanager_next_run_human'] = 'Next: [[+minutes]] minutes[[+hours]]'
 $_lang['crontabmanager_next_run_human_hours'] = ' and [[+hours]] hours';
 
 
-$_lang['crontabmanager_next_run_human_seconds'] = 'through [[+seconds]] seconds';
-$_lang['crontabmanager_next_run_human_minutes'] = 'through [[+minutes]] minutes';
-$_lang['crontabmanager_next_run_human_hours'] = 'through [[+hours]] hours';
-$_lang['crontabmanager_next_run_human_days'] = 'through [[+days]] days';
+$_lang['crontabmanager_next_run_human_seconds'] = 'Next run [[+seconds]] seconds';
+$_lang['crontabmanager_next_run_human_minutes'] = 'Next run [[+minutes]] minutes';
+$_lang['crontabmanager_next_run_human_hours'] = 'Next run [[+hours]] hours';
+$_lang['crontabmanager_next_run_human_days'] = 'Next run [[+days]] days';
 $_lang['crontabmanager_button_help'] = 'CrontabManager Documentation';
 
 $_lang['crontabmanager_task_cron_add'] = 'Add to cron';

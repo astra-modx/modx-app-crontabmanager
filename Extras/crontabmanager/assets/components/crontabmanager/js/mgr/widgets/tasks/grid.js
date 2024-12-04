@@ -661,7 +661,7 @@ function runTaskWindow() {
 
 function unlockTask() {
     var Tasks = Ext.getCmp('crontabmanager-grid-tasks')
-    Tasks.processors.confirm('unlock', 'task_unlock')
+    Tasks.processors.confirm('pid/kill', 'task_pid_kill')
 }
 
 function readLogFileBody() {

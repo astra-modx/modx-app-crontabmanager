@@ -89,11 +89,38 @@ class SchedulerService
         return $this;
     }
 
+    public $name;
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name)
+    {
+        $name = str_ireplace(':', '/', $name);
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getPath()
+    {
+        if (!empty($_REQUEST['_scheduler']) && is_string($_REQUEST['_scheduler'])) {
+            $this->setName($_REQUEST['_scheduler']);
+        }
+    }
+
     /**
      * Process the response and format in the proper response format.
      */
-    public function process(string $name, bool $command = false, $input = null)
+    public function process(string $name = null, bool $command = false, $input = null)
     {
+        if (!empty($name)) {
+            $this->setName($name);
+        }
+        $name = $this->getName();
+
         $this->isCommand = $command;
         $this->CronTabManagerTask = null;
         $this->setMode();

@@ -595,6 +595,9 @@ label[for=crontabmanager-grid-notifications-read]::before {
 .crontabmanager_task_pid_completed {
     color: #5cb85c;
 }
+.crontabmanager_task_pid_did_not_start {
+    color: #929b92;
+}
 .crontabmanager_task_pid_completed_error {
     color: #ee5e53;
 }

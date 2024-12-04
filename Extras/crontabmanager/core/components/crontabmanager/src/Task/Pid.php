@@ -28,14 +28,25 @@ class Pid
 
     public function isLock()
     {
-        return $this->status() !== 'completed';
+        switch ($this->status()) {
+            case 'completed':
+            case 'did_not_start':
+                return false;
+            default:
+                break;
+        }
+
+        return true;
     }
 
     public function kill()
     {
         $pid = $this->id();
-        // Выполняем команду kill через shell_exec
-        $output = shell_exec("kill -9 $pid 2>&1");
+        if (empty($pid)) {
+            return false;
+        }
+        $command = "kill -9 $pid 2>&1";
+        $output = shell_exec($command);
 
         // Проверяем результат выполнения
         if (strpos($output, 'No such process') !== false) {
@@ -88,20 +99,28 @@ class Pid
      */
     public function status()
     {
+        if ($this->id() == 0) {
+            return 'did_not_start';
+        }
         if ($info = $this->get()) {
             switch ($info['stat']) {
                 case 'R':
                 case 'S':
                     return 'running';
-                    break;
                 case 'Z':
                     return 'zombie';
-                    break;
                 default:
                     break;
             }
         }
 
         return 'completed';
+    }
+
+    public function update($pid = null)
+    {
+        $pid = $pid ?? getmypid();
+        $table = $this->task->xpdo->getTableName('CronTabManagerTask');
+        $this->task->xpdo->exec("UPDATE {$table} SET pid = '{$pid}'  WHERE id = '{$this->task->id}'");
     }
 }

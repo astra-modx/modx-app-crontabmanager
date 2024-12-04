@@ -276,7 +276,7 @@ abstract class modCrontabController
      */
     protected function schedulerSessionGenerate()
     {
-        return 'scheduler_offset_'.str_ireplace('/', '_', $this->service->scheduler);
+        return 'scheduler_offset_'.str_ireplace('/', '_', $this->service->getName());
     }
 
     /**
@@ -701,5 +701,14 @@ abstract class modCrontabController
         }
 
         return null;
+    }
+
+    public function circleTime($duration = 100)
+    {
+        $startTime = time(); // Фиксируем начальное время
+        while ((time() - $startTime) < $duration) {
+            echo "Текущее время: ".date('H:i:s').PHP_EOL;
+            sleep(1); // Задержка в 1 секунду между итерациями
+        }
     }
 }
